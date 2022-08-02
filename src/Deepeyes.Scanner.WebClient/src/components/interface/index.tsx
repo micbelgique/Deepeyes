@@ -1,14 +1,11 @@
-import { Grid } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import Info from "../info"
 
 export default function Interface() {
   return (
     <Grid container direction="column">
       <Grid item>
-        <h1>Deep Eyes</h1>
-      </Grid>
-      <Grid item>
-        <button>Scan</button>
+        <Typography variant="h1">Deep Eyes</Typography>
       </Grid>
       <Grid item>
         <Info />

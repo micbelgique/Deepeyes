@@ -1,11 +1,19 @@
 import { useState } from 'react'
 import './App.css'
 import Nav from './Nav'
+import { Container } from "@mui/material";
+import Footer from './footer';
 
 function App() {
-  const [count, setCount] = useState(0)
   return (
-    <Nav/>
+    <>
+    <Nav />
+      <div className="content">
+        <Container maxWidth="sm">
+        </Container>
+      </div>
+      <Footer />
+    </>
   )
 }
 export default App

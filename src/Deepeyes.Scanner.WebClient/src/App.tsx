@@ -1,14 +1,25 @@
+import { useCallback, useRef } from "react"
+import Webcam from "react-webcam"
 import "./App.css"
 import CaptureButton from "./components/captureButton"
 import Interface from "./components/interface"
-import WebCam from "./components/webcam"
+import WebCamView from "./components/webcamView"
 function App() {
+  const webcamRef = useRef<Webcam>(null)
+
+  const handleCapture = useCallback(() => {
+    if (webcamRef.current) {
+      const imageSrc = webcamRef.current.getScreenshot()
+      console.log(imageSrc)
+    }
+  }, [])
+
   return (
     <div
       className="App"
       style={{ height: "100vh", width: "100vw", backgroundColor: "#EEEEEE" }}
     >
-      <WebCam />
+      <WebCamView ref={webcamRef} />
       <div
         style={{
           position: "fixed",
@@ -30,7 +41,7 @@ function App() {
           zIndex: 100,
         }}
       >
-        <CaptureButton />
+        <CaptureButton onClick={handleCapture} />
       </div>
     </div>
   )

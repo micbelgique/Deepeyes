@@ -111,6 +111,70 @@ function Home() {
       <CardMedia
         component="img"
         height="240"
+        image="src\assets\test5.png"
+        alt="green iguana"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Description
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+        <table className='tableHome'>
+            <thead>
+            <th>Name</th>
+            <th>Valeur</th>
+            {/* <th>Presence (sec)</th> */}
+            <th>Probabilité</th>
+            </thead>
+            <tbody>
+             <td>Main background</td>  
+             <td>Landscape</td> 
+         {/* <td>{precence}</td> */}
+             <td>89.0123</td>
+            </tbody>
+        </table>
+        </Typography>
+      </CardContent> 
+    </Card>
+    {/* ----------------------------------- */}
+
+    {/* ------------------------------ */}
+    <Card sx={{ maxWidth: 345,marginTop:'2rem' }}>
+      <CardMedia
+        component="img"
+        height="240"
+        image="src\assets\test6.png"
+        alt="green iguana"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Description
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+        <table className='tableHome'>
+            <thead>
+            <th>Name</th>
+            <th>Valeur</th>
+            {/* <th>Presence (sec)</th> */}
+            <th>Probabilité</th>
+            </thead>
+            <tbody>
+             <td>Main background</td>  
+             <td>Landscape</td> 
+         {/* <td>{precence}</td> */}
+             <td>89.0123</td>
+            </tbody>
+        </table>
+        </Typography>
+      </CardContent> 
+    </Card>
+    {/* ----------------------------------- */}
+
+    {/* ------------------------------ */}
+    <Card sx={{ maxWidth: 345,marginTop:'2rem' }}>
+      <CardMedia
+        component="img"
+        height="240"
         image="src\assets\test4.png"
         alt="green iguana"
       />

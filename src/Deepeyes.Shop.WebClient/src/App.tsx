@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Nav from './Nav'
 import { Container } from "@mui/material";
-import Footer from './footer';
+import Footer from './Footer';
 
 function App() {
   return (

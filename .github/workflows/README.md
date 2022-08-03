@@ -20,7 +20,10 @@ You need to create secrets for your Azure credentials, resource group, and subsc
 
 Go to you reposity in Action, select the workflow called "Deploy ARM Template" and click on Run workflow.
 
-Let's the magic begin! This workflow build and deploy all the stucture for your project on Azure.
+Let's the magic begin! This workflow will deploy all the stucture you need for your project on Azure.
+
+
+
 
 ![MIC Belgique](https://cdn.discordapp.com/attachments/988803921634021466/997492237783007292/Capture_decran_2022-04-26_135503.png)
 

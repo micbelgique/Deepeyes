@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_Deepeyes_0822_fa_name": {
+            "value": null
+        },
+        "sites_Deepeyes_Shop_0822_wa_name": {
+            "value": null
+        },
+        "sites_Deepeyes_Scanner_0822_wa_name": {
+            "value": null
+        },
+        "serverfarms_ASP_Deepeyesrg_99bd_name": {
+            "value": null
+        },
+        "storageAccounts_deepeyes0822sa_name": {
+            "value": null
+        },
+        "serverfarms_ASP_Deepeyes_WebClients_name": {
+            "value": null
+        },
+        "accounts_Deepeyes_0822_cv_name": {
+            "value": null
+        }
+    }
+}

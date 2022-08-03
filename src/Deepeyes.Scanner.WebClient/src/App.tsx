@@ -10,8 +10,9 @@ function App() {
   const webcamRef = useRef<Webcam>(null)
 
   const sendImage = useCallback(async (imageB64: string) => {
-    const image = new Blob([imageB64], { type: "image/jpeg" })
     try {
+      const res = await fetch(imageB64)
+      const image = await res.blob()
       await uploadImage(image)
       console.log("Image uploaded")
     } catch (error) {

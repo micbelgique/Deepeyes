@@ -7,8 +7,6 @@ export default forwardRef<Webcam, any>((props, ref) => {
       <Webcam
         ref={ref}
         audio={false}
-        minScreenshotHeight={50}
-        minScreenshotWidth={50}
         // height={"100%"}
         screenshotFormat="image/jpeg"
         videoConstraints={{

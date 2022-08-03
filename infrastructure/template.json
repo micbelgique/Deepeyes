@@ -29,6 +29,10 @@
         "accounts_Deepeyes_0822_cv_name": {
             "defaultValue": "Deepeyes-0822-cv",
             "type": "String"
+        },
+        "databaseAccounts_deepeyes_0822_cosmosdb_name": {
+            "defaultValue": "deepeyes-0822-cosmosdb",
+            "type": "String"
         }
     },
     "variables": {},
@@ -65,6 +69,72 @@
             }
         },
         {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[parameters('databaseAccounts_deepeyes_0822_cosmosdb_name')]",
+            "location": "France Central",
+            "tags": {
+                "defaultExperience": "Azure Table",
+                "hidden-cosmos-mmspecial": ""
+            },
+            "kind": "GlobalDocumentDB",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "enableAutomaticFailover": false,
+                "enableMultipleWriteLocations": false,
+                "isVirtualNetworkFilterEnabled": false,
+                "virtualNetworkRules": [],
+                "disableKeyBasedMetadataWriteAccess": false,
+                "enableFreeTier": false,
+                "enableAnalyticalStorage": false,
+                "analyticalStorageConfiguration": {
+                    "schemaType": "WellDefined"
+                },
+                "databaseAccountOfferType": "Standard",
+                "defaultIdentity": "FirstPartyIdentity",
+                "networkAclBypass": "None",
+                "disableLocalAuth": false,
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "BoundedStaleness",
+                    "maxIntervalInSeconds": 86400,
+                    "maxStalenessPrefix": 1000000
+                },
+                "locations": [
+                    {
+                        "locationName": "France Central",
+                        "provisioningState": "Succeeded",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": false
+                    }
+                ],
+                "cors": [],
+                "capabilities": [
+                    {
+                        "name": "EnableTable"
+                    },
+                    {
+                        "name": "EnableServerless"
+                    }
+                ],
+                "ipRules": [],
+                "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 8,
+                        "backupStorageRedundancy": "Geo"
+                    }
+                },
+                "networkAclBypassResourceIds": [],
+                "diagnosticLogSettings": {
+                    "enableFullTextQuery": "None"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-09-01",
             "name": "[parameters('storageAccounts_deepeyes0822sa_name')]",
@@ -82,7 +152,7 @@
                 "name": "Standard_LRS",
                 "tier": "Standard"
             },
-            "kind": "Storage",
+            "kind": "StorageV2",
             "properties": {
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": true,
@@ -105,7 +175,8 @@
                         }
                     },
                     "keySource": "Microsoft.Storage"
-                }
+                },
+                "accessTier": "Hot"
             }
         },
         {
@@ -180,6 +251,19 @@
             }
         },
         {
+            "type": "Microsoft.DocumentDB/databaseAccounts/tables",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[concat(parameters('databaseAccounts_deepeyes_0822_cosmosdb_name'), '/ScanVisionResults')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdb_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "ScanVisionResults"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2021-09-01",
             "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
@@ -192,7 +276,29 @@
             },
             "properties": {
                 "cors": {
-                    "corsRules": []
+                    "corsRules": [
+                        {
+                            "allowedOrigins": [
+                                "*"
+                            ],
+                            "allowedMethods": [
+                                "POST",
+                                "GET",
+                                "DELETE",
+                                "HEAD",
+                                "MERGE",
+                                "OPTIONS",
+                                "PUT"
+                            ],
+                            "maxAgeInSeconds": 86400,
+                            "exposedHeaders": [
+                                "*"
+                            ],
+                            "allowedHeaders": [
+                                "*"
+                            ]
+                        }
+                    ]
                 },
                 "deleteRetentionPolicy": {
                     "allowPermanentDelete": false,
@@ -827,6 +933,25 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/8feef996-6524-41a9-87b6-dce7df400eae')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "VS Code",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2022-08-03T10:49:48.9619551Z",
+                "end_time": "2022-08-03T10:53:56.1087927Z",
+                "active": true
+            }
+        },
+        {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2022-03-01",
             "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/', parameters('sites_Deepeyes_0822_fa_name'), '.azurewebsites.net')]",
@@ -882,6 +1007,70 @@
             ]
         },
         {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/2022-08-03T09_54_49_2970770')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/2022-08-03T09_54_49_2970770')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/2022-08-03T10_54_49_3674369')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/2022-08-03T10_54_49_3674369')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/2022-08-03T11_54_49_4293290')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/2022-08-03T11_54_49_4293290')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/2022-08-03T12_54_49_4861914')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/2022-08-03T12_54_49_4861914')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ]
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2021-09-01",
             "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-hosts')]",
@@ -916,6 +1105,23 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/raw-pics')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "Blob"
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
             "apiVersion": "2021-09-01",
             "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/deepeyes-0822-faa2cc')]",
@@ -927,6 +1133,18 @@
                 "accessTier": "TransactionOptimized",
                 "shareQuota": 5120,
                 "enabledProtocols": "SMB"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-blobtrigger-pcportvictor-1949701969')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "metadata": {}
             }
         },
         {

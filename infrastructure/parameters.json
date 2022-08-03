@@ -22,6 +22,9 @@
         },
         "accounts_Deepeyes_0822_cv_name": {
             "value": null
+        },
+        "databaseAccounts_deepeyes_0822_cosmosdb_name": {
+            "value": null
         }
     }
 }

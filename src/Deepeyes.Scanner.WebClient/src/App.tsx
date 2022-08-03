@@ -4,13 +4,27 @@ import "./App.css"
 import CaptureButton from "./components/captureButton"
 import Interface from "./components/interface"
 import WebCamView from "./components/webcamView"
+import { uploadImage } from "./services/blobStorage"
+
 function App() {
   const webcamRef = useRef<Webcam>(null)
 
-  const handleCapture = useCallback(() => {
+  const sendImage = useCallback(async (imageB64: string) => {
+    const image = new Blob([imageB64], { type: "image/jpeg" })
+    try {
+      await uploadImage(image)
+      console.log("Image uploaded")
+    } catch (error) {
+      console.error(error)
+    }
+  }, [])
+
+  const handleCapture = useCallback(async () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot()
-      console.log(imageSrc)
+      if (imageSrc) {
+        await sendImage(imageSrc)
+      }
     }
   }, [])
 

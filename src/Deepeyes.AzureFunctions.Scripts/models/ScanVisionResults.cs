@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Azure.Data.Tables;
 
 namespace Deepeyes.Functions.Models
 {

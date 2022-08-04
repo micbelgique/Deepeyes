@@ -2,28 +2,64 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_Deepeyes_0822_fa_name": {
+        "IotHubs_IoTHub_TheGoodPlace_0722_connectionString": {
             "value": null
         },
-        "sites_Deepeyes_Shop_0822_wa_name": {
+        "IotHubs_IoTHub_TheGoodPlace_0722_containerName": {
             "value": null
         },
-        "sites_Deepeyes_Scanner_0822_wa_name": {
+        "sites_WA_thegoodplace_name": {
             "value": null
         },
-        "serverfarms_ASP_Deepeyesrg_99bd_name": {
+        "sites_FA_TheGoodPlace_0722_name": {
             "value": null
         },
-        "storageAccounts_deepeyes0822sa_name": {
+        "serverfarms_ASP_TheGoodPlace_Client_name": {
             "value": null
         },
-        "serverfarms_ASP_Deepeyes_WebClients_name": {
+        "IotHubs_IoTHub_TheGoodPlace_0722_name": {
             "value": null
         },
-        "accounts_Deepeyes_0822_cv_name": {
+        "components_FA_TheGoodPlace_0722_name": {
             "value": null
         },
-        "databaseAccounts_deepeyes_0822_cosmosdb_name": {
+        "serverfarms_ASP_RGGoodPlace0722_8c83_name": {
+            "value": null
+        },
+        "storageAccounts_sathegoodplace0722_name": {
+            "value": null
+        },
+        "sites_GoodPlaceWebService20220714145722_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___testinghuman_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___wa_thegoodplace_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___webappthegoodplace_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___fa_thegoodplace_0722_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "components_testinghuman_externalid": {
+            "value": null
+        },
+        "components_wa_thegoodplace_externalid": {
+            "value": null
+        },
+        "components_webappthegoodplace_externalid": {
+            "value": null
+        },
+        "workspaces_defaultworkspace_1310286d_4161_404b_b6eb_6a936fac3555_weu_externalid": {
+            "value": null
+        },
+        "serverfarms_ASP_Gespodo_b749_externalid": {
             "value": null
         }
     }

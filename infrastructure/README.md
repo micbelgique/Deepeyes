@@ -2,8 +2,6 @@
 
 ## How to
 
-
-
 ## Get your Credentials
 
 You can create a service principal with the az ad sp create-for-rbac command in the Azure CLI. Run this command with Azure Cloud Shell in the Azure portal or in your PowerShell with the CLI.

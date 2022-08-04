@@ -13,8 +13,12 @@ namespace Deepeyes.Functions
   {
 
     [FunctionName("TriggerVisionFromBlobToTable")]
-    [return: Table("ScanVisionResults", Connection = "CosmosDBConnection")]
-    public static async Task<ScanVisionResults> Run([BlobTrigger("raw-pics/{name}", Connection = "AzureWebJobsStorage")] Stream myBlob, string name, ILogger log)
+    [return: CosmosDB(
+               databaseName: "DeepEyesDB",
+               collectionName: "ScanVisionResults",
+               ConnectionStringSetting = "CosmosDBConnection")]
+    public static async Task<ScanVisionResult> Run([BlobTrigger("raw-pics/{name}", Connection = "AzureWebJobsStorage")] Stream myBlob, string name,
+                ILogger log)
     {
 
       log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
@@ -32,7 +36,7 @@ namespace Deepeyes.Functions
         Confidence = caption.Confidence
       }).ToList();
 
-      return new ScanVisionResults { PartitionKey = "Vision", RowKey = Guid.NewGuid().ToString(), Image = name, Tags = tags, Captions = captions };
+      return new ScanVisionResult { Id = Guid.NewGuid().ToString(), Image = name, Tags = tags, Captions = captions };
     }
   }
 }

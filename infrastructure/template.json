@@ -1,0 +1,943 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_Deepeyes_0822_fa_name": {
+            "defaultValue": "Deepeyes-0822-fa",
+            "type": "String"
+        },
+        "sites_Deepeyes_Shop_0822_wa_name": {
+            "defaultValue": "Deepeyes-Shop-0822-wa",
+            "type": "String"
+        },
+        "sites_Deepeyes_Scanner_0822_wa_name": {
+            "defaultValue": "Deepeyes-Scanner-0822-wa",
+            "type": "String"
+        },
+        "serverfarms_ASP_Deepeyesrg_99bd_name": {
+            "defaultValue": "ASP-Deepeyesrg-99bd",
+            "type": "String"
+        },
+        "storageAccounts_deepeyes0822sa_name": {
+            "defaultValue": "deepeyes0822sa",
+            "type": "String"
+        },
+        "serverfarms_ASP_Deepeyes_WebClients_name": {
+            "defaultValue": "ASP-Deepeyes-WebClients",
+            "type": "String"
+        },
+        "accounts_Deepeyes_0822_cv_name": {
+            "defaultValue": "Deepeyes-0822-cv",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('accounts_Deepeyes_0822_cv_name')]",
+            "location": "westeurope",
+            "tags": {
+                "AppName": "Deepeyes Computer Vision",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "sku": {
+                "name": "S1"
+            },
+            "kind": "ComputerVision",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "customSubDomainName": "deepeyes-0822-cv",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-09-01",
+            "name": "[parameters('storageAccounts_deepeyes0822sa_name')]",
+            "location": "westeurope",
+            "tags": {
+                "AppName": "Deepeyes Function App",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('serverfarms_ASP_Deepeyesrg_99bd_name')]",
+            "location": "West Europe",
+            "tags": {
+                "AppName": "Deepeyes Function App",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('serverfarms_ASP_Deepeyes_WebClients_name')]",
+            "location": "West Europe",
+            "tags": {
+                "AppName": "Deepeyes ASP for WebLClient",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "freeOfferExpirationTime": "2022-09-02T08:30:16.18",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "allowPermanentDelete": false,
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('sites_Deepeyes_0822_fa_name')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyesrg_99bd_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Function App",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "deepeyes-0822-fa.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "deepeyes-0822-fa.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyesrg_99bd_name'))]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "6A5F77D3AF15FDC0F82517C71295E0D9AE2C7285CF6CB55732E77E5E0E5F22F8",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('sites_Deepeyes_Scanner_0822_wa_name')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyes_WebClients_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes ASP for WebLClient",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "kind": "app,linux",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "deepeyes-scanner-0822-wa.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "deepeyes-scanner-0822-wa.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyes_WebClients_name'))]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "NODE|16-lts",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "6A5F77D3AF15FDC0F82517C71295E0D9AE2C7285CF6CB55732E77E5E0E5F22F8",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('sites_Deepeyes_Shop_0822_wa_name')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyes_WebClients_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Shop",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "kind": "app,linux",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "deepeyes-shop-0822-wa.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "deepeyes-shop-0822-wa.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyes_WebClients_name'))]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "NODE|16-lts",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "6A5F77D3AF15FDC0F82517C71295E0D9AE2C7285CF6CB55732E77E5E0E5F22F8",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/ftp')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Function App",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/ftp')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes ASP for WebLClient",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/ftp')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Shop",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/scm')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Function App",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/scm')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes ASP for WebLClient",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/scm')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Shop",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/web')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Function App",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v6.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$Deepeyes-0822-fa",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "cors": {
+                    "allowedOrigins": [
+                        "https://portal.azure.com"
+                    ],
+                    "supportCredentials": false
+                },
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/web')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes ASP for WebLClient",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "NODE|16-lts",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$Deepeyes-Scanner-0822-wa",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/web')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ],
+            "tags": {
+                "AppName": "Deepeyes Shop",
+                "CostCenter": "/",
+                "Environement": "Dev",
+                "Impact": "Medium/High",
+                "Owner": "MIC Belgique",
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "NODE|16-lts",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$Deepeyes-Shop-0822-wa",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/', parameters('sites_Deepeyes_0822_fa_name'), '.azurewebsites.net')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
+            ],
+            "properties": {
+                "siteName": "Deepeyes-0822-fa",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/', parameters('sites_Deepeyes_Scanner_0822_wa_name'), '.azurewebsites.net')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ],
+            "properties": {
+                "siteName": "Deepeyes-Scanner-0822-wa",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/', parameters('sites_Deepeyes_Shop_0822_wa_name'), '.azurewebsites.net')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ],
+            "properties": {
+                "siteName": "Deepeyes-Shop-0822-wa",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Scanner_0822_wa_name'), '/2022-08-03T08_54_49_2537130')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Scanner_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_Deepeyes_Shop_0822_wa_name'), '/2022-08-03T08_54_49_2537130')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_Shop_0822_wa_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-hosts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-secrets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/deepeyes-0822-faa2cc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "accessTier": "TransactionOptimized",
+                "shareQuota": 5120,
+                "enabledProtocols": "SMB"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/ScanVisionResults')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {}
+        }
+    ]
+}

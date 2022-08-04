@@ -1,16 +1,14 @@
-import { useState } from 'react'
-import './App.css'
-import Nav from './Nav'
-import { Container } from "@mui/material";
-import Footer from './Footer';
+import { Container } from "@mui/material"
+import "./App.css"
+import Footer from "./Footer"
+import Nav from "./Nav"
 
 function App() {
   return (
     <>
-    <Nav />
+      <Nav />
       <div className="content">
-        <Container maxWidth="sm">
-        </Container>
+        <Container maxWidth="sm"></Container>
       </div>
       <Footer />
     </>

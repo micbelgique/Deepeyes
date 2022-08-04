@@ -1,7 +1,6 @@
 import { Box, Link } from "@mui/material"
 
 export default function Footer() {
- 
   return (
     <footer className="footer">
       <Box
@@ -13,7 +12,11 @@ export default function Footer() {
           },
         }}
       >
-        Made by <Link href="https://github.com/micbelgique/Deepeyes" underline="hover">MIC Belgique</Link>.
+        Made by{" "}
+        <Link href="https://github.com/micbelgique/Deepeyes" underline="hover">
+          MIC Belgique
+        </Link>
+        .
       </Box>
     </footer>
   )

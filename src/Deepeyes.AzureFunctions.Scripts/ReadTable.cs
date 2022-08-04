@@ -18,13 +18,11 @@ namespace Deepeyes.Functions
 
 public class ScanVisionResults 
   {
-    public string PartitionKey { get; set; }
-    public string RowKey { get; set; }
+    public string Id { get; set; }
     public string Image { get; set; }
     public List<string> Tags { get; set; }
     public List<Caption> Captions { get; set; }
   
-
   }
 
 
@@ -41,15 +39,12 @@ public class ScanVisionResults
                 IEnumerable<ScanVisionResults> queryResults,
             ILogger log)
         {
-
           
-
             List<ScanVisionResults> response = new();
             // Execute the query and loop through the results
             foreach (ScanVisionResults entity in queryResults)
             {
                 response.Add(entity);
-                // log.LogInformation($"{entity.PartitionKey}\t{entity.RowKey}\t{entity.Timestamp}\t{entity.Image}");
             }
             string name = req.Query["name"];
 

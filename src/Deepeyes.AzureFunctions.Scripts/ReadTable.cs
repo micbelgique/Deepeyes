@@ -8,19 +8,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace Deepeyes.Functions
 {
-
-  public class ScanVisionResults
-  {
-    public string PartitionKey { get; set; }
-    public string RowKey { get; set; }
-    public string Image { get; set; }
-    public List<string> Tags { get; set; }
-    public List<Caption> Captions { get; set; }
-
-
-  }
-
-
   public static class ReadTable
   {
     [FunctionName("ReadTable")]
@@ -31,7 +18,7 @@ namespace Deepeyes.Functions
                 collectionName: "ScanVisionResults",
                 ConnectionStringSetting = "CosmosDBConnection",
                 SqlQuery = "SELECT * FROM c order by c._ts desc")]
-                IEnumerable<ScanVisionResults> queryResults)
+                IEnumerable<ScanVisionResult> queryResults)
     {
       return new OkObjectResult(queryResults);
     }

@@ -9,6 +9,11 @@ namespace Deepeyes.Functions.Models
     public List<string> Tags { get; set; }
     public List<Caption> Captions { get; set; }
     public bool IsAdult { get; set; } = false;
+    public bool IsGory { get; set; } = false;
+    public bool IsRacy { get; set; } = false;
+    public double AdultScore { get; set; } = 0;
+    public double GoreScore { get; set; } = 0;
+    public double RacyScore { get; set; } = 0;
     public List<string> DominantColors { get; set; } = new();
     public string AccentColor { get; set; } = string.Empty;
 

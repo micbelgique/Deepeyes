@@ -58,7 +58,7 @@ namespace Deepeyes.Functions
         Confidence = obj.Confidence
       });
 
-      return new ScanVisionResult { Id = Guid.NewGuid().ToString(), Image = name, Tags = tags, Captions = captions, AccentColor = result.Color.AccentColor, DominantColors = result.Color.DominantColors.ToList(), Faces = faces, Objects = objects.ToList() };
+      return new ScanVisionResult { Id = Guid.NewGuid().ToString(), Image = name, Tags = tags, Captions = captions, AccentColor = result.Color.AccentColor, DominantColors = result.Color.DominantColors.ToList(), Faces = faces, Objects = objects.ToList(), IsAdult = result.Adult.IsAdultContent, IsGory = result.Adult.IsGoryContent, IsRacy = result.Adult.IsRacyContent, AdultScore = result.Adult.AdultScore, GoreScore = result.Adult.GoreScore, RacyScore = result.Adult.RacyScore };
     }
   }
 }

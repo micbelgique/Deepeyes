@@ -1,0 +1,100 @@
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fefefe;
+  font-family: "Bebas Neue", cursive;
+  margin: auto;
+  font-size: x-large;
+}
+
+.nav-link {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+.navMenu {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.navMenu a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  display: inline-block;
+  width: 80px;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.navMenu a:hover {
+  color: #57ab5a;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+}
+
+.Home {
+  margin-top: 6%;
+  text-align: center;
+}
+
+.Contact {
+  margin-top: 6%;
+  text-align: center;
+}
+
+td {
+  background-color: #e8f1e8;
+  text-align: center;
+}
+
+table {
+  align-items: center;
+  border: none;
+  font-size: small;
+}
+.tableHome {
+  color: #4a4646;
+  width: auto;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.footer {
+  flex-shrink: 0;
+  text-align: center;
+  height: "3rem";
+}
+.content {
+  flex: 1 0 auto;
+}
+
+.webviewContainer {
+  width: 40%;
+  margin: 4%;
+}
+
+.webview {
+  width: 100%;
+  height: 100%;
+}

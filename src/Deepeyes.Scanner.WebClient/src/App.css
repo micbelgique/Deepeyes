@@ -1,0 +1,51 @@
+
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: #fefefe;
+    font-family: 'Bebas Neue', cursive;
+    margin: auto;
+    font-size:x-large
+  }
+
+  .App{
+    background: #fefefe;
+    font-family: 'Bebas Neue', cursive;
+    margin: auto;
+    font-size:x-large
+  }
+
+  .ButtonCam{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    color: white;
+  }
+  
+  .IndexInterface{
+
+    text-align: center;
+    align-items: center;
+  }
+
+  .Container{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media only screen and (max-device-width : 500px) {
+    .webcamCapture {
+        position:fixed;
+        /* height: 500px;;
+        width:500px;  */
+   }
+}
+  
+  

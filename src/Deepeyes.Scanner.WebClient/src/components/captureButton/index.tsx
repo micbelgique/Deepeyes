@@ -14,7 +14,7 @@ export default function CaptureButton({ onClick }: CaptureButtonProps) {
       variant="contained"
       onClick={onClick}
     >
-      <PhotoCamera />
+    <PhotoCamera /> 
     </Button>
   )
 }

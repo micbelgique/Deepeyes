@@ -32,15 +32,14 @@ function App() {
   return (
     <div
       className="App"
-      style={{ height: "100vh", width: "100vw", backgroundColor: "#EEEEEE" }}
+      style={{ height: "100vh", width: "100vw", backgroundColor: "#EEEEEE", display: "flex", justifyContent:"center", alignItems:"center" }}
     >
       <WebCamView ref={webcamRef} />
       <div
         style={{
           position: "fixed",
-          left: "60%",
+          left: "70%",
           top: 0,
-          // transform: "translateX(-10%)",
           zIndex: 100,
           backgroundColor: "rgba(255, 255, 255, 0.5)",
         }}

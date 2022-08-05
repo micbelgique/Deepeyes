@@ -2,286 +2,144 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "IotHubs_IoTHub_TheGoodPlace_0722_connectionString": {
-            "type": "SecureString"
-        },
-        "IotHubs_IoTHub_TheGoodPlace_0722_containerName": {
-            "type": "SecureString"
-        },
-        "sites_WA_thegoodplace_name": {
-            "defaultValue": "WA-thegoodplace",
+        "sites_Deepeyes_0822_fa_name": {
+            "defaultValue": "Deepeyes-0822-fa",
             "type": "String"
         },
-        "sites_FA_TheGoodPlace_0722_name": {
-            "defaultValue": "FA-TheGoodPlace-0722",
+        "serverfarms_ASP_Deepeyesrg_99bd_name": {
+            "defaultValue": "ASP-Deepeyesrg-99bd",
             "type": "String"
         },
-        "serverfarms_ASP_TheGoodPlace_Client_name": {
-            "defaultValue": "ASP-TheGoodPlace-Client",
+        "staticSites_deepeyes_scanner_0822_name": {
+            "defaultValue": "deepeyes-scanner-0822",
             "type": "String"
         },
-        "IotHubs_IoTHub_TheGoodPlace_0722_name": {
-            "defaultValue": "IoTHub-TheGoodPlace-0722",
+        "storageAccounts_deepeyes0822sa_name": {
+            "defaultValue": "deepeyes0822sa",
             "type": "String"
         },
-        "components_FA_TheGoodPlace_0722_name": {
-            "defaultValue": "FA-TheGoodPlace-0722",
+        "staticSites_deepeyes_shop_0822_swa_name": {
+            "defaultValue": "deepeyes-shop-0822-swa",
             "type": "String"
         },
-        "serverfarms_ASP_RGGoodPlace0722_8c83_name": {
-            "defaultValue": "ASP-RGGoodPlace0722-8c83",
+        "accounts_Deepeyes_0822_cv_name": {
+            "defaultValue": "Deepeyes-0822-cv",
             "type": "String"
         },
-        "storageAccounts_sathegoodplace0722_name": {
-            "defaultValue": "sathegoodplace0722",
-            "type": "String"
-        },
-        "sites_GoodPlaceWebService20220714145722_name": {
-            "defaultValue": "GoodPlaceWebService20220714145722",
-            "type": "String"
-        },
-        "smartdetectoralertrules_failure_anomalies___testinghuman_name": {
-            "defaultValue": "failure anomalies - testinghuman",
-            "type": "String"
-        },
-        "smartdetectoralertrules_failure_anomalies___wa_thegoodplace_name": {
-            "defaultValue": "failure anomalies - wa-thegoodplace",
-            "type": "String"
-        },
-        "smartdetectoralertrules_failure_anomalies___webappthegoodplace_name": {
-            "defaultValue": "failure anomalies - webappthegoodplace",
-            "type": "String"
-        },
-        "smartdetectoralertrules_failure_anomalies___fa_thegoodplace_0722_name": {
-            "defaultValue": "failure anomalies - fa-thegoodplace-0722",
-            "type": "String"
-        },
-        "actiongroups_application_insights_smart_detection_externalid": {
-            "defaultValue": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/iothub-workshop/providers/microsoft.insights/actiongroups/application insights smart detection",
-            "type": "String"
-        },
-        "components_testinghuman_externalid": {
-            "defaultValue": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/rg-goodplace-0722/providers/microsoft.insights/components/testinghuman",
-            "type": "String"
-        },
-        "components_wa_thegoodplace_externalid": {
-            "defaultValue": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/rg-goodplace-0722/providers/microsoft.insights/components/wa-thegoodplace",
-            "type": "String"
-        },
-        "components_webappthegoodplace_externalid": {
-            "defaultValue": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/rg-goodplace-0722/providers/microsoft.insights/components/webappthegoodplace",
-            "type": "String"
-        },
-        "workspaces_defaultworkspace_1310286d_4161_404b_b6eb_6a936fac3555_weu_externalid": {
-            "defaultValue": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/defaultresourcegroup-weu/providers/microsoft.operationalinsights/workspaces/defaultworkspace-1310286d-4161-404b-b6eb-6a936fac3555-weu",
-            "type": "String"
-        },
-        "serverfarms_ASP_Gespodo_b749_externalid": {
-            "defaultValue": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/Gespodo/providers/Microsoft.Web/serverfarms/ASP-Gespodo-b749",
+        "databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name": {
+            "defaultValue": "deepeyes-0822-cosmosdbcoreapi",
             "type": "String"
         }
     },
     "variables": {},
     "resources": [
         {
-            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
-            "apiVersion": "2021-04-01",
-            "name": "[parameters('smartdetectoralertrules_failure_anomalies___testinghuman_name')]",
-            "location": "global",
-            "properties": {
-                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
-                "state": "Enabled",
-                "severity": "Sev3",
-                "frequency": "PT1M",
-                "detector": {
-                    "id": "FailureAnomaliesDetector"
-                },
-                "scope": [
-                    "[parameters('components_testinghuman_externalid')]"
-                ],
-                "actionGroups": {
-                    "groupIds": [
-                        "[parameters('actiongroups_application_insights_smart_detection_externalid')]"
-                    ]
-                }
-            }
-        },
-        {
-            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
-            "apiVersion": "2021-04-01",
-            "name": "[parameters('smartdetectoralertrules_failure_anomalies___wa_thegoodplace_name')]",
-            "location": "global",
-            "properties": {
-                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
-                "state": "Enabled",
-                "severity": "Sev3",
-                "frequency": "PT1M",
-                "detector": {
-                    "id": "FailureAnomaliesDetector"
-                },
-                "scope": [
-                    "[parameters('components_wa_thegoodplace_externalid')]"
-                ],
-                "actionGroups": {
-                    "groupIds": [
-                        "[parameters('actiongroups_application_insights_smart_detection_externalid')]"
-                    ]
-                }
-            }
-        },
-        {
-            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
-            "apiVersion": "2021-04-01",
-            "name": "[parameters('smartdetectoralertrules_failure_anomalies___webappthegoodplace_name')]",
-            "location": "global",
-            "properties": {
-                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
-                "state": "Enabled",
-                "severity": "Sev3",
-                "frequency": "PT1M",
-                "detector": {
-                    "id": "FailureAnomaliesDetector"
-                },
-                "scope": [
-                    "[parameters('components_webappthegoodplace_externalid')]"
-                ],
-                "actionGroups": {
-                    "groupIds": [
-                        "[parameters('actiongroups_application_insights_smart_detection_externalid')]"
-                    ]
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Devices/IotHubs",
-            "apiVersion": "2021-07-02",
-            "name": "[parameters('IotHubs_IoTHub_TheGoodPlace_0722_name')]",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('accounts_Deepeyes_0822_cv_name')]",
             "location": "westeurope",
             "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Computer Vision",
                 "CostCenter": "/",
                 "Environement": "Dev",
-                "Impact": "Medium/High",
+                "Impact": "High",
                 "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "sku": {
-                "name": "B1",
-                "tier": "Basic",
-                "capacity": 1
+                "name": "S1"
             },
+            "kind": "ComputerVision",
             "identity": {
                 "type": "None"
             },
             "properties": {
-                "ipFilterRules": [],
-                "eventHubEndpoints": {
-                    "events": {
-                        "retentionTimeInDays": 1,
-                        "partitionCount": 4
-                    }
+                "customSubDomainName": "deepeyes-0822-cv",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
                 },
-                "routing": {
-                    "endpoints": {
-                        "serviceBusQueues": [],
-                        "serviceBusTopics": [],
-                        "eventHubs": [],
-                        "storageContainers": [
-                            {
-                                "connectionString": "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=sathegoodplace0722;AccountKey=****",
-                                "containerName": "storagedataiothub",
-                                "fileNameFormat": "{iothub}{partition}{YYYY}{MM}{DD}{HH}{mm}.json",
-                                "batchFrequencyInSeconds": 100,
-                                "maxChunkSizeInBytes": 104857600,
-                                "encoding": "json",
-                                "authenticationType": "keyBased",
-                                "name": "TableStoragePath",
-                                "id": "2faf6352-6d16-4c79-9567-c6b45ac7f97b",
-                                "subscriptionId": "1310286d-4161-404b-b6eb-6a936fac3555",
-                                "resourceGroup": "RG-GoodPlace-0722"
-                            }
-                        ]
-                    },
-                    "routes": [
-                        {
-                            "name": "StorageTablePath",
-                            "source": "DeviceMessages",
-                            "condition": "true",
-                            "endpointNames": [
-                                "events"
-                            ],
-                            "isEnabled": true
-                        }
-                    ],
-                    "fallbackRoute": {
-                        "name": "$fallback",
-                        "source": "DeviceMessages",
-                        "condition": "true",
-                        "endpointNames": [
-                            "events"
-                        ],
-                        "isEnabled": false
-                    }
-                },
-                "storageEndpoints": {
-                    "$default": {
-                        "sasTtlAsIso8601": "PT1H",
-                        "connectionString": "[parameters('IotHubs_IoTHub_TheGoodPlace_0722_connectionString')]",
-                        "containerName": "[parameters('IotHubs_IoTHub_TheGoodPlace_0722_containerName')]"
-                    }
-                },
-                "messagingEndpoints": {
-                    "fileNotifications": {
-                        "lockDurationAsIso8601": "PT1M",
-                        "ttlAsIso8601": "PT1H",
-                        "maxDeliveryCount": 10
-                    }
-                },
-                "enableFileUploadNotifications": false,
-                "cloudToDevice": {
-                    "maxDeliveryCount": 10,
-                    "defaultTtlAsIso8601": "PT1H",
-                    "feedback": {
-                        "lockDurationAsIso8601": "PT1M",
-                        "ttlAsIso8601": "PT1H",
-                        "maxDeliveryCount": 10
-                    }
-                },
-                "features": "None",
-                "disableLocalAuth": false,
-                "allowedFqdnList": [],
-                "enableDataResidency": false
+                "publicNetworkAccess": "Enabled"
             }
         },
         {
-            "type": "microsoft.insights/components",
-            "apiVersion": "2020-02-02",
-            "name": "[parameters('components_FA_TheGoodPlace_0722_name')]",
-            "location": "westeurope",
-            "kind": "web",
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name')]",
+            "location": "UK West",
+            "tags": {
+                "defaultExperience": "Core (SQL)",
+                "hidden-cosmos-mmspecial": ""
+            },
+            "kind": "GlobalDocumentDB",
+            "identity": {
+                "type": "None"
+            },
             "properties": {
-                "Application_Type": "web",
-                "Flow_Type": "Redfield",
-                "Request_Source": "IbizaAIExtensionEnablementBlade",
-                "RetentionInDays": 90,
-                "WorkspaceResourceId": "[parameters('workspaces_defaultworkspace_1310286d_4161_404b_b6eb_6a936fac3555_weu_externalid')]",
-                "IngestionMode": "LogAnalytics",
-                "publicNetworkAccessForIngestion": "Enabled",
-                "publicNetworkAccessForQuery": "Enabled"
+                "publicNetworkAccess": "Enabled",
+                "enableAutomaticFailover": false,
+                "enableMultipleWriteLocations": false,
+                "isVirtualNetworkFilterEnabled": false,
+                "virtualNetworkRules": [],
+                "disableKeyBasedMetadataWriteAccess": false,
+                "enableFreeTier": false,
+                "enableAnalyticalStorage": false,
+                "analyticalStorageConfiguration": {
+                    "schemaType": "WellDefined"
+                },
+                "databaseAccountOfferType": "Standard",
+                "defaultIdentity": "FirstPartyIdentity",
+                "networkAclBypass": "None",
+                "disableLocalAuth": false,
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "locations": [
+                    {
+                        "locationName": "UK West",
+                        "provisioningState": "Succeeded",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": false
+                    }
+                ],
+                "cors": [],
+                "capabilities": [
+                    {
+                        "name": "EnableServerless"
+                    }
+                ],
+                "ipRules": [],
+                "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 8,
+                        "backupStorageRedundancy": "Local"
+                    }
+                },
+                "networkAclBypassResourceIds": [],
+                "diagnosticLogSettings": {
+                    "enableFullTextQuery": "None"
+                }
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-09-01",
-            "name": "[parameters('storageAccounts_sathegoodplace0722_name')]",
+            "name": "[parameters('storageAccounts_deepeyes0822sa_name')]",
             "location": "westeurope",
             "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Function App",
                 "CostCenter": "/",
                 "Environement": "Dev",
                 "Impact": "Medium/High",
                 "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "sku": {
                 "name": "Standard_LRS",
@@ -289,13 +147,8 @@
             },
             "kind": "StorageV2",
             "properties": {
-                "dnsEndpointType": "Standard",
-                "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
-                "allowCrossTenantReplication": true,
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": true,
-                "allowSharedKeyAccess": true,
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "virtualNetworkRules": [],
@@ -304,7 +157,6 @@
                 },
                 "supportsHttpsTrafficOnly": true,
                 "encryption": {
-                    "requireInfrastructureEncryption": false,
                     "services": {
                         "file": {
                             "keyType": "Account",
@@ -323,15 +175,16 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('serverfarms_ASP_RGGoodPlace0722_8c83_name')]",
+            "name": "[parameters('serverfarms_ASP_Deepeyesrg_99bd_name')]",
             "location": "West Europe",
             "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Function App",
                 "CostCenter": "/",
                 "Environement": "Dev",
                 "Impact": "Medium/High",
                 "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "sku": {
                 "name": "Y1",
@@ -355,470 +208,171 @@
             }
         },
         {
-            "type": "Microsoft.Web/serverfarms",
+            "type": "Microsoft.Web/staticSites",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('serverfarms_ASP_TheGoodPlace_Client_name')]",
+            "name": "[parameters('staticSites_deepeyes_scanner_0822_name')]",
             "location": "West Europe",
-            "tags": {
-                "AppName": "The Good Place",
-                "CostCenter": "/",
-                "Environement": "Dev",
-                "Owner": "MIC Belgique",
-                "ProjectName": "TheGoodPlace0722",
-                "Impact": "Medium/High",
-                "Scope": "PlaygroundMIC2022"
-            },
             "sku": {
-                "name": "F1",
-                "tier": "Free",
-                "size": "F1",
-                "family": "F",
-                "capacity": 0
+                "name": "Free",
+                "tier": "Free"
             },
-            "kind": "app",
             "properties": {
-                "perSiteScaling": false,
-                "elasticScaleEnabled": false,
-                "maximumElasticWorkerCount": 1,
-                "isSpot": false,
-                "reserved": false,
-                "isXenon": false,
-                "hyperV": false,
-                "targetWorkerCount": 0,
-                "targetWorkerSizeId": 0,
-                "zoneRedundant": false
+                "stagingEnvironmentPolicy": "Enabled",
+                "allowConfigFileUpdates": true,
+                "provider": "Custom",
+                "enterpriseGradeCdnStatus": "Disabled"
             }
         },
         {
-            "type": "Microsoft.Web/sites",
+            "type": "Microsoft.Web/staticSites",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('sites_GoodPlaceWebService20220714145722_name')]",
+            "name": "[parameters('staticSites_deepeyes_shop_0822_swa_name')]",
             "location": "West Europe",
-            "tags": {
-                "hidden-related:/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/Gespodo/providers/Microsoft.Web/serverFarms/ASP-Gespodo-b749": "empty"
-            },
-            "kind": "app",
-            "identity": {
-                "type": "SystemAssigned"
+            "sku": {
+                "name": "Free",
+                "tier": "Free"
             },
             "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "goodplacewebservice20220714145722.azurewebsites.net",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "goodplacewebservice20220714145722.scm.azurewebsites.net",
-                        "sslState": "Disabled",
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[parameters('serverfarms_ASP_Gespodo_b749_externalid')]",
-                "reserved": false,
-                "isXenon": false,
-                "hyperV": false,
-                "vnetRouteAllEnabled": false,
-                "siteConfig": {
-                    "numberOfWorkers": 1,
-                    "acrUseManagedIdentityCreds": false,
-                    "alwaysOn": false,
-                    "http20Enabled": false,
-                    "functionAppScaleLimit": 0,
-                    "minimumElasticInstanceCount": 0
-                },
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": true,
-                "clientCertEnabled": false,
-                "clientCertMode": "Required",
-                "hostNamesDisabled": false,
-                "customDomainVerificationId": "6A5F77D3AF15FDC0F82517C71295E0D9AE2C7285CF6CB55732E77E5E0E5F22F8",
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
-                "httpsOnly": true,
-                "redundancyMode": "None",
-                "storageAccountRequired": false,
-                "keyVaultReferenceIdentity": "SystemAssigned"
+                "stagingEnvironmentPolicy": "Enabled",
+                "allowConfigFileUpdates": true,
+                "provider": "Custom",
+                "enterpriseGradeCdnStatus": "Disabled"
             }
         },
         {
-            "type": "microsoft.alertsmanagement/smartdetectoralertrules",
-            "apiVersion": "2021-04-01",
-            "name": "[parameters('smartdetectoralertrules_failure_anomalies___fa_thegoodplace_0722_name')]",
-            "location": "global",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[concat(parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'), '/DeepEyesDB')]",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'))]"
             ],
             "properties": {
-                "description": "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls.",
-                "state": "Enabled",
-                "severity": "Sev3",
-                "frequency": "PT1M",
-                "detector": {
-                    "id": "FailureAnomaliesDetector"
-                },
-                "scope": [
-                    "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-                ],
-                "actionGroups": {
-                    "groupIds": [
-                        "[parameters('actiongroups_application_insights_smart_detection_externalid')]"
-                    ]
+                "resource": {
+                    "id": "DeepEyesDB"
                 }
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/degradationindependencyduration')]",
-            "location": "westeurope",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[concat(parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'), '/00000000-0000-0000-0000-000000000001')]",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'))]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "degradationindependencyduration",
-                    "DisplayName": "Degradation in dependency duration",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "roleName": "Cosmos DB Built-in Data Reader",
+                "type": "BuiltInRole",
+                "assignableScopes": [
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'))]"
+                ],
+                "permissions": [
+                    {
+                        "dataActions": [
+                            "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read"
+                        ],
+                        "notDataActions": []
+                    }
+                ]
             }
         },
         {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/degradationinserverresponsetime')]",
-            "location": "westeurope",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[concat(parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'), '/00000000-0000-0000-0000-000000000002')]",
             "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'))]"
             ],
             "properties": {
-                "ruleDefinitions": {
-                    "Name": "degradationinserverresponsetime",
-                    "DisplayName": "Degradation in server response time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/digestMailConfiguration')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "digestMailConfiguration",
-                    "DisplayName": "Digest Mail Configuration",
-                    "Description": "This rule describes the digest mail preferences",
-                    "HelpUrl": "www.homail.com",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/extension_billingdatavolumedailyspikeextension')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_billingdatavolumedailyspikeextension",
-                    "DisplayName": "Abnormal rise in daily data volume (preview)",
-                    "Description": "This detection rule automatically analyzes the billing data generated by your application, and can warn you about an unusual increase in your application's billing costs",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/billing-data-volume-daily-spike.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/extension_canaryextension')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_canaryextension",
-                    "DisplayName": "Canary extension",
-                    "Description": "Canary extension",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/extension_exceptionchangeextension')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_exceptionchangeextension",
-                    "DisplayName": "Abnormal rise in exception volume (preview)",
-                    "Description": "This detection rule automatically analyzes the exceptions thrown in your application, and can warn you about unusual patterns in your exception telemetry.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/abnormal-rise-in-exception-volume.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/extension_memoryleakextension')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_memoryleakextension",
-                    "DisplayName": "Potential memory leak detected (preview)",
-                    "Description": "This detection rule automatically analyzes the memory consumption of each process in your application, and can warn you about potential memory leaks or increased memory consumption.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/tree/master/SmartDetection/memory-leak.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/extension_securityextensionspackage')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_securityextensionspackage",
-                    "DisplayName": "Potential security issue detected (preview)",
-                    "Description": "This detection rule automatically analyzes the telemetry generated by your application and detects potential security issues.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/application-security-detection-pack.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/extension_traceseveritydetector')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "extension_traceseveritydetector",
-                    "DisplayName": "Degradation in trace severity ratio (preview)",
-                    "Description": "This detection rule automatically analyzes the trace logs emitted from your application, and can warn you about unusual patterns in the severity of your trace telemetry.",
-                    "HelpUrl": "https://github.com/Microsoft/ApplicationInsights-Home/blob/master/SmartDetection/degradation-in-trace-severity-ratio.md",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/longdependencyduration')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "longdependencyduration",
-                    "DisplayName": "Long dependency duration",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/migrationToAlertRulesCompleted')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "migrationToAlertRulesCompleted",
-                    "DisplayName": "Migration To Alert Rules Completed",
-                    "Description": "A configuration that controls the migration state of Smart Detection to Smart Alerts",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": true,
-                    "IsEnabledByDefault": false,
-                    "IsInPreview": true,
-                    "SupportsEmailNotifications": false
-                },
-                "enabled": false,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/slowpageloadtime')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "slowpageloadtime",
-                    "DisplayName": "Slow page load time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
-            }
-        },
-        {
-            "type": "microsoft.insights/components/ProactiveDetectionConfigs",
-            "apiVersion": "2018-05-01-preview",
-            "name": "[concat(parameters('components_FA_TheGoodPlace_0722_name'), '/slowserverresponsetime')]",
-            "location": "westeurope",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/components', parameters('components_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "ruleDefinitions": {
-                    "Name": "slowserverresponsetime",
-                    "DisplayName": "Slow server response time",
-                    "Description": "Smart Detection rules notify you of performance anomaly issues.",
-                    "HelpUrl": "https://docs.microsoft.com/en-us/azure/application-insights/app-insights-proactive-performance-diagnostics",
-                    "IsHidden": false,
-                    "IsEnabledByDefault": true,
-                    "IsInPreview": false,
-                    "SupportsEmailNotifications": true
-                },
-                "enabled": true,
-                "sendEmailsToSubscriptionOwners": true,
-                "customEmails": []
+                "roleName": "Cosmos DB Built-in Data Contributor",
+                "type": "BuiltInRole",
+                "assignableScopes": [
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'))]"
+                ],
+                "permissions": [
+                    {
+                        "dataActions": [
+                            "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*",
+                            "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*"
+                        ],
+                        "notDataActions": []
+                    }
+                ]
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
             },
             "properties": {
-                "changeFeed": {
-                    "enabled": false
-                },
-                "restorePolicy": {
-                    "enabled": false
-                },
-                "containerDeleteRetentionPolicy": {
-                    "enabled": true,
-                    "days": 7
-                },
                 "cors": {
-                    "corsRules": []
+                    "corsRules": [
+                        {
+                            "allowedOrigins": [
+                                "*"
+                            ],
+                            "allowedMethods": [
+                                "POST",
+                                "GET",
+                                "DELETE",
+                                "HEAD",
+                                "MERGE",
+                                "OPTIONS",
+                                "PUT"
+                            ],
+                            "maxAgeInSeconds": 86400,
+                            "exposedHeaders": [
+                                "*"
+                            ],
+                            "allowedHeaders": [
+                                "*"
+                            ]
+                        },
+                        {
+                            "allowedOrigins": [
+                                "https://mango-mud-0eb096903-preview.westeurope.1.azurestaticapps.net/"
+                            ],
+                            "allowedMethods": [
+                                "PUT",
+                                "OPTIONS",
+                                "POST",
+                                "MERGE",
+                                "HEAD",
+                                "GET",
+                                "DELETE"
+                            ],
+                            "maxAgeInSeconds": 86400,
+                            "exposedHeaders": [
+                                "*"
+                            ],
+                            "allowedHeaders": [
+                                "*"
+                            ]
+                        }
+                    ]
                 },
                 "deleteRetentionPolicy": {
                     "allowPermanentDelete": false,
-                    "enabled": true,
-                    "days": 7
-                },
-                "isVersioningEnabled": false
+                    "enabled": false
+                }
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/fileServices",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "sku": {
                 "name": "Standard_LRS",
@@ -840,9 +394,9 @@
         {
             "type": "Microsoft.Storage/storageAccounts/queueServices",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "cors": {
@@ -853,9 +407,9 @@
         {
             "type": "Microsoft.Storage/storageAccounts/tableServices",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "cors": {
@@ -866,41 +420,36 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
-            "name": "[parameters('sites_FA_TheGoodPlace_0722_name')]",
+            "name": "[parameters('sites_Deepeyes_0822_fa_name')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_RGGoodPlace0722_8c83_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyesrg_99bd_name'))]"
             ],
             "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Function App",
                 "CostCenter": "/",
                 "Environement": "Dev",
                 "Impact": "Medium/High",
                 "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022",
-                "hidden-link: /app-insights-resource-id": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/RG-GoodPlace-0722/providers/microsoft.insights/components/FA-TheGoodPlace-0722",
-                "hidden-link: /app-insights-instrumentation-key": "fbd414b6-07ef-4089-bddd-44767d04dcb6",
-                "hidden-link: /app-insights-conn-string": "InstrumentationKey=fbd414b6-07ef-4089-bddd-44767d04dcb6;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "kind": "functionapp",
-            "identity": {
-                "type": "SystemAssigned"
-            },
             "properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "fa-thegoodplace-0722.azurewebsites.net",
+                        "name": "deepeyes-0822-fa.azurewebsites.net",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "fa-thegoodplace-0722.scm.azurewebsites.net",
+                        "name": "deepeyes-0822-fa.scm.azurewebsites.net",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_RGGoodPlace0722_8c83_name'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_Deepeyesrg_99bd_name'))]",
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
@@ -921,65 +470,6 @@
                 "customDomainVerificationId": "6A5F77D3AF15FDC0F82517C71295E0D9AE2C7285CF6CB55732E77E5E0E5F22F8",
                 "containerSize": 1536,
                 "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false,
-                "redundancyMode": "None",
-                "storageAccountRequired": false,
-                "keyVaultReferenceIdentity": "SystemAssigned"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "apiVersion": "2022-03-01",
-            "name": "[parameters('sites_WA_thegoodplace_name')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_TheGoodPlace_Client_name'))]"
-            ],
-            "tags": {
-                "AppName": "The Good Place",
-                "CostCenter": "/",
-                "Environement": "Dev",
-                "Impact": "Medium/High",
-                "Owner": "MIC Belgique",
-                "ProjectName": "TheGoodPlace0722",
-                "Scope": "PlaygroundMIC2022"
-            },
-            "kind": "app",
-            "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "wa-thegoodplace.azurewebsites.net",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "wa-thegoodplace.scm.azurewebsites.net",
-                        "sslState": "Disabled",
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_TheGoodPlace_Client_name'))]",
-                "reserved": false,
-                "isXenon": false,
-                "hyperV": false,
-                "vnetRouteAllEnabled": false,
-                "siteConfig": {
-                    "numberOfWorkers": 1,
-                    "acrUseManagedIdentityCreds": false,
-                    "alwaysOn": false,
-                    "http20Enabled": false,
-                    "functionAppScaleLimit": 0,
-                    "minimumElasticInstanceCount": 0
-                },
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": true,
-                "clientCertEnabled": false,
-                "clientCertMode": "Required",
-                "hostNamesDisabled": false,
-                "customDomainVerificationId": "6A5F77D3AF15FDC0F82517C71295E0D9AE2C7285CF6CB55732E77E5E0E5F22F8",
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
                 "httpsOnly": true,
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
@@ -989,21 +479,19 @@
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/ftp')]",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/ftp')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
             ],
             "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Function App",
                 "CostCenter": "/",
                 "Environement": "Dev",
                 "Impact": "Medium/High",
                 "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022",
-                "hidden-link: /app-insights-resource-id": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/RG-GoodPlace-0722/providers/microsoft.insights/components/FA-TheGoodPlace-0722",
-                "hidden-link: /app-insights-instrumentation-key": "fbd414b6-07ef-4089-bddd-44767d04dcb6",
-                "hidden-link: /app-insights-conn-string": "InstrumentationKey=fbd414b6-07ef-4089-bddd-44767d04dcb6;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "properties": {
                 "allow": true
@@ -1012,93 +500,19 @@
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/ftp')]",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/scm')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
             ],
             "tags": {
-                "hidden-related:/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/Gespodo/providers/Microsoft.Web/serverFarms/ASP-Gespodo-b749": "empty"
-            },
-            "properties": {
-                "allow": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_WA_thegoodplace_name'), '/ftp')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_WA_thegoodplace_name'))]"
-            ],
-            "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Function App",
                 "CostCenter": "/",
                 "Environement": "Dev",
                 "Impact": "Medium/High",
                 "Owner": "MIC Belgique",
-                "ProjectName": "TheGoodPlace0722",
-                "Scope": "PlaygroundMIC2022"
-            },
-            "properties": {
-                "allow": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/scm')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "tags": {
-                "AppName": "The Good Place",
-                "CostCenter": "/",
-                "Environement": "Dev",
-                "Impact": "Medium/High",
-                "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022",
-                "hidden-link: /app-insights-resource-id": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/RG-GoodPlace-0722/providers/microsoft.insights/components/FA-TheGoodPlace-0722",
-                "hidden-link: /app-insights-instrumentation-key": "fbd414b6-07ef-4089-bddd-44767d04dcb6",
-                "hidden-link: /app-insights-conn-string": "InstrumentationKey=fbd414b6-07ef-4089-bddd-44767d04dcb6;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"
-            },
-            "properties": {
-                "allow": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/scm')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "tags": {
-                "hidden-related:/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/Gespodo/providers/Microsoft.Web/serverFarms/ASP-Gespodo-b749": "empty"
-            },
-            "properties": {
-                "allow": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_WA_thegoodplace_name'), '/scm')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_WA_thegoodplace_name'))]"
-            ],
-            "tags": {
-                "AppName": "The Good Place",
-                "CostCenter": "/",
-                "Environement": "Dev",
-                "Impact": "Medium/High",
-                "Owner": "MIC Belgique",
-                "ProjectName": "TheGoodPlace0722",
-                "Scope": "PlaygroundMIC2022"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "properties": {
                 "allow": true
@@ -1107,21 +521,19 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/web')]",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/web')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
             ],
             "tags": {
-                "AppName": "The Good Place",
+                "AppName": "Deepeyes Function App",
                 "CostCenter": "/",
                 "Environement": "Dev",
                 "Impact": "Medium/High",
                 "Owner": "MIC Belgique",
-                "Scope": "PlaygroundMIC2022",
-                "hidden-link: /app-insights-resource-id": "/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/RG-GoodPlace-0722/providers/microsoft.insights/components/FA-TheGoodPlace-0722",
-                "hidden-link: /app-insights-instrumentation-key": "fbd414b6-07ef-4089-bddd-44767d04dcb6",
-                "hidden-link: /app-insights-conn-string": "InstrumentationKey=fbd414b6-07ef-4089-bddd-44767d04dcb6;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"
+                "ProjectName": "Deepeyes",
+                "Scope": "DemoMIC2022"
             },
             "properties": {
                 "numberOfWorkers": 1,
@@ -1135,7 +547,7 @@
                     "default.aspx",
                     "index.php"
                 ],
-                "netFrameworkVersion": "v4.0",
+                "netFrameworkVersion": "v6.0",
                 "requestTracingEnabled": false,
                 "remoteDebuggingEnabled": false,
                 "remoteDebuggingVersion": "VS2019",
@@ -1143,7 +555,7 @@
                 "acrUseManagedIdentityCreds": false,
                 "logsDirectorySizeLimit": 35,
                 "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$FA-TheGoodPlace-0722",
+                "publishingUsername": "$Deepeyes-0822-fa",
                 "scmType": "None",
                 "use32BitWorkerProcess": true,
                 "webSocketsEnabled": false,
@@ -1165,12 +577,20 @@
                 "vnetPrivatePortsCount": 0,
                 "cors": {
                     "allowedOrigins": [
-                        "https://portal.azure.com"
+                        "https://portal.azure.com",
+                        "http://localhost",
+                        "http://localhost:5173",
+                        "https://deepeyes-scanner-0822-wa.azurewebsites.net",
+                        "https://deepeyes-shop-0822-wa.azurewebsites.net",
+                        "https://proud-river-00da0c603-preview.westeurope.1.azurestaticapps.net",
+                        "https://mango-mud-0eb096903-preview.westeurope.1.azurestaticapps.net",
+                        "https://proud-river-00da0c603.1.azurestaticapps.net",
+                        "https://mango-mud-0eb096903.1.azurestaticapps.net",
+                        "http://localhost:5174"
                     ],
                     "supportCredentials": false
                 },
                 "localMySqlEnabled": false,
-                "managedServiceIdentityId": 29175,
                 "ipSecurityRestrictions": [
                     {
                         "ipAddress": "Any",
@@ -1193,7 +613,7 @@
                 "http20Enabled": false,
                 "minTlsVersion": "1.2",
                 "scmMinTlsVersion": "1.2",
-                "ftpsState": "AllAllowed",
+                "ftpsState": "FtpsOnly",
                 "preWarmedInstanceCount": 0,
                 "functionAppScaleLimit": 200,
                 "functionsRuntimeScaleMonitoringEnabled": false,
@@ -1202,452 +622,12 @@
             }
         },
         {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/web')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "tags": {
-                "hidden-related:/subscriptions/1310286d-4161-404b-b6eb-6a936fac3555/resourceGroups/Gespodo/providers/Microsoft.Web/serverFarms/ASP-Gespodo-b749": "empty"
-            },
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "phpVersion": "5.6",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2022",
-                "httpLoggingEnabled": false,
-                "acrUseManagedIdentityCreds": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$GoodPlaceWebService20220714145722",
-                "scmType": "None",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "autoHealEnabled": false,
-                "vnetRouteAllEnabled": false,
-                "vnetPrivatePortsCount": 0,
-                "localMySqlEnabled": false,
-                "managedServiceIdentityId": 39106,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "scmMinTlsVersion": "1.2",
-                "ftpsState": "FtpsOnly",
-                "preWarmedInstanceCount": 0,
-                "functionAppScaleLimit": 0,
-                "functionsRuntimeScaleMonitoringEnabled": false,
-                "minimumElasticInstanceCount": 0,
-                "azureStorageAccounts": {}
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_WA_thegoodplace_name'), '/web')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_WA_thegoodplace_name'))]"
-            ],
-            "tags": {
-                "AppName": "The Good Place",
-                "CostCenter": "/",
-                "Environement": "Dev",
-                "Impact": "Medium/High",
-                "Owner": "MIC Belgique",
-                "ProjectName": "TheGoodPlace0722",
-                "Scope": "PlaygroundMIC2022"
-            },
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "nodeVersion": "~14",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "httpLoggingEnabled": false,
-                "acrUseManagedIdentityCreds": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$WA-thegoodplace",
-                "scmType": "None",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "autoHealEnabled": false,
-                "vnetRouteAllEnabled": false,
-                "vnetPrivatePortsCount": 0,
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "scmMinTlsVersion": "1.2",
-                "ftpsState": "FtpsOnly",
-                "preWarmedInstanceCount": 0,
-                "functionAppScaleLimit": 0,
-                "functionsRuntimeScaleMonitoringEnabled": false,
-                "minimumElasticInstanceCount": 0,
-                "azureStorageAccounts": {}
-            }
-        },
-        {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/02fb2025cd3c41dfaf244abf3c508608')]",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/d1cae5b41d234fef9812fc512f23c43b')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-27T09:48:24.8995802Z",
-                "end_time": "2022-07-27T09:48:26.5401017Z",
-                "active": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/0faca1d8cdb3449188ffe6f0725c002d')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-27T09:34:05.8885482Z",
-                "end_time": "2022-07-27T09:34:07.5135471Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/12d2c564a6b84b19a697460a905ac32d')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-13T13:22:37.7707957Z",
-                "end_time": "2022-07-13T13:22:39.7886304Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/19ffdcee4ff84e6e9729e5316059d208')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-14T14:00:02.1730323Z",
-                "end_time": "2022-07-14T14:00:09.862485Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/484b232f8cf84bb18d30a69a74560950')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-14T14:55:42.0388421Z",
-                "end_time": "2022-07-14T14:55:48.4552809Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/48bb38337d4f40109634f72f7659320d')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-26T13:33:13.9702526Z",
-                "end_time": "2022-07-26T13:33:16.2233018Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/555a1f8235934119be60b922a34ab941')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-27T09:18:09.0191381Z",
-                "end_time": "2022-07-27T09:18:10.8531439Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/5b54de98432249259bb7452174347dd1')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-13T13:40:39.8359565Z",
-                "end_time": "2022-07-13T13:40:43.0133398Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/84f2c41afbac42be894ffc9c7ae2c777')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-14T14:50:33.5855983Z",
-                "end_time": "2022-07-14T14:50:39.9293063Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/a02bf7ab58944f17a85838dce00cf8d5')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-27T09:26:11.9075785Z",
-                "end_time": "2022-07-27T09:26:13.4866408Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/aa220d34cd4f4a49915f71f2b69be49e')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-14T14:49:13.3791855Z",
-                "end_time": "2022-07-14T14:49:20.0511249Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/bebf57ee6629435a81cd70580754c2d8')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-15T09:08:59.1061231Z",
-                "end_time": "2022-07-15T09:09:05.7777284Z",
-                "active": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/c7366196d8814943b5334d60e4e2a10d')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-13T13:45:39.7928036Z",
-                "end_time": "2022-07-13T13:45:41.9975884Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/d12a220af20b420d8f24bc22d92096f5')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-13T14:10:08.9579908Z",
-                "end_time": "2022-07-13T14:10:10.8489747Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_WA_thegoodplace_name'), '/f67c1dcdffdd41389cac30489ccae865')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_WA_thegoodplace_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
             ],
             "properties": {
                 "status": 4,
@@ -1655,44 +635,64 @@
                 "author": "VS Code",
                 "deployer": "ZipDeploy",
                 "message": "Created via a push deployment",
-                "start_time": "2022-07-22T12:09:22.8549676Z",
-                "end_time": "2022-07-22T12:17:24.9721545Z",
+                "start_time": "2022-08-04T11:38:55.1358268Z",
+                "end_time": "2022-08-04T11:38:57.2764462Z",
                 "active": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/fe02f47927f84185a7e2313ef4bb02b7')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "ZipDeploy",
-                "message": "Created via a push deployment",
-                "start_time": "2022-07-14T14:42:38.8380912Z",
-                "end_time": "2022-07-14T14:42:45.651627Z",
-                "active": false
             }
         },
         {
             "type": "Microsoft.Web/sites/functions",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/IoTHubTriggerToTableStorage')]",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/CreateThumbnailFromRaw')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
             ],
             "properties": {
-                "script_root_path_href": "https://fa-thegoodplace-0722.azurewebsites.net/admin/vfs/site/wwwroot/IoTHubTriggerToTableStorage/",
-                "script_href": "https://fa-thegoodplace-0722.azurewebsites.net/admin/vfs/site/wwwroot/bin/HubTrigger.dll",
-                "config_href": "https://fa-thegoodplace-0722.azurewebsites.net/admin/vfs/site/wwwroot/IoTHubTriggerToTableStorage/function.json",
-                "test_data_href": "https://fa-thegoodplace-0722.azurewebsites.net/admin/vfs/data/Functions/sampledata/IoTHubTriggerToTableStorage.dat",
-                "href": "https://fa-thegoodplace-0722.azurewebsites.net/admin/functions/IoTHubTriggerToTableStorage",
+                "script_root_path_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/CreateThumbnailFromRaw/",
+                "script_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/bin/api.dll",
+                "config_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/CreateThumbnailFromRaw/function.json",
+                "test_data_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/data/Functions/sampledata/CreateThumbnailFromRaw.dat",
+                "href": "https://deepeyes-0822-fa.azurewebsites.net/admin/functions/CreateThumbnailFromRaw",
+                "config": {},
+                "language": "DotNetAssembly",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/ReadTable')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/ReadTable/",
+                "script_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/bin/api.dll",
+                "config_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/ReadTable/function.json",
+                "test_data_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/data/Functions/sampledata/ReadTable.dat",
+                "href": "https://deepeyes-0822-fa.azurewebsites.net/admin/functions/ReadTable",
+                "config": {},
+                "invoke_url_template": "https://deepeyes-0822-fa.azurewebsites.net/api/readtable",
+                "language": "DotNetAssembly",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/TriggerVisionFromBlobToTable')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/TriggerVisionFromBlobToTable/",
+                "script_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/bin/api.dll",
+                "config_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/site/wwwroot/TriggerVisionFromBlobToTable/function.json",
+                "test_data_href": "https://deepeyes-0822-fa.azurewebsites.net/admin/vfs/data/Functions/sampledata/TriggerVisionFromBlobToTable.dat",
+                "href": "https://deepeyes-0822-fa.azurewebsites.net/admin/functions/TriggerVisionFromBlobToTable",
                 "config": {},
                 "language": "DotNetAssembly",
                 "isDisabled": false
@@ -1701,1138 +701,64 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_FA_TheGoodPlace_0722_name'), '/', parameters('sites_FA_TheGoodPlace_0722_name'), '.azurewebsites.net')]",
+            "name": "[concat(parameters('sites_Deepeyes_0822_fa_name'), '/', parameters('sites_Deepeyes_0822_fa_name'), '.azurewebsites.net')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_FA_TheGoodPlace_0722_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('sites_Deepeyes_0822_fa_name'))]"
             ],
             "properties": {
-                "siteName": "FA-TheGoodPlace-0722",
+                "siteName": "Deepeyes-0822-fa",
                 "hostNameType": "Verified"
             }
         },
         {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/', parameters('sites_GoodPlaceWebService20220714145722_name'), '.azurewebsites.net')]",
-            "location": "West Europe",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2022-02-15-preview",
+            "name": "[concat(parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'), '/DeepEyesDB/ScanVisionResults')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'), 'DeepEyesDB')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_deepeyes_0822_cosmosdbcoreapi_name'))]"
             ],
             "properties": {
-                "siteName": "GoodPlaceWebService20220714145722",
-                "hostNameType": "Verified"
+                "resource": {
+                    "id": "ScanVisionResults",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    }
+                }
             }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_WA_thegoodplace_name'), '/', parameters('sites_WA_thegoodplace_name'), '.azurewebsites.net')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_WA_thegoodplace_name'))]"
-            ],
-            "properties": {
-                "siteName": "WA-thegoodplace",
-                "hostNameType": "Verified"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/siteextensions",
-            "apiVersion": "2022-03-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/Microsoft.AspNetCore.AzureAppServices.SiteExtension')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-15T02_17_52_6211880')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-16T02_17_52_5969078')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-17T02_17_52_6050133')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-18T02_17_52_6254976')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-19T02_17_52_7033862')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-20T02_17_52_7658549')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-21T02_17_52_8144996')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-21T23_17_52_9019789')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-22T02_17_52_9078235')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-22T23_17_52_9678399')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-23T02_17_52_9550647')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-23T07_17_52_9586431')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-23T11_17_52_9658461')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-23T23_17_52_9520987')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-24T07_17_52_9612195')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-24T11_17_52_9581077')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-24T23_17_52_9382187')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-25T07_17_52_9871627')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-25T11_17_52_9995373')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-25T23_17_53_0351196')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-26T07_17_53_0444678')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-26T11_17_53_0284377')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-26T23_17_53_0320900')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-27T07_17_53_0580495')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-27T11_17_53_0599098')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-27T23_17_53_0698718')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-28T07_17_53_0834914')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-28T11_17_53_1299909')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-28T23_17_53_1205091')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-29T07_17_53_1271904')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-29T11_17_53_1369256')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-29T23_17_53_1582581')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-30T07_17_53_1716060')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-30T11_17_53_1743782')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-30T23_17_53_2168836')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T05_17_53_2182385')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T06_17_53_2179595')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T07_17_53_2189661')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T08_17_53_2154620')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T09_17_53_2122040')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T10_17_53_2159667')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T11_17_53_2154706')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T12_17_53_2062385')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T13_17_53_2209915')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T14_17_53_2228205')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T15_17_53_2149269')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T16_17_53_2087491')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T17_17_53_2045763')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T18_17_53_2127274')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T19_17_53_2423890')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T20_17_53_2201478')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T21_17_53_2043965')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T22_17_53_2202581')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-07-31T23_17_53_2234796')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T00_17_53_2100317')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T01_17_53_2076548')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T02_17_53_2180207')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T03_17_53_2172997')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T04_17_53_2183758')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T05_17_53_2040483')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T06_17_53_2157939')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T07_17_53_2189299')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T08_17_53_2109749')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T09_17_53_2180668')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T10_17_53_2226016')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T11_17_53_2361699')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T12_17_53_2235987')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T13_17_53_2150740')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T14_17_53_2255485')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T15_17_53_2238346')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T16_17_53_2379183')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T17_17_53_2297532')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T18_17_53_2297212')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T19_17_53_2269485')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T20_17_53_2201704')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T21_17_53_2141782')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T22_17_53_2093359')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-01T23_17_53_2227847')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T00_17_53_2146907')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T01_17_53_2116264')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T02_17_53_2194823')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T03_17_53_2058570')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T04_17_53_2107042')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T05_17_53_2394684')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T06_17_53_2110380')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T07_17_53_2227333')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T08_17_53_2346003')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T09_17_53_2253048')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T10_17_53_2216639')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T11_17_53_2177733')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T12_17_53_2266266')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T13_17_53_2371176')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T14_17_53_2444617')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T15_17_53_2260642')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T16_17_53_2456681')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T17_17_53_2386620')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T18_17_53_2510703')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T19_17_53_2536844')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T20_17_53_2734232')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T21_17_53_2493182')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T22_17_53_2529079')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-02T23_17_53_2506431')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T00_17_53_2698600')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T01_17_53_2574419')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T02_17_53_2575736')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T03_17_53_2586380')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T04_17_53_2585737')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T05_17_53_2773100')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T06_17_53_2660502')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T07_17_53_2639897')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T08_17_53_2940205')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T09_17_53_2945175')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T10_17_53_2849910')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T11_17_53_2894208')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T12_17_53_2906027')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T13_17_53_2903365')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T14_17_53_3114665')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T15_17_53_2958428')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T16_17_53_3052844')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T17_17_53_2939802')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T18_17_53_2871724')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T19_17_53_2981050')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T20_17_53_2844640')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T21_17_53_2870925')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T22_17_53_2821534')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-03T23_17_53_2837905')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T00_17_53_2898525')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T01_17_53_2721902')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T02_17_53_2903847')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T03_17_53_2970264')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T04_17_53_2964839')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T05_17_53_3130448')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T06_17_53_3072487')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T07_17_53_3101565')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/snapshots",
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('sites_GoodPlaceWebService20220714145722_name'), '/2022-08-04T08_17_53_3114366')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_GoodPlaceWebService20220714145722_name'))]"
-            ]
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/azure-webjobs-eventhub')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-hosts')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "immutableStorageWithVersioning": {
@@ -2846,10 +772,10 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/azure-webjobs-hosts')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-secrets')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "immutableStorageWithVersioning": {
@@ -2863,10 +789,10 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/azure-webjobs-secrets')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/raw-pics')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "immutableStorageWithVersioning": {
@@ -2874,16 +800,16 @@
                 },
                 "defaultEncryptionScope": "$account-encryption-key",
                 "denyEncryptionScopeOverride": false,
-                "publicAccess": "None"
+                "publicAccess": "Blob"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/microompics')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/thumbnails')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "immutableStorageWithVersioning": {
@@ -2891,16 +817,16 @@
                 },
                 "defaultEncryptionScope": "$account-encryption-key",
                 "denyEncryptionScopeOverride": false,
-                "publicAccess": "None"
+                "publicAccess": "Blob"
             }
         },
         {
             "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/fa-thegoodplace-07228365')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/deepeyes-0822-faa2cc')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
                 "accessTier": "TransactionOptimized",
@@ -2909,42 +835,52 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/fa-thegoodplace-0722a2ab')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-blobtrigger-deepeyes-0822-fa')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
-                "accessTier": "TransactionOptimized",
-                "shareQuota": 5120,
-                "enabledProtocols": "SMB"
+                "metadata": {}
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/hubtrigger20220713131005')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-blobtrigger-msi-186491607')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
             "properties": {
-                "accessTier": "TransactionOptimized",
-                "shareQuota": 5120,
-                "enabledProtocols": "SMB"
+                "metadata": {}
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
             "apiVersion": "2021-09-01",
-            "name": "[concat(parameters('storageAccounts_sathegoodplace0722_name'), '/default/DevicesDataTable')]",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/azure-webjobs-blobtrigger-pcportvictor-1949701969')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', parameters('storageAccounts_sathegoodplace0722_name'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sathegoodplace0722_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
             ],
-            "properties": {}
+            "properties": {
+                "metadata": {}
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+            "apiVersion": "2021-09-01",
+            "name": "[concat(parameters('storageAccounts_deepeyes0822sa_name'), '/default/webjobs-blobtrigger-poison')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/queueServices', parameters('storageAccounts_deepeyes0822sa_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_deepeyes0822sa_name'))]"
+            ],
+            "properties": {
+                "metadata": {}
+            }
         }
     ]
 }

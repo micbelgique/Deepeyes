@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Deepeyes.Functions.Models;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
@@ -28,15 +30,35 @@ namespace Deepeyes.Functions
         Endpoint = Environment.GetEnvironmentVariable("ComputerVisionEndpoint")
       };
 
-      var results = await vision.DescribeImageInStreamAsync(myBlob);
-      var tags = results.Tags.ToList();
-      var captions = results.Captions.Select(caption => new Caption
+      List<VisualFeatureTypes?> features = new() {
+        VisualFeatureTypes.Adult,
+        VisualFeatureTypes.Categories,
+        VisualFeatureTypes.Color,
+        VisualFeatureTypes.Description,
+        VisualFeatureTypes.Brands,
+        VisualFeatureTypes.Faces,
+        VisualFeatureTypes.ImageType,
+        VisualFeatureTypes.Objects,
+      };
+
+      var result = await vision.AnalyzeImageInStreamAsync(myBlob, visualFeatures: features);
+
+      var tags = result.Description.Tags.ToList();
+      var captions = result.Description.Captions.Select(caption => new Caption
       {
         Text = caption.Text,
         Confidence = caption.Confidence
       }).ToList();
 
-      return new ScanVisionResult { Id = Guid.NewGuid().ToString(), Image = name, Tags = tags, Captions = captions };
+      var faces = result.Faces.Select(face => new Face { Age = face.Age, Gender = face.Gender.ToString() }).ToList();
+
+      var objects = result.Objects.Select(obj => new Models.Object
+      {
+        Name = obj.ObjectProperty,
+        Confidence = obj.Confidence
+      });
+
+      return new ScanVisionResult { Id = Guid.NewGuid().ToString(), Image = name, Tags = tags, Captions = captions, AccentColor = result.Color.AccentColor, DominantColors = result.Color.DominantColors.ToList(), Faces = faces, Objects = objects.ToList(), IsAdult = result.Adult.IsAdultContent, IsGory = result.Adult.IsGoryContent, IsRacy = result.Adult.IsRacyContent, AdultScore = result.Adult.AdultScore, GoreScore = result.Adult.GoreScore, RacyScore = result.Adult.RacyScore };
     }
   }
 }

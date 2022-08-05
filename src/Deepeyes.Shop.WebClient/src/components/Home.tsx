@@ -33,9 +33,7 @@ function Home() {
           {items.map((item) => (
             <ItemCard
               key={item.id}
-              description={item.captions?.[0]?.text ?? "description"}
-              tags={item.tags}
-              image={item.image}
+              item={item}
             />
           ))}
         </Masonry>

@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box"
+import Masonry from "@mui/lab/Masonry"
 import { Container } from "@mui/system"
 import { useState } from "react"
 import usePollingEffect from "../hooks/usePollingEffect"
@@ -23,15 +23,12 @@ function Home() {
     <div className="Home">
       <h1>Deep Eyes Project</h1>
       <Container>
-        <Box
-          sx={{
-            display: "flex",
-            m: 1,
-            p: 1,
-            justifyContent: "space-around",
-            flexWrap: "wrap",
-            alignContent: "center",
-          }}
+        <Masonry
+          columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+          spacing={2}
+          defaultHeight={450}
+          defaultColumns={4}
+          defaultSpacing={1}
         >
           {items.map((item) => (
             <ItemCard
@@ -41,7 +38,7 @@ function Home() {
               image={item.image}
             />
           ))}
-        </Box>
+        </Masonry>
       </Container>
     </div>
   )

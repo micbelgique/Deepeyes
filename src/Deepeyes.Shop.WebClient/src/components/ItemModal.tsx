@@ -36,19 +36,19 @@ export default function ItemModal({ item, open, onClose }: ItemModalProps): JSX.
           {item.captions?.[0]?.text ?? "Description"}
         </Typography>
         <img src={generatedImageUrl(item.image, "full")} style={{ width: 500 }} />
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <div id="modal-modal-description">
           {item.captions?.length > 0 && (
             <>
               <Typography variant="h6" component="h3">
                 Descriptions:
               </Typography>
-              <li>
+              <ul>
                 {item.captions.map((caption, i) => (
-                  <ul key={i}>
+                  <Typography key={i} variant="body2" component="li">
                     {caption.text} | {caption.confidence.toFixed(2)}
-                  </ul>
+                  </Typography>
                 ))}
-              </li>
+              </ul>
             </>
           )}
           <Typography variant="h6" component="h3">
@@ -83,9 +83,9 @@ export default function ItemModal({ item, open, onClose }: ItemModalProps): JSX.
           <ul>
             {item.faces?.length > 0 &&
               item.faces.map((face, i) => (
-                <li key={i}>
+                <Typography key={i} variant="body2" component="li">
                   {face.gender} - {face.age.toString()}
-                </li>
+                </Typography>
               ))}
           </ul>
           <Typography variant="h6" component="h3">
@@ -94,15 +94,15 @@ export default function ItemModal({ item, open, onClose }: ItemModalProps): JSX.
           <ul>
             {item.objects?.length > 0 &&
               item.objects.map((object, i) => (
-                <li key={i}>
+                <Typography key={i} variant="body2" component="li">
                   {object.name} - {object.confidence.toString()}
-                </li>
+                </Typography>
               ))}
           </ul>
           <Typography variant="h6" component="h3">
             Is Adult: {item.isAdult.toString()}
           </Typography>
-        </Typography>
+        </div>
       </Box>
     </Modal>
   )

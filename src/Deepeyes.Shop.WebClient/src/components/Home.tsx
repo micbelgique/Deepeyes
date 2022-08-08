@@ -4,9 +4,12 @@ import { useState } from "react"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
 import ItemCard from "./ItemCard"
+import ItemModal from "./ItemModal"
 
 function Home() {
   const [items, setItems] = useState<ScanVisionResult[]>([])
+  const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
+  const [openModal, setOpenModal] = useState(false)
   usePollingEffect(
     () => {
       fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/api/readtable")
@@ -34,10 +37,15 @@ function Home() {
             <ItemCard
               key={item.id}
               item={item}
+              onClick={() => {
+                setSelectedItem(item)
+                setOpenModal(true)
+              }}
             />
           ))}
         </Masonry>
       </Container>
+      <ItemModal open={openModal} item={selectedItem} onClose={() => setOpenModal(false)} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
 export default interface Face {
-    age: Number
-    genre: string
-  }
+  age: Number
+  gender: string
+}

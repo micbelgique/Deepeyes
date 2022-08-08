@@ -8,8 +8,8 @@ export default interface ScanVisionResult {
   captions: Caption[]
   tags: string[]
   isAdult: boolean
-  dominantColors : string[]
-  accentColors : string[]
-  faces:Face[]
-  objects:Object[]
+  dominantColors: string[]
+  accentColor: string
+  faces: Face[]
+  objects: Object[]
 }

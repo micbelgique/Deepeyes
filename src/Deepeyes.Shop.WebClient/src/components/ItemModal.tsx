@@ -56,7 +56,11 @@ export default function ItemModal({ item, open, onClose }: ItemModalProps): JSX.
           </Typography>
           <Stack spacing={0} direction="row" sx={{ flexWrap: "wrap" }}>
             {item.tags.map((tag) => (
-              <Chip key={tag} label={tag} sx={{ m: 0.2 }} />
+              <Chip
+                key={tag.name}
+                label={`${tag.name} | ${tag.confidence.toFixed(2)}`}
+                sx={{ m: 0.2 }}
+              />
             ))}
           </Stack>
           <Typography variant="h6" component="h3">

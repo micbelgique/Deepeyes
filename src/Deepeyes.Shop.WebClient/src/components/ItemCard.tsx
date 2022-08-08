@@ -38,7 +38,7 @@ export default function ItemCard({
           </Typography>
           <Stack spacing={0} direction="row" sx={{ flexWrap: "wrap" }}>
             {tags.map((tag) => (
-              <Chip key={tag} label={tag} sx={{ m: 0.2 }} />
+              <Chip key={tag.name} label={tag.name} sx={{ m: 0.2 }} />
             ))}
           </Stack>
         </CardContent>

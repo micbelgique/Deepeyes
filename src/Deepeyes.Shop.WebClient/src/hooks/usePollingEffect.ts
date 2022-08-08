@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 interface usePollingEffectOptions {
   interval?: number
@@ -14,12 +14,16 @@ export default function usePollingEffect(
   }: usePollingEffectOptions = {}
 ) {
   const timeoutIdRef = useRef<number | null>(null)
+  const [pause, setPause] = useState(false)
+
   useEffect(() => {
     let _stopped = false
     // Side note: preceding semicolon needed for IIFEs.
     ;(async function pollingCallback() {
       try {
-        await asyncCallback()
+        if (!pause) {
+          await asyncCallback()
+        }
       } finally {
         // Set timeout after it finished, unless stopped
         timeoutIdRef.current = !_stopped && setTimeout(pollingCallback, interval)
@@ -33,5 +37,17 @@ export default function usePollingEffect(
       }
       onCleanUp()
     }
-  }, [...dependencies, interval])
+  }, [...dependencies, interval, pause])
+
+  // function to stop polling
+  const stopPolling = useCallback(() => {
+    setPause(true)
+  }, [])
+
+  // function to restrat polling
+  const startPolling = useCallback(() => {
+    setPause(false)
+  }, [])
+
+  return { stopPolling, startPolling }
 }

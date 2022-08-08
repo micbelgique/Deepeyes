@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import Masonry from "@mui/lab/Masonry"
 import { InputAdornment, TextField } from "@mui/material"
 import { Container } from "@mui/system"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
 import ItemCard from "./ItemCard"
@@ -39,6 +39,29 @@ function Home() {
       startPolling()
     }
   }
+
+  const handleDelete = useCallback(async () => {
+    if (selectedItem) {
+      const url = new URL(
+        `/api/deleteItem?id=${selectedItem.id}&imageId=${selectedItem.image}`,
+        import.meta.env.VITE_FUNCTION_APP_URL
+      )
+      try {
+        const res = await fetch(url, {
+          method: "DELETE",
+        })
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+        console.log("deleted")
+        setItems((items) => items.filter((item) => item.id !== selectedItem.id))
+        setSelectedItem(null)
+        setOpenModal(false)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }, [selectedItem])
 
   return (
     <div className="Home">
@@ -78,7 +101,12 @@ function Home() {
           ))}
         </Masonry>
       </Container>
-      <ItemModal open={openModal} item={selectedItem} onClose={() => setOpenModal(false)} />
+      <ItemModal
+        open={openModal}
+        item={selectedItem}
+        onClose={() => setOpenModal(false)}
+        onDelete={handleDelete}
+      />
     </div>
   )
 }

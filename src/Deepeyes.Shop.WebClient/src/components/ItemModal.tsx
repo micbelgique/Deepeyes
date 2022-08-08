@@ -1,4 +1,4 @@
-import { Box, Chip, Modal, Stack, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Chip, Modal, Stack, Tooltip, Typography } from "@mui/material"
 import ScanVisionResult from "../models/ScanVisionResult"
 import generatedImageUrl from "../utils/generatedImageUrl"
 
@@ -6,6 +6,7 @@ interface ItemModalProps {
   item: ScanVisionResult | null
   open: boolean
   onClose: () => void
+  onDelete: () => void
 }
 
 const style = {
@@ -22,7 +23,7 @@ const style = {
   height: "100%",
 }
 
-export default function ItemModal({ item, open, onClose }: ItemModalProps): JSX.Element {
+export default function ItemModal({ item, open, onClose, onDelete }: ItemModalProps): JSX.Element {
   if (item === null) return <></>
   return (
     <Modal
@@ -102,6 +103,9 @@ export default function ItemModal({ item, open, onClose }: ItemModalProps): JSX.
           <Typography variant="h6" component="h3">
             Is Adult: {item.isAdult.toString()}
           </Typography>
+          <Button variant="contained" color="error" onClick={onDelete}>
+            Delete
+          </Button>
         </div>
       </Box>
     </Modal>

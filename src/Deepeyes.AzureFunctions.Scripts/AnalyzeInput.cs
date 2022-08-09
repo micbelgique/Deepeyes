@@ -16,8 +16,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Deepeyes.Functions
 {
+
+
     public static class AnalyzeInput
     {
+        private static Lazy<ComputerVisionClient> lazyClient = new Lazy<ComputerVisionClient>(InitializeComputerVisionClient);
+        private static ComputerVisionClient ComputerVisionClient => lazyClient.Value;
+
+        private static ComputerVisionClient InitializeComputerVisionClient()
+        {
+            return new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("ComputerVisionApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
+            {
+                Endpoint = Environment.GetEnvironmentVariable("ComputerVisionEndpoint")
+            }; ;
+        }
+
+
         [FunctionName("AnalyzeInput")]
         public static async Task RunOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context, ILogger log)
@@ -45,10 +59,6 @@ namespace Deepeyes.Functions
         public static async Task<ScanVisionResult> DescribeImage([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)
         {
             // send the blob to vision api and get the results
-            ComputerVisionClient vision = new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("ComputerVisionApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
-            {
-                Endpoint = Environment.GetEnvironmentVariable("ComputerVisionEndpoint")
-            };
 
             List<VisualFeatureTypes?> features = new() {
                 VisualFeatureTypes.Tags,
@@ -63,7 +73,7 @@ namespace Deepeyes.Functions
             };
             // var result = await vision.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
             var stream = await myBlob.DownloadContentAsync();
-            var result = await vision.AnalyzeImageInStreamAsync(stream.Value.Content.ToStream(), visualFeatures: features);
+            var result = await ComputerVisionClient.AnalyzeImageInStreamAsync(stream.Value.Content.ToStream(), visualFeatures: features);
 
             var id = Guid.NewGuid().ToString();
 
@@ -113,14 +123,10 @@ namespace Deepeyes.Functions
             log.LogInformation("Extracting text from image");
 
             // send the blob to vision api and get the results
-            ComputerVisionClient vision = new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("ComputerVisionApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
-            {
-                Endpoint = Environment.GetEnvironmentVariable("ComputerVisionEndpoint")
-            };
 
             // var result = await vision.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
             var stream = await myBlob.DownloadContentAsync();
-            var textHeaders = await vision.ReadInStreamAsync(stream.Value.Content.ToStream());
+            var textHeaders = await ComputerVisionClient.ReadInStreamAsync(stream.Value.Content.ToStream());
             string operationLocation = textHeaders.OperationLocation;
 
             const int numberOfCharsInOperationId = 36;
@@ -135,15 +141,10 @@ namespace Deepeyes.Functions
             log.LogInformation("Extracting text from image");
             var operationId = context.GetInput<string>();
 
-            ComputerVisionClient client = new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("ComputerVisionApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
-            {
-                Endpoint = Environment.GetEnvironmentVariable("ComputerVisionEndpoint")
-            };
-
             ReadOperationResult results;
             do
             {
-                results = await client.GetReadResultAsync(Guid.Parse(operationId));
+                results = await ComputerVisionClient.GetReadResultAsync(Guid.Parse(operationId));
                 Thread.Sleep(1000);
 
             } while (results.Status == OperationStatusCodes.Running || results.Status == OperationStatusCodes.NotStarted);

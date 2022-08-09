@@ -71,9 +71,7 @@ namespace Deepeyes.Functions
                 VisualFeatureTypes.ImageType,
                 VisualFeatureTypes.Objects,
             };
-            // var result = await vision.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
-            var stream = await myBlob.DownloadContentAsync();
-            var result = await ComputerVisionClient.AnalyzeImageInStreamAsync(stream.Value.Content.ToStream(), visualFeatures: features);
+            var result = await ComputerVisionClient.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
 
             var id = Guid.NewGuid().ToString();
 
@@ -124,9 +122,8 @@ namespace Deepeyes.Functions
 
             // send the blob to vision api and get the results
 
-            // var result = await vision.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
-            var stream = await myBlob.DownloadContentAsync();
-            var textHeaders = await ComputerVisionClient.ReadInStreamAsync(stream.Value.Content.ToStream());
+            var textHeaders = await ComputerVisionClient.ReadAsync(myBlob.Uri.ToString());
+
             string operationLocation = textHeaders.OperationLocation;
 
             const int numberOfCharsInOperationId = 36;

@@ -26,7 +26,7 @@ namespace Deepeyes.AzureFunctions.Scripts
                 databaseName: "DeepEyesDB",
                 collectionName: "ScanVisionResults",
                 ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
-                [Blob("raw-images/{Query.imageId}", FileAccess.ReadWrite)] BlobClient rawImage,
+                [Blob("raw-pics/{Query.imageId}", FileAccess.ReadWrite)] BlobClient rawImage,
                 [Blob("thumbnails/{Query.imageId}", FileAccess.ReadWrite)] BlobClient thumbnail,
             ILogger log)
         {

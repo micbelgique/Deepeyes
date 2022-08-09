@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Deepeyes.Functions.Models
 {
@@ -20,5 +21,7 @@ namespace Deepeyes.Functions.Models
         public List<Face> Faces { get; set; } = new();
 
         public List<Object> Objects { get; set; } = new();
+        public Ocr Ocr { get; set; } = new();
+
     }
 }

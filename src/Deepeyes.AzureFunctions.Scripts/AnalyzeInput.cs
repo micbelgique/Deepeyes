@@ -169,12 +169,16 @@ namespace Deepeyes.Functions
         {
             TextAnalyticsActions actions = new()
             {
-                ExtractSummaryActions = new List<ExtractSummaryAction>() { new ExtractSummaryAction() },
                 ExtractKeyPhrasesActions = new List<ExtractKeyPhrasesAction>() { new ExtractKeyPhrasesAction() },
                 RecognizeEntitiesActions = new List<RecognizeEntitiesAction>() { new RecognizeEntitiesAction() },
             };
 
-            var operation = await TextAnalyticsClient.StartAnalyzeActionsAsync(new List<string>() { string.Join("\n", ocrResult.Lines) }, actions);
+            var text = string.Join("\n", ocrResult.Lines);
+            if (text.Length > 600)
+            {
+                actions.ExtractSummaryActions = new List<ExtractSummaryAction>() { new ExtractSummaryAction() };
+            }
+            var operation = await TextAnalyticsClient.StartAnalyzeActionsAsync(new List<string>() { text }, actions);
             await operation.WaitForCompletionAsync();
 
             var documentsInPage = await operation.Value.FirstAsync();

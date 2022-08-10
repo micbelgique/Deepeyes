@@ -1,6 +1,7 @@
 import Caption from "./Caption"
 import Face from "./Face"
 import Object from "./Object"
+import Ocr from "./Ocr"
 import Tag from "./Tag"
 
 export default interface ScanVisionResult {
@@ -13,4 +14,5 @@ export default interface ScanVisionResult {
   accentColor: string
   faces: Face[]
   objects: Object[]
+  ocr: Ocr
 }

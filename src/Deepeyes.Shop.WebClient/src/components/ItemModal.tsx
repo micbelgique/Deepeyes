@@ -1,4 +1,17 @@
-import { Box, Button, Chip, Modal, Stack, Tooltip, Typography } from "@mui/material"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Chip,
+  Modal,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material"
+import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import generatedImageUrl from "../utils/generatedImageUrl"
 
@@ -103,11 +116,53 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
           <Typography variant="h6" component="h3">
             Is Adult: {item.isAdult.toString()}
           </Typography>
-          <Button variant="contained" color="error" onClick={onDelete}>
+          <Typography variant="h6" component="h3">
+            Ocr:
+          </Typography>
+          <OcrBlock ocr={item.ocr} />
+          <Button variant="contained" color="error" onClick={onDelete} sx={{ mt: "0.5em" }}>
             Delete
           </Button>
         </div>
       </Box>
     </Modal>
   )
+}
+
+function OcrBlock({ ocr }: { ocr: Ocr }) {
+  if (ocr.state === "DONE")
+    return (
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography sx={{ width: "33%", flexShrink: 0 }}>Text: </Typography>
+          <OcrState ocr={ocr} />
+        </AccordionSummary>
+        <AccordionDetails>
+          {ocr.lines.map((text, i) => (
+            <Typography key={i}>{text}</Typography>
+          ))}
+        </AccordionDetails>
+      </Accordion>
+    )
+  return (
+    <Typography variant="body2" component="p">
+      Unknown state
+    </Typography>
+  )
+}
+
+function OcrState({ ocr: { state, summary } }: { ocr: Ocr }) {
+  if (state === "NONE")
+    return <Typography sx={{ color: "text.secondary" }}>No Text found</Typography>
+  if (state === "PENDING")
+    return <Typography sx={{ color: "text.secondary" }}>Text will be processed</Typography>
+  if (state === "RUNNING")
+    return <Typography sx={{ color: "text.secondary" }}>Text is being processed</Typography>
+  if (state === "DONE")
+    return <Typography sx={{ color: "text.secondary" }}>{summary ?? "Text processed"}</Typography>
+  return <Typography sx={{ color: "text.secondary" }}>Unknown state</Typography>
 }

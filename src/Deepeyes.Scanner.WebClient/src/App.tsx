@@ -1,8 +1,9 @@
-import { Alert, AlertColor, Snackbar } from "@mui/material"
+import { Alert, AlertColor, Snackbar, Stack } from "@mui/material"
 import { useCallback, useRef, useState } from "react"
 import Webcam from "react-webcam"
 import "./App.css"
 import CaptureButton from "./components/captureButton"
+import UploadButton from "./components/uploadButton"
 
 import WebCamView from "./components/webcamView"
 import { uploadImage } from "./services/blobStorage"
@@ -40,11 +41,23 @@ function App() {
     }
   }, [])
 
+  const handleSubmitFiles = useCallback(async (files: FileList) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files.item(i)
+      if (file) {
+        await uploadImage(file)
+      }
+    }
+  }, [])
+
   return (
     <div className="App">
       <WebCamView ref={webcamRef} />
       <div className="ButtonCam">
-        <CaptureButton onClick={handleCapture} />
+        <Stack direction="row" spacing={2}>
+          <UploadButton onSubmit={handleSubmitFiles} />
+          <CaptureButton onClick={handleCapture} />
+        </Stack>
       </div>
       <Snackbar
         open={open}

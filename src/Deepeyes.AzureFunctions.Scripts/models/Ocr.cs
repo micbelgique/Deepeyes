@@ -6,5 +6,6 @@ namespace Deepeyes.Functions.Models
     {
         public string State { get; set; } = "NONE";
         public List<string> Lines { get; set; } = new List<string>();
+        public List<Entity> Entities { get; set; } = new List<Entity>();
     }
 }

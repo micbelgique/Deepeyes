@@ -4,6 +4,7 @@
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.AI.TextAnalytics" Version="5.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.ComputerVision" Version="7.0.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />

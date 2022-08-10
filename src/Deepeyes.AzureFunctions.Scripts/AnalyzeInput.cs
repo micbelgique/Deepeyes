@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using Azure.AI.TextAnalytics;
 using Azure.Storage.Blobs;
 using Deepeyes.Functions.Models;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
@@ -11,6 +13,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
+using Entity = Deepeyes.Functions.Models.Entity;
 
 // TODO: use singleton to get vision client;
 
@@ -20,15 +23,22 @@ namespace Deepeyes.Functions
 
     public static class AnalyzeInput
     {
-        private static Lazy<ComputerVisionClient> lazyClient = new Lazy<ComputerVisionClient>(InitializeComputerVisionClient);
-        private static ComputerVisionClient ComputerVisionClient => lazyClient.Value;
+        private static readonly Lazy<ComputerVisionClient> lazyComputerVisionClient = new(InitializeComputerVisionClient);
+        private static ComputerVisionClient ComputerVisionClient => lazyComputerVisionClient.Value;
 
         private static ComputerVisionClient InitializeComputerVisionClient()
         {
-            return new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("ComputerVisionApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
+            return new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("CognitiveServicesApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
             {
-                Endpoint = Environment.GetEnvironmentVariable("ComputerVisionEndpoint")
-            }; ;
+                Endpoint = Environment.GetEnvironmentVariable("CognitiveServicesEndpoint")
+            };
+        }
+
+        private static readonly Lazy<TextAnalyticsClient> lazyTextAnalyticsClient = new(InitializeTextAnalyticsClient);
+        private static TextAnalyticsClient TextAnalyticsClient => lazyTextAnalyticsClient.Value;
+        private static TextAnalyticsClient InitializeTextAnalyticsClient()
+        {
+            return new(new Uri(Environment.GetEnvironmentVariable("CognitiveServicesEndpoint")), new AzureKeyCredential(Environment.GetEnvironmentVariable("CognitiveServicesApiKey")));
         }
 
 
@@ -48,8 +58,9 @@ namespace Deepeyes.Functions
                 var operationId = await context.CallActivityAsync<string>("AnalyzeInput_StartExtractText", myBlobName);
                 var textResult = await context.CallActivityAsync<IList<ReadResult>>("AnalyzeInput_ReceiveExtractedText", operationId);
 
-                scanVisionResult.Ocr.State = "DONE";
                 scanVisionResult.Ocr.Lines = textResult.SelectMany(x => x.Lines.Select(l => l.Text)).ToList();
+                scanVisionResult.Ocr = await context.CallActivityAsync<Ocr>("AnalyzeInput_NerAnalysis", scanVisionResult.Ocr);
+                scanVisionResult.Ocr.State = "DONE";
                 await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             }
 
@@ -71,7 +82,8 @@ namespace Deepeyes.Functions
                 VisualFeatureTypes.ImageType,
                 VisualFeatureTypes.Objects,
             };
-            var result = await ComputerVisionClient.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
+            var result = await ComputerVisionClient.AnalyzeImageInStreamAsync(myBlob.OpenRead(), features);
+            // var result = await ComputerVisionClient.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
 
             var id = Guid.NewGuid().ToString();
 
@@ -121,8 +133,8 @@ namespace Deepeyes.Functions
             log.LogInformation("Extracting text from image");
 
             // send the blob to vision api and get the results
-
-            var textHeaders = await ComputerVisionClient.ReadAsync(myBlob.Uri.ToString());
+            var textHeaders = await ComputerVisionClient.ReadInStreamAsync(myBlob.OpenRead());
+            // var textHeaders = await ComputerVisionClient.ReadAsync(myBlob.Uri.ToString());
 
             string operationLocation = textHeaders.OperationLocation;
 
@@ -151,6 +163,15 @@ namespace Deepeyes.Functions
             return textResults;
 
         }
+
+        [FunctionName("AnalyzeInput_NerAnalysis")]
+        public static async Task<Ocr> AnalyzeInput_NerAnalysis([ActivityTrigger] Ocr ocrResult, ILogger log)
+        {
+            var response = await TextAnalyticsClient.RecognizeEntitiesAsync(string.Join("\n", ocrResult.Lines.SelectMany(l => l)));
+            ocrResult.Entities = response.Value.Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory }).ToList();
+            return ocrResult;
+        }
+
 
         [FunctionName("AnalyzeInput_SaveResult")]
         [return: CosmosDB(

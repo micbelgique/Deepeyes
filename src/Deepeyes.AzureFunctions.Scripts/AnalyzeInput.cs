@@ -183,7 +183,7 @@ namespace Deepeyes.Functions
                                                                        .Select(s => new Summary { Confidence = s.RankScore, Text = s.Text })
                                                                        .ToList();
             ocrResult.Entities = documentsInPage.RecognizeEntitiesResults.SelectMany(re => re.DocumentsResults.SelectMany(d => d.Entities))
-                                                                         .Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory, Confidence = e.ConfidenceScore, Name = e.Text.Substring(e.Offset, e.Length) })
+                                                                         .Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory, Confidence = e.ConfidenceScore, Name = e.Text })
                                                                          .ToList();
             ocrResult.KeyPhrases = documentsInPage.ExtractKeyPhrasesResults.SelectMany(kp => kp.DocumentsResults.SelectMany(d => d.KeyPhrases))
                                                                            .ToList();

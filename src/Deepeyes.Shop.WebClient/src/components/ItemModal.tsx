@@ -1,6 +1,5 @@
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
@@ -13,11 +12,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import { useState } from "react"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import generatedImageUrl from "../utils/generatedImageUrl"
-import { flexbox, fontSize, margin, width } from "@mui/system";
-
 
 interface ItemModalProps {
   item: ScanVisionResult | null
@@ -42,24 +40,22 @@ const style = {
 
 const subtitle = {
   fontSize: "x-large",
-  textTransform:"uppercase",
-  fontFamily:"Bebas Neue",
-  margin:"2%",
-  color:"#9d9797"
+  textTransform: "uppercase",
+  fontFamily: "Bebas Neue",
+  margin: "2%",
+  color: "#9d9797",
 }
 
 const buttonstyle = {
-  marginTop:"10%",
-  marginRight:"40%",
-  marginLeft:"40%"
+  marginTop: "10%",
+  marginRight: "40%",
+  marginLeft: "40%",
 }
 
-
 export default function ItemModal({ item, open, onClose, onDelete }: ItemModalProps): JSX.Element {
-
   //Show the confidence
-  const [isShown, setIsShown] = useState(false);
-  const [ShownDescribe, setIsShownDescribe] = useState(false);
+  const [isShown, setIsShown] = useState(false)
+  const [ShownDescribe, setIsShownDescribe] = useState(false)
   const [ShownObject, setIsShownObject] = useState(false)
 
   if (item === null) return <></>
@@ -71,42 +67,45 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography className="modalTitle" id="modal-modal-title" style={{
+        <Typography
+          className="modalTitle"
+          id="modal-modal-title"
+          style={{
             fontSize: "xx-large",
-            textTransform:"uppercase",
-            fontFamily:"Bebas Neue",
-            margin:"auto"
+            textTransform: "uppercase",
+            fontFamily: "Bebas Neue",
+            margin: "auto",
           }}
-          >
-          <b></b>{item.captions?.[0]?.text ?? "Description"}
+        >
+          <b></b>
+          {item.captions?.[0]?.text ?? "Description"}
         </Typography>
         <img src={generatedImageUrl(item.image, "full")} style={{ width: 500 }} />
         <div id="modal-modal-description">
           {item.captions?.length > 0 && (
             <>
-              <Typography>
-                {/* Description */}
-              </Typography>
+              <Typography>{/* Description */}</Typography>
               <ul>
                 {item.captions.map((caption, i) => (
-                  <Typography 
-                    key={i} variant="body2">
+                  <Typography key={i} variant="body2">
                     <div
-                    onMouseEnter={() => setIsShownDescribe(true)}
-                    onMouseLeave={() => setIsShownDescribe(false)}
-                    className="DescriptionModal">
-                    {caption.text}  
+                      onMouseEnter={() => setIsShownDescribe(true)}
+                      onMouseLeave={() => setIsShownDescribe(false)}
+                      className="DescriptionModal"
+                    >
+                      {caption.text}
 
-                    {ShownDescribe && (
-                    <Chip
-                      key={caption.confidence}
-                      label= {`${caption.confidence.toFixed(2)}`}
-                      sx={{
-                        m: 0.5,
-                        fontSize: "small",
-                        backgroundColor:"#a5a5a5",
-                        color:"white"
-                      }} />
+                      {ShownDescribe && (
+                        <Chip
+                          key={caption.confidence}
+                          label={`${caption.confidence.toFixed(2)}`}
+                          sx={{
+                            m: 0.5,
+                            fontSize: "small",
+                            backgroundColor: "#a5a5a5",
+                            color: "white",
+                          }}
+                        />
                       )}
                     </div>
                   </Typography>
@@ -114,58 +113,56 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
               </ul>
             </>
           )}
-          <Typography sx={subtitle}>
-            Tags
-          </Typography>
-          <Stack 
-           onMouseEnter={() => setIsShown(true)}
-           onMouseLeave={() => setIsShown(false)}
-           spacing={0} direction="row" sx={{ flexWrap: "wrap" }}>
-
+          <Typography sx={subtitle}>Tags</Typography>
+          <Stack
+            onMouseEnter={() => setIsShown(true)}
+            onMouseLeave={() => setIsShown(false)}
+            spacing={0}
+            direction="row"
+            sx={{ flexWrap: "wrap" }}
+          >
             {item.tags.map((tag) => (
               <>
-              <Chip
-                key={tag.name}
-                label={`${tag.name}`}
-                sx={{
-                  m: 0.5,
-                  fontSize: "small",
-                }}/>
-
-                {isShown && (
                 <Chip
-                  key={tag.confidence}
-                  label= {`${tag.confidence.toFixed(2)}`}
+                  key={tag.name}
+                  label={`${tag.name}`}
                   sx={{
                     m: 0.5,
                     fontSize: "small",
-                    backgroundColor:"#a5a5a5",
-                    color:"white"
-                  }} />
-                  )}
-                </>
-               
+                  }}
+                />
+
+                {isShown && (
+                  <Chip
+                    key={tag.confidence}
+                    label={`${tag.confidence.toFixed(2)}`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                      backgroundColor: "#a5a5a5",
+                      color: "white",
+                    }}
+                  />
+                )}
+              </>
             ))}
           </Stack>
 
           <Typography sx={subtitle}>
             Accent Color
             <Tooltip title={`#${item.accentColor}`}>
-
               <div
                 style={{
-                  display:"flex",
+                  display: "flex",
                   height: "100px",
                   width: "200px",
                   backgroundColor: "#" + item.accentColor,
-                  marginTop:"2%",                  
+                  marginTop: "2%",
                 }}
               ></div>
             </Tooltip>
           </Typography>
-          <Typography sx={subtitle}>
-            Faces
-          </Typography>
+          <Typography sx={subtitle}>Faces</Typography>
           <ul>
             {item.faces?.length > 0 &&
               item.faces.map((face, i) => (
@@ -174,13 +171,10 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                 </Typography>
               ))}
           </ul>
-          <Typography sx={subtitle}>
-            Objects
-          </Typography>
-            {item.objects?.length > 0 &&
-              item.objects.map((object, i) => (
-                <Typography key={i} variant="body2">
-                
+          <Typography sx={subtitle}>Objects</Typography>
+          {item.objects?.length > 0 &&
+            item.objects.map((object, i) => (
+              <Typography key={i} variant="body2">
                 <Chip
                   onMouseEnter={() => setIsShownObject(true)}
                   onMouseLeave={() => setIsShownObject(false)}
@@ -189,40 +183,42 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                   sx={{
                     m: 0.5,
                     fontSize: "small",
-                  }}/>
+                  }}
+                />
 
-               {ShownObject && (
-                <Chip
-                key={object.confidence}
-                label= {`${object.confidence.toFixed(2)}`}
-                sx={{
-                  m: 0.5,
-                  fontSize: "small",
-                  backgroundColor:"#a5a5a5",
-                  color:"white"
-                }} /> 
+                {ShownObject && (
+                  <Chip
+                    key={object.confidence}
+                    label={`${object.confidence.toFixed(2)}`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                      backgroundColor: "#a5a5a5",
+                      color: "white",
+                    }}
+                  />
                 )}
-                </Typography>
-              ))}
-          
+              </Typography>
+            ))}
+
           <Typography sx={subtitle}>
-          Adult Content
-          <div
-                style={{
-                  display:"flex",
-                  marginTop:"2%", 
-                  fontSize: "large",      
-                  color:"black"           
-                }}
-              > {item.isAdult.toString()}</div>
-            
+            Adult Content
+            <div
+              style={{
+                display: "flex",
+                marginTop: "2%",
+                fontSize: "large",
+                color: "black",
+              }}
+            >
+              {" "}
+              {item.isAdult.toString()}
+            </div>
           </Typography>
-          <Typography sx={subtitle}>
-            Ocr
-          </Typography>
+          <Typography sx={subtitle}>Ocr</Typography>
           <OcrBlock ocr={item.ocr} />
           <Button variant="contained" color="error" onClick={onDelete} sx={buttonstyle}>
-            <DeleteForeverIcon/>
+            <DeleteForeverIcon />
           </Button>
         </div>
       </Box>
@@ -231,32 +227,27 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
 }
 
 function OcrBlock({ ocr }: { ocr: Ocr }) {
-  if (ocr.state === "DONE")
-    return (
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}></Typography>
-          <OcrState ocr={ocr} />
-        </AccordionSummary>
-        <AccordionDetails>
-          {ocr.lines.map((text, i) => (
-            <Typography key={i}>{text}</Typography>
-          ))}
-        </AccordionDetails>
-      </Accordion>
-    )
   return (
-    <Typography variant="body2" component="p">
-      Unknown state
-    </Typography>
+    <Accordion disabled={ocr.state !== "DONE"}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography sx={{ width: "33%", flexShrink: 0 }}></Typography>
+        <OcrState ocr={ocr} />
+      </AccordionSummary>
+      <AccordionDetails>
+        {ocr.lines.map((text, i) => (
+          <Typography key={i}>{text}</Typography>
+        ))}
+      </AccordionDetails>
+    </Accordion>
   )
 }
 
 function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
+  console.log(state)
   if (state === "NONE")
     return <Typography sx={{ color: "text.secondary" }}>No Text found</Typography>
   if (state === "PENDING")
@@ -264,6 +255,10 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
   if (state === "RUNNING")
     return <Typography sx={{ color: "text.secondary" }}>Text is being processed</Typography>
   if (state === "DONE")
-    return <Typography sx={{ color: "text.secondary" }}>{summaries?.[0]?.text ?? "Text processed"}</Typography>
+    return (
+      <Typography sx={{ color: "text.secondary" }}>
+        {summaries?.[0]?.text ?? "Text processed"}
+      </Typography>
+    )
   return <Typography sx={{ color: "text.secondary" }}>Unknown state</Typography>
 }

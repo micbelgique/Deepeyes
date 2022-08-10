@@ -59,7 +59,8 @@ namespace Deepeyes.Functions
                 var textResult = await context.CallActivityAsync<IList<ReadResult>>("AnalyzeInput_ReceiveExtractedText", operationId);
 
                 scanVisionResult.Ocr.Lines = textResult.SelectMany(x => x.Lines.Select(l => l.Text)).ToList();
-                scanVisionResult.Ocr = await context.CallActivityAsync<Ocr>("AnalyzeInput_NerAnalysis", scanVisionResult.Ocr);
+                scanVisionResult.Ocr.Entities = await context.CallActivityAsync<List<Entity>>("AnalyzeInput_NerAnalysis", scanVisionResult.Ocr);
+                scanVisionResult.Ocr.KeyPhrases = await context.CallActivityAsync<List<string>>("AnalyzeInput_KeyPhrasesExtraction", scanVisionResult.Ocr);
                 scanVisionResult.Ocr.State = "DONE";
                 await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             }
@@ -165,11 +166,18 @@ namespace Deepeyes.Functions
         }
 
         [FunctionName("AnalyzeInput_NerAnalysis")]
-        public static async Task<Ocr> AnalyzeInput_NerAnalysis([ActivityTrigger] Ocr ocrResult, ILogger log)
+        public static async Task<List<Entity>> AnalyzeInput_NerAnalysis([ActivityTrigger] Ocr ocrResult, ILogger log)
         {
-            var response = await TextAnalyticsClient.RecognizeEntitiesAsync(string.Join("\n", ocrResult.Lines.SelectMany(l => l)));
-            ocrResult.Entities = response.Value.Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory }).ToList();
-            return ocrResult;
+            var response = await TextAnalyticsClient.RecognizeEntitiesAsync(string.Join("\n", ocrResult.Lines));
+            return response.Value.Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory }).ToList();
+        }
+
+        [FunctionName("AnalyzeInput_KeyPhrasesExtraction")]
+        public static async Task<List<string>> AnalyzeInput_KeyPhrasesExtraction([ActivityTrigger] Ocr ocrResult, ILogger log)
+        {
+            log.LogInformation("Extracting key phrases from image");
+            var response = await TextAnalyticsClient.ExtractKeyPhrasesAsync(string.Join("\n", ocrResult.Lines));
+            return response.Value.ToList();
         }
 
 

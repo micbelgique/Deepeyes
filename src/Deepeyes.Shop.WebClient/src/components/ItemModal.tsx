@@ -1,4 +1,6 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
@@ -14,6 +16,8 @@ import {
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import generatedImageUrl from "../utils/generatedImageUrl"
+import { flexbox, fontSize, margin, width } from "@mui/system";
+
 
 interface ItemModalProps {
   item: ScanVisionResult | null
@@ -36,7 +40,28 @@ const style = {
   height: "100%",
 }
 
+const subtitle = {
+  fontSize: "x-large",
+  textTransform:"uppercase",
+  fontFamily:"Bebas Neue",
+  margin:"2%",
+  color:"#9d9797"
+}
+
+const buttonstyle = {
+  marginTop:"10%",
+  marginRight:"40%",
+  marginLeft:"40%"
+}
+
+
 export default function ItemModal({ item, open, onClose, onDelete }: ItemModalProps): JSX.Element {
+
+  //Show the confidence
+  const [isShown, setIsShown] = useState(false);
+  const [ShownDescribe, setIsShownDescribe] = useState(false);
+  const [ShownObject, setIsShownObject] = useState(false)
+
   if (item === null) return <></>
   return (
     <Modal
@@ -46,53 +71,100 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h5" component="h2">
-          {item.captions?.[0]?.text ?? "Description"}
+        <Typography className="modalTitle" id="modal-modal-title" style={{
+            fontSize: "xx-large",
+            textTransform:"uppercase",
+            fontFamily:"Bebas Neue",
+            margin:"auto"
+          }}
+          >
+          <b></b>{item.captions?.[0]?.text ?? "Description"}
         </Typography>
         <img src={generatedImageUrl(item.image, "full")} style={{ width: 500 }} />
         <div id="modal-modal-description">
           {item.captions?.length > 0 && (
             <>
-              <Typography variant="h6" component="h3">
-                Descriptions:
+              <Typography>
+                {/* Description */}
               </Typography>
               <ul>
                 {item.captions.map((caption, i) => (
-                  <Typography key={i} variant="body2" component="li">
-                    {caption.text} | {caption.confidence.toFixed(2)}
+                  <Typography 
+                    key={i} variant="body2">
+                    <div
+                    onMouseEnter={() => setIsShownDescribe(true)}
+                    onMouseLeave={() => setIsShownDescribe(false)}
+                    className="DescriptionModal">
+                    {caption.text}  
+
+                    {ShownDescribe && (
+                    <Chip
+                      key={caption.confidence}
+                      label= {`${caption.confidence.toFixed(2)}`}
+                      sx={{
+                        m: 0.5,
+                        fontSize: "small",
+                        backgroundColor:"#a5a5a5",
+                        color:"white"
+                      }} />
+                      )}
+                    </div>
                   </Typography>
                 ))}
               </ul>
             </>
           )}
-          <Typography variant="h6" component="h3">
-            Tags:
+          <Typography sx={subtitle}>
+            Tags
           </Typography>
-          <Stack spacing={0} direction="row" sx={{ flexWrap: "wrap" }}>
+          <Stack 
+           onMouseEnter={() => setIsShown(true)}
+           onMouseLeave={() => setIsShown(false)}
+           spacing={0} direction="row" sx={{ flexWrap: "wrap" }}>
+
             {item.tags.map((tag) => (
+              <>
               <Chip
                 key={tag.name}
-                label={`${tag.name} | ${tag.confidence.toFixed(2)}`}
-                sx={{ m: 0.2 }}
-              />
+                label={`${tag.name}`}
+                sx={{
+                  m: 0.5,
+                  fontSize: "small",
+                }}/>
+
+                {isShown && (
+                <Chip
+                  key={tag.confidence}
+                  label= {`${tag.confidence.toFixed(2)}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                    backgroundColor:"#a5a5a5",
+                    color:"white"
+                  }} />
+                  )}
+                </>
+               
             ))}
           </Stack>
-          <Typography variant="h6" component="h3">
-            Accent Color:
+
+          <Typography sx={subtitle}>
+            Accent Color
             <Tooltip title={`#${item.accentColor}`}>
-              <span
+
+              <div
                 style={{
-                  height: "1em",
-                  width: "1em",
+                  display:"flex",
+                  height: "100px",
+                  width: "200px",
                   backgroundColor: "#" + item.accentColor,
-                  display: "inline-block",
-                  borderRadius: "50%",
+                  marginTop:"2%",                  
                 }}
-              ></span>
+              ></div>
             </Tooltip>
           </Typography>
-          <Typography variant="h6" component="h3">
-            Faces:
+          <Typography sx={subtitle}>
+            Faces
           </Typography>
           <ul>
             {item.faces?.length > 0 &&
@@ -102,26 +174,55 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                 </Typography>
               ))}
           </ul>
-          <Typography variant="h6" component="h3">
-            Objects:
+          <Typography sx={subtitle}>
+            Objects
           </Typography>
-          <ul>
             {item.objects?.length > 0 &&
               item.objects.map((object, i) => (
-                <Typography key={i} variant="body2" component="li">
-                  {object.name} - {object.confidence.toString()}
+                <Typography key={i} variant="body2">
+                
+                <Chip
+                  onMouseEnter={() => setIsShownObject(true)}
+                  onMouseLeave={() => setIsShownObject(false)}
+                  key={object.name}
+                  label={`${object.name}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}/>
+
+               {ShownObject && (
+                <Chip
+                key={object.confidence}
+                label= {`${object.confidence.toFixed(2)}`}
+                sx={{
+                  m: 0.5,
+                  fontSize: "small",
+                  backgroundColor:"#a5a5a5",
+                  color:"white"
+                }} /> 
+                )}
                 </Typography>
               ))}
-          </ul>
-          <Typography variant="h6" component="h3">
-            Is Adult: {item.isAdult.toString()}
+          
+          <Typography sx={subtitle}>
+          Adult Content
+          <div
+                style={{
+                  display:"flex",
+                  marginTop:"2%", 
+                  fontSize: "large",      
+                  color:"black"           
+                }}
+              > {item.isAdult.toString()}</div>
+            
           </Typography>
-          <Typography variant="h6" component="h3">
-            Ocr:
+          <Typography sx={subtitle}>
+            Ocr
           </Typography>
           <OcrBlock ocr={item.ocr} />
-          <Button variant="contained" color="error" onClick={onDelete} sx={{ mt: "0.5em" }}>
-            Delete
+          <Button variant="contained" color="error" onClick={onDelete} sx={buttonstyle}>
+            <DeleteForeverIcon/>
           </Button>
         </div>
       </Box>
@@ -138,7 +239,7 @@ function OcrBlock({ ocr }: { ocr: Ocr }) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>Text: </Typography>
+          <Typography sx={{ width: "33%", flexShrink: 0 }}></Typography>
           <OcrState ocr={ocr} />
         </AccordionSummary>
         <AccordionDetails>
@@ -155,7 +256,7 @@ function OcrBlock({ ocr }: { ocr: Ocr }) {
   )
 }
 
-function OcrState({ ocr: { state, summary } }: { ocr: Ocr }) {
+function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
   if (state === "NONE")
     return <Typography sx={{ color: "text.secondary" }}>No Text found</Typography>
   if (state === "PENDING")
@@ -163,6 +264,6 @@ function OcrState({ ocr: { state, summary } }: { ocr: Ocr }) {
   if (state === "RUNNING")
     return <Typography sx={{ color: "text.secondary" }}>Text is being processed</Typography>
   if (state === "DONE")
-    return <Typography sx={{ color: "text.secondary" }}>{summary ?? "Text processed"}</Typography>
+    return <Typography sx={{ color: "text.secondary" }}>{summaries?.[0].text ?? "Text processed"}</Typography>
   return <Typography sx={{ color: "text.secondary" }}>Unknown state</Typography>
 }

@@ -67,6 +67,7 @@ function Home() {
     <div className="Home">
       <h1>Deep Eyes Project</h1>
       <Container>
+        <div className="search">
         <form onSubmit={handleSearch}>
           <TextField
             variant="standard"
@@ -82,6 +83,8 @@ function Home() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </form>
+        </div>
+
         <Masonry
           columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
           spacing={2}

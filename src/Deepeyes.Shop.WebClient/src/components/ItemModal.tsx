@@ -264,6 +264,6 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
   if (state === "RUNNING")
     return <Typography sx={{ color: "text.secondary" }}>Text is being processed</Typography>
   if (state === "DONE")
-    return <Typography sx={{ color: "text.secondary" }}>{summaries?.[0].text ?? "Text processed"}</Typography>
+    return <Typography sx={{ color: "text.secondary" }}>{summaries?.[0]?.text ?? "Text processed"}</Typography>
   return <Typography sx={{ color: "text.secondary" }}>Unknown state</Typography>
 }

@@ -61,6 +61,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
   const [isShown, setIsShown] = useState(false);
   const [ShownDescribe, setIsShownDescribe] = useState(false);
   const [ShownObject, setIsShownObject] = useState(false)
+  const [ShownFace, setIsShownFace] = useState(false)
 
   if (item === null) return <></>
   return (
@@ -166,14 +167,29 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
           <Typography sx={subtitle}>
             Faces
           </Typography>
-          <ul>
+          
+            
             {item.faces?.length > 0 &&
               item.faces.map((face, i) => (
-                <Typography key={i} variant="body2" component="li">
-                  {face.gender} - {face.age.toString()}
+                <Typography key={i} variant="body2">
+                <Chip
+                  key={face.gender}
+                  label={`${face.gender}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}/>
+
+                <Chip
+                  key={face.age.toString()}
+                  label={`${face.age.toString()}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}/>
                 </Typography>
               ))}
-          </ul>
+         
           <Typography sx={subtitle}>
             Objects
           </Typography>

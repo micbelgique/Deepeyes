@@ -59,8 +59,7 @@ namespace Deepeyes.Functions
                 var textResult = await context.CallActivityAsync<IList<ReadResult>>("AnalyzeInput_ReceiveExtractedText", operationId);
 
                 scanVisionResult.Ocr.Lines = textResult.SelectMany(x => x.Lines.Select(l => l.Text)).ToList();
-                scanVisionResult.Ocr.Entities = await context.CallActivityAsync<List<Entity>>("AnalyzeInput_NerAnalysis", scanVisionResult.Ocr);
-                scanVisionResult.Ocr.KeyPhrases = await context.CallActivityAsync<List<string>>("AnalyzeInput_KeyPhrasesExtraction", scanVisionResult.Ocr);
+                scanVisionResult.Ocr = await context.CallActivityAsync<Ocr>("AnalyzeInput_AnalyseText", scanVisionResult.Ocr);
                 scanVisionResult.Ocr.State = "DONE";
                 await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             }
@@ -165,19 +164,32 @@ namespace Deepeyes.Functions
 
         }
 
-        [FunctionName("AnalyzeInput_NerAnalysis")]
-        public static async Task<List<Entity>> AnalyzeInput_NerAnalysis([ActivityTrigger] Ocr ocrResult, ILogger log)
+        [FunctionName("AnalyzeInput_AnalyseText")]
+        public static async Task<Ocr> AnalyzeInput_AnalyseText([ActivityTrigger] Ocr ocrResult, ILogger log)
         {
-            var response = await TextAnalyticsClient.RecognizeEntitiesAsync(string.Join("\n", ocrResult.Lines));
-            return response.Value.Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory }).ToList();
-        }
+            TextAnalyticsActions actions = new()
+            {
+                ExtractSummaryActions = new List<ExtractSummaryAction>() { new ExtractSummaryAction() },
+                ExtractKeyPhrasesActions = new List<ExtractKeyPhrasesAction>() { new ExtractKeyPhrasesAction() },
+                RecognizeEntitiesActions = new List<RecognizeEntitiesAction>() { new RecognizeEntitiesAction() },
+            };
 
-        [FunctionName("AnalyzeInput_KeyPhrasesExtraction")]
-        public static async Task<List<string>> AnalyzeInput_KeyPhrasesExtraction([ActivityTrigger] Ocr ocrResult, ILogger log)
-        {
-            log.LogInformation("Extracting key phrases from image");
-            var response = await TextAnalyticsClient.ExtractKeyPhrasesAsync(string.Join("\n", ocrResult.Lines));
-            return response.Value.ToList();
+            var operation = await TextAnalyticsClient.StartAnalyzeActionsAsync(new List<string>() { string.Join("\n", ocrResult.Lines) }, actions);
+            await operation.WaitForCompletionAsync();
+
+            var documentsInPage = await operation.Value.FirstAsync();
+
+            ocrResult.Summaries = documentsInPage.ExtractSummaryResults.SelectMany(s => s.DocumentsResults.SelectMany(d => d.Sentences))
+                                                                      .Select(s => new Summary { Confidence = s.RankScore, Text = s.Text })
+                                                                      .ToList();
+            ocrResult.Entities = documentsInPage.RecognizeEntitiesResults.SelectMany(re => re.DocumentsResults.SelectMany(d => d.Entities))
+                                                                          .Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory })
+                                                                          .ToList();
+            ocrResult.KeyPhrases = documentsInPage.ExtractKeyPhrasesResults.SelectMany(kp => kp.DocumentsResults.SelectMany(d => d.KeyPhrases))
+                                                                            .ToList();
+
+
+            return ocrResult;
         }
 
 

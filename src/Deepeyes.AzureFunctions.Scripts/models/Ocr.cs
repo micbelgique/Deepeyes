@@ -8,5 +8,6 @@ namespace Deepeyes.Functions.Models
         public List<string> Lines { get; set; } = new List<string>();
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public List<string> KeyPhrases { get; set; } = new List<string>();
+        public List<Summary> Summaries { get; set; } = new List<Summary>();
     }
 }

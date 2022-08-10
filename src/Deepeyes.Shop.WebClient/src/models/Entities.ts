@@ -1,4 +1,6 @@
 export default interface Entity {
-  Category: string
-  SubCategory: string
+  name: string
+  confidence: string
+  category: string
+  subCategory: string
 }

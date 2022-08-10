@@ -180,13 +180,13 @@ namespace Deepeyes.Functions
             var documentsInPage = await operation.Value.FirstAsync();
 
             ocrResult.Summaries = documentsInPage.ExtractSummaryResults.SelectMany(s => s.DocumentsResults.SelectMany(d => d.Sentences))
-                                                                      .Select(s => new Summary { Confidence = s.RankScore, Text = s.Text })
-                                                                      .ToList();
+                                                                       .Select(s => new Summary { Confidence = s.RankScore, Text = s.Text })
+                                                                       .ToList();
             ocrResult.Entities = documentsInPage.RecognizeEntitiesResults.SelectMany(re => re.DocumentsResults.SelectMany(d => d.Entities))
-                                                                          .Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory })
-                                                                          .ToList();
+                                                                         .Select(e => new Entity { Category = e.Category.ToString(), SubCategory = e.SubCategory, Confidence = e.ConfidenceScore, Name = e.Text.Substring(e.Offset, e.Length) })
+                                                                         .ToList();
             ocrResult.KeyPhrases = documentsInPage.ExtractKeyPhrasesResults.SelectMany(kp => kp.DocumentsResults.SelectMany(d => d.KeyPhrases))
-                                                                            .ToList();
+                                                                           .ToList();
 
 
             return ocrResult;

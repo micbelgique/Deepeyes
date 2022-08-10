@@ -23,5 +23,7 @@ namespace Deepeyes.Functions.Models
         public List<Object> Objects { get; set; } = new();
         public Ocr Ocr { get; set; } = new();
 
+        public List<FaceAttributes> FacesAttributes { get; set; } = new();
+
     }
 }

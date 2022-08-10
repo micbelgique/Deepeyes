@@ -7,7 +7,9 @@ const blobServiceClient = new BlobServiceClient(blobSasUrl)
 const containerCLient = blobServiceClient.getContainerClient(blobContainerName)
 
 const uploadImage = async (image: Blob) => {
-  const blobClient = containerCLient.getBlockBlobClient(`${Date.now()}.jpg`)
+  const blobClient = containerCLient.getBlockBlobClient(
+    `${Date.now()}-${(Math.random() * 100) % 100}.jpg`
+  )
   await blobClient.upload(image, image.size)
 }
 

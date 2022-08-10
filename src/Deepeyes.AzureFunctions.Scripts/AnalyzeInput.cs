@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ using Azure.Storage.Blobs;
 using Deepeyes.Functions.Models;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using Microsoft.Azure.CognitiveServices.Vision.Face;
+using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
@@ -28,7 +31,7 @@ namespace Deepeyes.Functions
 
         private static ComputerVisionClient InitializeComputerVisionClient()
         {
-            return new(new ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("CognitiveServicesApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
+            return new(new Microsoft.Azure.CognitiveServices.Vision.ComputerVision.ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("CognitiveServicesApiKey")), Array.Empty<System.Net.Http.DelegatingHandler>())
             {
                 Endpoint = Environment.GetEnvironmentVariable("CognitiveServicesEndpoint")
             };
@@ -41,6 +44,13 @@ namespace Deepeyes.Functions
             return new(new Uri(Environment.GetEnvironmentVariable("CognitiveServicesEndpoint")), new AzureKeyCredential(Environment.GetEnvironmentVariable("CognitiveServicesApiKey")));
         }
 
+        private static readonly Lazy<FaceClient> lazyFaceClient = new(InitializeFaceClient);
+        private static FaceClient FaceClient => lazyFaceClient.Value;
+        private static FaceClient InitializeFaceClient()
+        {
+            return new(new Microsoft.Azure.CognitiveServices.Vision.Face.ApiKeyServiceClientCredentials(Environment.GetEnvironmentVariable("CognitiveServicesApiKey"))) { Endpoint = Environment.GetEnvironmentVariable("CognitiveServicesEndpoint") };
+        }
+
 
         [FunctionName("AnalyzeInput")]
         public static async Task RunOrchestrator(
@@ -50,6 +60,11 @@ namespace Deepeyes.Functions
 
             // Replace "hello" with the name of your Durable Activity Function.
             var scanVisionResult = await context.CallActivityAsync<ScanVisionResult>("AnalyzeInput_DescribeImage", myBlobName);
+            // await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
+            if (scanVisionResult.Faces.Count > 0)
+            {
+                scanVisionResult.FacesAttributes = await context.CallActivityAsync<List<Models.FaceAttributes>>("AnalyzeInput_AnalyseFaces", myBlobName);
+            }
             await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             if (scanVisionResult.Ocr.State == "PENDING")
             {
@@ -63,7 +78,6 @@ namespace Deepeyes.Functions
                 scanVisionResult.Ocr.State = "DONE";
                 await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             }
-
         }
 
         [FunctionName("AnalyzeInput_DescribeImage")]
@@ -194,6 +208,31 @@ namespace Deepeyes.Functions
 
 
             return ocrResult;
+        }
+
+        [FunctionName("AnalyzeInput_AnalyseFaces")]
+        public static async Task<List<Models.FaceAttributes>> AnalyzeInput_AnalyseFaces([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)
+        {
+            log.LogInformation("Extracting text from image");
+
+            var faceAttributes = new[]
+            {
+                FaceAttributeType.QualityForRecognition,
+                FaceAttributeType.Age,
+                FaceAttributeType.Gender,
+                FaceAttributeType.Accessories,
+                FaceAttributeType.Emotion,
+                FaceAttributeType.Smile,
+                FaceAttributeType.FacialHair,
+                FaceAttributeType.Makeup,
+                FaceAttributeType.Glasses,
+            };
+            // send the blob to vision api and get the results
+            var faces = await FaceClient.Face.DetectWithStreamAsync(myBlob.OpenRead(), recognitionModel: RecognitionModel.Recognition04, detectionModel: DetectionModel.Detection01, returnFaceAttributes: faceAttributes);
+
+            return faces.Select(f => new Models.FaceAttributes(f.FaceAttributes)).ToList();
+
+
         }
 
 

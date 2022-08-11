@@ -63,8 +63,9 @@ function App() {
       </div>
       <Snackbar
         open={open}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={() => setOpen(false)}

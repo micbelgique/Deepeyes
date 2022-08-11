@@ -6,7 +6,6 @@ namespace Deepeyes.Functions.Models
     public class FaceAttributes
     {
         public double Age { get; set; }
-        public Emotion Emotion { get; set; }
         public string Gender { get; set; }
         public string Glasses { get; set; }
         public FacialHair FacialHair { get; set; }
@@ -22,17 +21,6 @@ namespace Deepeyes.Functions.Models
                 return;
             }
             Age = facialAttributes.Age ?? -1;
-            Emotion = new Emotion
-            {
-                Anger = facialAttributes.Emotion.Anger,
-                Contempt = facialAttributes.Emotion.Contempt,
-                Disgust = facialAttributes.Emotion.Disgust,
-                Fear = facialAttributes.Emotion.Fear,
-                Happiness = facialAttributes.Emotion.Happiness,
-                Neutral = facialAttributes.Emotion.Neutral,
-                Sadness = facialAttributes.Emotion.Sadness,
-
-            };
             Gender = facialAttributes.Gender.ToString();
             Glasses = facialAttributes.Glasses.ToString();
             FacialHair = new FacialHair

@@ -1,5 +1,5 @@
 export default interface FacialHair {
-  Moustache: number
-  Beard: number
-  Sideburns: number
+  moustache: number
+  beard: number
+  sideburns: number
 }

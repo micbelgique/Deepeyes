@@ -15,6 +15,6 @@ export default interface ScanVisionResult {
   accentColor: string
   faces: Face[]
   objects: Object[]
-  ocr: Ocr
+  ocr: Ocr 
   facesAttributes: FaceAttributes[]
 }

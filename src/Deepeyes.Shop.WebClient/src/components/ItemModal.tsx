@@ -1,3 +1,4 @@
+import { ConstructionOutlined } from "@mui/icons-material"
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import {
@@ -13,6 +14,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useState } from "react"
+import Entity from "../models/Entities"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import generatedImageUrl from "../utils/generatedImageUrl"
@@ -51,13 +53,13 @@ const buttonstyle = {
   marginRight: "40%",
   marginLeft: "40%",
 }
-
+  
 export default function ItemModal({ item, open, onClose, onDelete }: ItemModalProps): JSX.Element {
   //Show the confidence
   const [isShown, setIsShown] = useState(false)
   const [ShownDescribe, setIsShownDescribe] = useState(false)
   const [ShownObject, setIsShownObject] = useState(false)
-  const [ShownFace, setIsShownFace] = useState(false)
+
 
   if (item === null) return <></>
   return (
@@ -163,31 +165,80 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
               ></div>
             </Tooltip>
           </Typography>
-          <Typography sx={subtitle}>Faces</Typography>
-          <ul>
-            {item.faces?.length > 0 &&
-              item.faces.map((face, i) => (
-                <Typography key={i} variant="body2">
-                  <Chip
-                    key={face.gender}
-                    label={`${face.gender}`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
 
-                  <Chip
-                    key={face.age.toString()}
-                    label={`${face.age.toString()}`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-                </Typography>
-              ))}
-          </ul>
+
+          <Typography sx={subtitle}>Apparence</Typography>
+          {item.facesAttributes?.length > 0 &&
+            item.facesAttributes.map((facesAttribute, i) => (
+              
+              <>
+              <Typography key={i} variant="body2">
+                <Chip
+                  key={facesAttribute.gender}
+                  label={`${facesAttribute.gender.toString()}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  key={facesAttribute.age}
+                  label={`${facesAttribute.age.toString()}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+
+                <Chip
+                  
+                  key={facesAttribute.smile}
+                  label={`Smile : ${(facesAttribute.smile.toFixed(2))}/1`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+              </Typography>
+
+              <Typography key={i} variant="body2">
+                <Chip
+                  key={facesAttribute.glasses}
+                  label={`${facesAttribute.glasses.toString()}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+
+                <Chip
+                  key={facesAttribute.facialHair.beard}
+                  label={`Beard : ${facesAttribute.facialHair.beard} /1`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  key={facesAttribute.facialHair.moustache}
+                  label={`Moustache : ${facesAttribute.facialHair.moustache}/1`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />               
+                <Chip
+                  key={facesAttribute.facialHair.sideburns}
+                  label={`Sideburns : ${facesAttribute.facialHair.sideburns}/1`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                /> 
+              </Typography>
+              </>
+          ))}
+
           <Typography sx={subtitle}>Objects</Typography>
           {item.objects?.length > 0 &&
             item.objects.map((object, i) => (
@@ -202,7 +253,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                     fontSize: "small",
                   }}
                 />
-
                 {ShownObject && (
                   <Chip
                     key={object.confidence}
@@ -232,8 +282,45 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
               {item.isAdult.toString()}
             </div>
           </Typography>
+
           <Typography sx={subtitle}>Ocr</Typography>
           <OcrBlock ocr={item.ocr} />
+
+        <Typography sx={subtitle}>Key phrase</Typography>
+              <Typography variant="body2">
+              {item.ocr.keyPhrases.map((keyPhrase) => (
+               <Chip
+                  key={keyPhrase}
+                  label={`${keyPhrase}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                ))}
+            <Typography sx={subtitle}>Entities (categories)</Typography>
+              {item.ocr.entities.map((entitie) => (
+              <>
+               <Chip
+                  key={entitie.category}
+                  label={`Categories : ${entitie.category}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                 <Chip
+                  key={entitie.name}
+                  label={` Name : ${entitie.name}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+
+              </>
+                ))}
+              </Typography>
           <Button variant="contained" color="error" onClick={onDelete} sx={buttonstyle}>
             <DeleteForeverIcon />
           </Button>
@@ -279,3 +366,6 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
     )
   return <Typography sx={{ color: "text.secondary" }}>Unknown state</Typography>
 }
+
+
+

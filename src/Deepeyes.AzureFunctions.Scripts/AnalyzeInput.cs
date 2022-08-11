@@ -185,13 +185,11 @@ namespace Deepeyes.Functions
             {
                 ExtractKeyPhrasesActions = new List<ExtractKeyPhrasesAction>() { new ExtractKeyPhrasesAction() },
                 RecognizeEntitiesActions = new List<RecognizeEntitiesAction>() { new RecognizeEntitiesAction() },
+                ExtractSummaryActions = new List<ExtractSummaryAction>() { new ExtractSummaryAction() }
             };
 
             var text = string.Join("\n", ocrResult.Lines);
-            if (text.Length > 600)
-            {
-                actions.ExtractSummaryActions = new List<ExtractSummaryAction>() { new ExtractSummaryAction() };
-            }
+
             var operation = await TextAnalyticsClient.StartAnalyzeActionsAsync(new List<string>() { text }, actions);
             await operation.WaitForCompletionAsync();
 

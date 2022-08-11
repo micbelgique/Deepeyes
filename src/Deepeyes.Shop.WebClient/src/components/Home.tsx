@@ -1,6 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search"
 import Masonry from "@mui/lab/Masonry"
-import { InputAdornment, TextField } from "@mui/material"
+import { Button, Grid, IconButton, InputAdornment, TextField } from "@mui/material"
 import { Container } from "@mui/system"
 import { useCallback, useState } from "react"
 import usePollingEffect from "../hooks/usePollingEffect"
@@ -24,8 +24,7 @@ function Home() {
     }
   )
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSearch = () => {
     if (search.length > 0) {
       stopPolling()
       const url = new URL("/api/search", import.meta.env.VITE_FUNCTION_APP_URL)
@@ -63,25 +62,62 @@ function Home() {
     }
   }, [selectedItem])
 
+  const handleDeleteAll = useCallback(async () => {
+    const url = new URL(`/api/deleteItem`, import.meta.env.VITE_FUNCTION_APP_URL)
+    try {
+      for (const { id, image } of items) {
+        const res = await fetch(`${url}?id=${id}&imageId=${image}`, {
+          method: "DELETE",
+        })
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+        console.log("deleted")
+      }
+      setItems([])
+    } catch (e) {
+      console.error(e)
+    }
+  }, [items])
+
   return (
     <div className="Home">
       <h1>Deep Eyes Project</h1>
       <Container>
-        <form onSubmit={handleSearch}>
-          <TextField
-            variant="standard"
-            id="search"
-            label="Search"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </form>
+        <div className="search">
+          <Grid container justifyContent="space-between">
+            <Grid item>
+              <Button variant="contained" color="error" onClick={handleDeleteAll}>
+                DELETE
+              </Button>
+            </Grid>
+            <Grid item>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleSearch()
+                }}
+              >
+                <TextField
+                  variant="standard"
+                  id="search"
+                  label="Search"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleSearch}>
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </form>
+            </Grid>
+          </Grid>
+        </div>
+
         <Masonry
           columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
           spacing={2}

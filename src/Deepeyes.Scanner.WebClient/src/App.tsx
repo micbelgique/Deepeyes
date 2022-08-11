@@ -8,6 +8,8 @@ import UploadButton from "./components/uploadButton"
 import WebCamView from "./components/webcamView"
 import { uploadImage } from "./services/blobStorage"
 
+const MAX_FILES = 10
+
 function App() {
   const webcamRef = useRef<Webcam>(null)
   const [open, setOpen] = useState(false)
@@ -42,7 +44,7 @@ function App() {
   }, [])
 
   const handleSubmitFiles = useCallback(async (files: FileList) => {
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < Math.min(files.length, MAX_FILES); i++) {
       const file = files.item(i)
       if (file) {
         await uploadImage(file)

@@ -1,5 +1,6 @@
 import Caption from "./Caption"
 import Face from "./Face"
+import FaceAttributes from "./FaceAttributes"
 import Object from "./Object"
 import Ocr from "./Ocr"
 import Tag from "./Tag"
@@ -15,4 +16,5 @@ export default interface ScanVisionResult {
   faces: Face[]
   objects: Object[]
   ocr: Ocr
+  facesAttributes: FaceAttributes[]
 }

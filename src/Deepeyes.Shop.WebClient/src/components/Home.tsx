@@ -1,6 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search"
 import Masonry from "@mui/lab/Masonry"
-import { InputAdornment, TextField } from "@mui/material"
+import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { Container } from "@mui/system"
 import { useCallback, useState } from "react"
 import usePollingEffect from "../hooks/usePollingEffect"
@@ -24,8 +24,7 @@ function Home() {
     }
   )
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSearch = () => {
     if (search.length > 0) {
       stopPolling()
       const url = new URL("/api/search", import.meta.env.VITE_FUNCTION_APP_URL)
@@ -68,21 +67,28 @@ function Home() {
       <h1>Deep Eyes Project</h1>
       <Container>
         <div className="search">
-        <form onSubmit={handleSearch}>
-          <TextField
-            variant="standard"
-            id="search"
-            label="Search"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleSearch()
             }}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </form>
+          >
+            <TextField
+              variant="standard"
+              id="search"
+              label="Search"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch}>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </form>
         </div>
 
         <Masonry

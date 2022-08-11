@@ -20,11 +20,12 @@ namespace Deepeyes.AzureFunctions.Scripts
         [FunctionName("Search")]
         public static async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-             [CosmosDB(
+            [CosmosDB(
                 databaseName: "DeepEyesDB",
                 collectionName: "ScanVisionResults",
-                ConnectionStringSetting = "CosmosDBConnection")]
-                              DocumentClient client,
+                ConnectionStringSetting = "CosmosDBConnection",
+                SqlQuery = "SELECT * FROM c order by c._ts desc")]
+                IEnumerable<ScanVisionResult> queryResults,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -37,17 +38,12 @@ namespace Deepeyes.AzureFunctions.Scripts
             {
                 return new BadRequestObjectResult("Please pass a value on the query string or in the request body");
             }
-            var queryResults = client.CreateDocumentQuery<ScanVisionResult>(collectionUri, new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+            var response = queryResults
                 .Where(svr => svr.Captions.Any(c => c.Text.Contains(query)) ||
                                 svr.Tags.Any(t => t.Name.Contains(query)) ||
                                 svr.Objects.Any(o => o.Name.Contains(query))
-                ).AsDocumentQuery();
-            var results = new List<ScanVisionResult>();
-            while (queryResults.HasMoreResults)
-            {
-                results.AddRange(await queryResults.ExecuteNextAsync<ScanVisionResult>());
-            }
-            return new OkObjectResult(queryResults);
+                );
+            return new OkObjectResult(response);
 
         }
     }

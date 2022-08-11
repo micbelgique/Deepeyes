@@ -18,6 +18,10 @@ import Entity from "../models/Entities"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import generatedImageUrl from "../utils/generatedImageUrl"
+import TreeView from '@mui/lab/TreeView';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem'
+
 
 interface ItemModalProps {
   item: ScanVisionResult | null
@@ -286,6 +290,8 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
           <Typography sx={subtitle}>Ocr</Typography>
           <OcrBlock ocr={item.ocr} />
 
+         
+
         <Typography sx={subtitle}>Key phrase</Typography>
               <Typography variant="body2">
               {item.ocr.keyPhrases.map((keyPhrase) => (
@@ -298,29 +304,11 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                   }}
                 />
                 ))}
-            <Typography sx={subtitle}>Entities (categories)</Typography>
-              {item.ocr.entities.map((entitie) => (
-              <>
-               <Chip
-                  key={entitie.category}
-                  label={`Categories : ${entitie.category}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-                 <Chip
-                  key={entitie.name}
-                  label={` Name : ${entitie.name}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-
-              </>
-                ))}
               </Typography>
+
+
+              <FilterCategory entities={item.ocr.entities} />
+
           <Button variant="contained" color="error" onClick={onDelete} sx={buttonstyle}>
             <DeleteForeverIcon />
           </Button>
@@ -358,7 +346,8 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
     return <Typography sx={{ color: "text.secondary" }}>Text will be processed</Typography>
   if (state === "RUNNING")
     return <Typography sx={{ color: "text.secondary" }}>Text is being processed</Typography>
-  if (state === "DONE")
+ 
+    if (state === "DONE")
     return (
       <Typography sx={{ color: "text.secondary" }}>
         {summaries?.[0]?.text ?? "Text processed"}
@@ -369,3 +358,39 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
 
 
 
+
+function FilterCategory ({ entities }: { entities: Entity[] }) {
+  let cats: Record<string, Set<string>> = {
+  };
+ 
+  for(var en of entities){
+      if (!cats.hasOwnProperty(en.category)) {
+        cats[en.category] = new Set([en.name])
+        // cats = {[en.category]:[en.name], ...cats}
+      }
+      else{
+        cats[en.category].add(en.name)
+      }
+    }
+    console.log(cats)
+    
+    return(
+      <>
+      <Typography sx={subtitle}>Categories</Typography>
+      {Object.entries(cats).map(([categorieName,valueName]) => (
+        <div key={categorieName}>
+        <TreeView
+        aria-label="file system navigator"
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+        sx={{flexGrow: 1, maxWidth: 400, overflowY: 'auto',backgroundColor:"white"}}
+        >
+          <TreeItem className="changecolor" nodeId="1" label={categorieName}>
+          {[...valueName].map((v, i) => <TreeItem key={i} nodeId="2" label={v} />)}
+          </TreeItem>
+        </TreeView>
+        </div>
+      ))}
+    </>
+    )
+}

@@ -219,7 +219,6 @@ namespace Deepeyes.Functions
                 FaceAttributeType.Age,
                 FaceAttributeType.Gender,
                 FaceAttributeType.Accessories,
-                FaceAttributeType.Emotion,
                 FaceAttributeType.Smile,
                 FaceAttributeType.FacialHair,
                 FaceAttributeType.Makeup,

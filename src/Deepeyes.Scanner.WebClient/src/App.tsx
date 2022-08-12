@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from "react"
 import Webcam from "react-webcam"
 import "./App.css"
 import CaptureButton from "./components/captureButton"
+import Footer from "./components/footer"
 import UploadButton from "./components/uploadButton"
 
 import WebCamView from "./components/webcamView"
@@ -54,12 +55,18 @@ function App() {
 
   return (
     <div className="App">
-      <WebCamView ref={webcamRef} />
-      <div className="ButtonCam">
-        <Stack direction="row" spacing={2}>
-          <UploadButton onSubmit={handleSubmitFiles} />
-          <CaptureButton onClick={handleCapture} />
-        </Stack>
+      <div className="content Container">
+        <div className="IndexInterface">
+          <h1 style={{ margin: "0.2em 0" }}>Deep Eyes Project</h1>
+        </div>
+        <WebCamView ref={webcamRef} />
+        <div className="ButtonCam">
+          <Stack direction="row" spacing={2}>
+            <UploadButton onSubmit={handleSubmitFiles} />
+            <CaptureButton onClick={handleCapture} />
+          </Stack>
+        </div>
+        <Footer />
       </div>
       <Snackbar
         open={open}

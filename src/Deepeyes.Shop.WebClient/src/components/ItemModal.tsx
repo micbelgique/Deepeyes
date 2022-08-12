@@ -16,7 +16,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import Entity from "../models/Entities"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
@@ -172,10 +172,9 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
           <Typography sx={subtitle}>Apparence</Typography>
           {item.facesAttributes?.length > 0 &&
             item.facesAttributes.map((facesAttribute, i) => (
-              <>
-                <Typography key={i} variant="body2">
+              <Fragment key={i}>
+                <Typography variant="body2">
                   <Chip
-                    key={facesAttribute.gender}
                     label={`${facesAttribute.gender.toString()}`}
                     sx={{
                       m: 0.5,
@@ -183,7 +182,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                     }}
                   />
                   <Chip
-                    key={facesAttribute.age}
                     label={`${facesAttribute.age.toString()}`}
                     sx={{
                       m: 0.5,
@@ -192,7 +190,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                   />
 
                   <Chip
-                    key={facesAttribute.smile}
                     label={`Smile : ${(facesAttribute.smile * 100).toFixed(0)}%`}
                     sx={{
                       m: 0.5,
@@ -203,7 +200,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
 
                 <Typography key={i} variant="body2">
                   <Chip
-                    key={facesAttribute.glasses}
                     label={`${facesAttribute.glasses.toString()}`}
                     sx={{
                       m: 0.5,
@@ -212,7 +208,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                   />
 
                   <Chip
-                    key={facesAttribute.facialHair.beard}
                     label={`Beard : ${facesAttribute.facialHair.beard} /1`}
                     sx={{
                       m: 0.5,
@@ -220,7 +215,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                     }}
                   />
                   <Chip
-                    key={facesAttribute.facialHair.moustache}
                     label={`Moustache : ${facesAttribute.facialHair.moustache}/1`}
                     sx={{
                       m: 0.5,
@@ -228,7 +222,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                     }}
                   />
                   <Chip
-                    key={facesAttribute.facialHair.sideburns}
                     label={`Sideburns : ${facesAttribute.facialHair.sideburns}/1`}
                     sx={{
                       m: 0.5,
@@ -237,7 +230,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                   />
                 </Typography>
                 <Divider sx={{ my: "0.5em" }} />
-              </>
+              </Fragment>
             ))}
 
           <Typography sx={subtitle}>Objects</Typography>
@@ -247,7 +240,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                 <Chip
                   onMouseEnter={() => setIsShownObject(true)}
                   onMouseLeave={() => setIsShownObject(false)}
-                  key={object.name}
                   label={`${object.name}`}
                   sx={{
                     m: 0.5,
@@ -256,7 +248,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                 />
                 {ShownObject && (
                   <Chip
-                    key={object.confidence}
                     label={`${object.confidence.toFixed(2)}`}
                     sx={{
                       m: 0.5,
@@ -279,7 +270,6 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                 color: "black",
               }}
             >
-              {" "}
               {item.isAdult.toString()}
             </div>
           </Typography>

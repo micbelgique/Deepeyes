@@ -1,17 +1,15 @@
-import SearchIcon from "@mui/icons-material/Search"
 import Masonry from "@mui/lab/Masonry"
-import { InputAdornment, TextField } from "@mui/material"
-import { Container } from "@mui/system"
+import { Button, Grid, Typography } from "@mui/material"
 import { useCallback, useState } from "react"
+import ItemCard from "../components/ItemCard"
+import ItemModal from "../components/ItemModal"
+import Search from "../components/Search"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
-import ItemCard from "./ItemCard"
-import ItemModal from "./ItemModal"
 function Home() {
   const [items, setItems] = useState<ScanVisionResult[]>([])
   const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
   const [openModal, setOpenModal] = useState(false)
-  const [search, setSearch] = useState("")
   const { stopPolling, startPolling } = usePollingEffect(
     () => {
       fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/api/readtable")
@@ -24,8 +22,7 @@ function Home() {
     }
   )
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSearch = (search: string) => {
     if (search.length > 0) {
       stopPolling()
       const url = new URL("/api/search", import.meta.env.VITE_FUNCTION_APP_URL)
@@ -53,7 +50,6 @@ function Home() {
         if (!res.ok) {
           throw new Error(res.statusText)
         }
-        console.log("deleted")
         setItems((items) => items.filter((item) => item.id !== selectedItem.id))
         setSelectedItem(null)
         setOpenModal(false)
@@ -63,51 +59,64 @@ function Home() {
     }
   }, [selectedItem])
 
+  const handleDeleteAll = useCallback(async () => {
+    const url = new URL(`/api/deleteItem`, import.meta.env.VITE_FUNCTION_APP_URL)
+    try {
+      for (const { id, image } of items) {
+        const res = await fetch(`${url}?id=${id}&imageId=${image}`, {
+          method: "DELETE",
+        })
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+      }
+      setItems([])
+    } catch (e) {
+      console.error(e)
+    }
+  }, [items])
+
   return (
-    <div className="Home">
-      <h1>Deep Eyes Project</h1>
-      <Container>
-        <form onSubmit={handleSearch}>
-          <TextField
-            variant="standard"
-            id="search"
-            label="Search"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
+    <>
+      <Typography variant="h1" sx={{ color: "black", textAlign: "center" }}>
+        Deep Eyes Project
+      </Typography>
+      <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
+        <Grid item>
+          <Button variant="contained" color="error" onClick={handleDeleteAll}>
+            DELETE
+          </Button>
+        </Grid>
+        <Grid item>
+          <Search onSubmit={handleSearch} />
+        </Grid>
+      </Grid>
+
+      <Masonry
+        columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+        spacing={2}
+        defaultHeight={450}
+        defaultColumns={4}
+        defaultSpacing={1}
+      >
+        {items.map((item) => (
+          <ItemCard
+            key={item.id}
+            item={item}
+            onClick={() => {
+              setSelectedItem(item)
+              setOpenModal(true)
             }}
-            onChange={(e) => setSearch(e.target.value)}
           />
-        </form>
-        <Masonry
-          columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-          spacing={2}
-          defaultHeight={450}
-          defaultColumns={4}
-          defaultSpacing={1}
-        >
-          {items.map((item) => (
-            <ItemCard
-              key={item.id}
-              item={item}
-              onClick={() => {
-                setSelectedItem(item)
-                setOpenModal(true)
-              }}
-            />
-          ))}
-        </Masonry>
-      </Container>
+        ))}
+      </Masonry>
       <ItemModal
         open={openModal}
         item={selectedItem}
         onClose={() => setOpenModal(false)}
         onDelete={handleDelete}
       />
-    </div>
+    </>
   )
 }
 export default Home

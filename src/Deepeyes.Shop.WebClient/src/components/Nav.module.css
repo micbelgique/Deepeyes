@@ -1,0 +1,19 @@
+.navLink {
+  list-style: none;
+}
+
+.navMenu a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.navMenu a:hover {
+  color: #57ab5a;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+}

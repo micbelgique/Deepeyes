@@ -22,7 +22,6 @@ function App() {
       const res = await fetch(imageB64)
       const image = await res.blob()
       await uploadImage(image)
-      console.log("Image uploaded")
       setSnackbarText("Image uploaded")
       setSnackbarSeverity("success")
       setOpen(true)

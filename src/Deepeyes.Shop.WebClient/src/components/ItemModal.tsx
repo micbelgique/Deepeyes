@@ -175,14 +175,14 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
               <Fragment key={i}>
                 <Typography variant="body2">
                   <Chip
-                    label={`${facesAttribute.gender.toString()}`}
+                    label={facesAttribute.gender}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
                     }}
                   />
                   <Chip
-                    label={`${facesAttribute.age.toString()}`}
+                    label={`Age : ${facesAttribute.age}`}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
@@ -200,7 +200,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
 
                 <Typography key={i} variant="body2">
                   <Chip
-                    label={`${facesAttribute.glasses.toString()}`}
+                    label={facesAttribute.glasses}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
@@ -208,21 +208,21 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                   />
 
                   <Chip
-                    label={`Beard : ${facesAttribute.facialHair.beard} /1`}
+                    label={`Beard : ${(facesAttribute.facialHair.beard * 100).toFixed(0)} %`}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
                     }}
                   />
                   <Chip
-                    label={`Moustache : ${facesAttribute.facialHair.moustache}/1`}
+                    label={`Moustache : ${facesAttribute.facialHair.moustache * 100} %`}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
                     }}
                   />
                   <Chip
-                    label={`Sideburns : ${facesAttribute.facialHair.sideburns}/1`}
+                    label={`Sideburns : ${facesAttribute.facialHair.sideburns * 100} %`}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
@@ -240,7 +240,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                 <Chip
                   onMouseEnter={() => setIsShownObject(true)}
                   onMouseLeave={() => setIsShownObject(false)}
-                  label={`${object.name}`}
+                  label={object.name}
                   sx={{
                     m: 0.5,
                     fontSize: "small",
@@ -279,10 +279,10 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
 
           <Typography sx={subtitle}>Key phrase</Typography>
           <Typography variant="body2">
-            {item.ocr.keyPhrases.map((keyPhrase) => (
+            {item.ocr.keyPhrases.map((keyPhrase, i) => (
               <Chip
-                key={keyPhrase}
-                label={`${keyPhrase}`}
+                key={i}
+                label={keyPhrase}
                 sx={{
                   m: 0.5,
                   fontSize: "small",

@@ -7,22 +7,27 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
-  Modal,
+  Slide,
   Stack,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material"
-import { Fragment, useState } from "react"
+import { TransitionProps } from "@mui/material/transitions"
+import useMediaQuery from "@mui/material/useMediaQuery"
+import { forwardRef, Fragment, useState } from "react"
 import Entity from "../models/Entities"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import { filteredTags } from "../utils/filter"
 import generatedImageUrl from "../utils/generatedImageUrl"
-
 interface ItemModalProps {
   item: ScanVisionResult | null
   open: boolean
@@ -30,216 +35,174 @@ interface ItemModalProps {
   onDelete: () => void
 }
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  overflow: "scroll",
-  display: "block",
-  height: "100%",
-}
-
-const subtitle = {
-  fontSize: "x-large",
-  textTransform: "uppercase",
-  fontFamily: "Bebas Neue",
-  margin: "2%",
-  color: "#9d9797",
-}
-
-const buttonstyle = {
-  marginTop: "10%",
-  marginRight: "40%",
-  marginLeft: "40%",
-}
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />
+})
 
 export default function ItemModal({ item, open, onClose, onDelete }: ItemModalProps): JSX.Element {
-  //Show the confidence
-  const [isShown, setIsShown] = useState(false)
+  const [isShownTag, setIsShownTag] = useState(false)
   const [ShownDescribe, setIsShownDescribe] = useState(false)
   const [ShownObject, setIsShownObject] = useState(false)
+  const theme = useTheme()
+  const fullscreen = useMediaQuery(theme.breakpoints.down("md"))
 
   if (item === null) return <></>
   return (
-    <Modal
+    <Dialog
+      fullScreen={fullscreen}
+      fullWidth={true}
+      maxWidth="md"
+      TransitionComponent={Transition}
       open={open}
       onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
-        <Typography
-          className="modalTitle"
-          id="modal-modal-title"
-          style={{
-            fontSize: "xx-large",
-            textTransform: "uppercase",
-            fontFamily: "Bebas Neue",
-            margin: "auto",
-          }}
-        >
-          <b></b>
-          {item.captions?.[0]?.text ?? "Description"}
-        </Typography>
-        <img src={generatedImageUrl(item.image, "full")} style={{ width: 500 }} />
-        <div id="modal-modal-description">
-          {item.captions?.length > 0 && (
-            <>
-              <Typography>{/* Description */}</Typography>
-              <ul>
-                {item.captions.map((caption, i) => (
-                  <Typography key={i} variant="body2">
-                    <div
-                      onMouseEnter={() => setIsShownDescribe(true)}
-                      onMouseLeave={() => setIsShownDescribe(false)}
-                      className="DescriptionModal"
-                    >
-                      {caption.text}
-
-                      {ShownDescribe && (
-                        <Chip
-                          key={caption.confidence}
-                          label={`${caption.confidence.toFixed(2)}`}
-                          sx={{
-                            m: 0.5,
-                            fontSize: "small",
-                            backgroundColor: "#a5a5a5",
-                            color: "white",
-                          }}
-                        />
-                      )}
-                    </div>
-                  </Typography>
-                ))}
-              </ul>
-            </>
-          )}
-          <Typography sx={subtitle}>Tags</Typography>
-          <Stack
-            onMouseEnter={() => setIsShown(true)}
-            onMouseLeave={() => setIsShown(false)}
-            spacing={0}
-            direction="row"
-            sx={{ flexWrap: "wrap" }}
+      <DialogTitle id="modal-modal-title">{item.captions?.[0]?.text ?? "Description"}</DialogTitle>
+      <DialogContent>
+        <img src={generatedImageUrl(item.image, "full")} style={{ maxWidth: "100%" }} />
+        {item.captions?.length > 0 && (
+          <ul
+            onMouseEnter={() => setIsShownDescribe(true)}
+            onMouseLeave={() => setIsShownDescribe(false)}
           >
-            {filteredTags(item.tags).map((tag) => (
-              <>
-                <Chip
-                  key={tag.name}
-                  label={`${tag.name}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-
-                {isShown && (
+            {item.captions.map((caption, i) => (
+              <Typography variant="body1" key={i} component="li">
+                {caption.text}
+                {ShownDescribe && (
                   <Chip
-                    key={tag.confidence}
-                    label={`${tag.confidence.toFixed(2)}`}
+                    key={caption.confidence}
+                    label={`${caption.confidence.toFixed(2)}`}
                     sx={{
-                      m: 0.5,
+                      ml: 0.5,
                       fontSize: "small",
                       backgroundColor: "#a5a5a5",
                       color: "white",
                     }}
                   />
                 )}
-              </>
+              </Typography>
             ))}
-          </Stack>
-
-          <Typography sx={subtitle}>
-            Accent Color
-            <Tooltip title={`#${item.accentColor}`}>
-              <div
-                style={{
-                  display: "flex",
-                  height: "100px",
-                  width: "200px",
-                  backgroundColor: "#" + item.accentColor,
-                  marginTop: "2%",
+          </ul>
+        )}
+        <Typography variant="h4">Tags</Typography>
+        <Stack
+          onMouseEnter={() => setIsShownTag(true)}
+          onMouseLeave={() => setIsShownTag(false)}
+          spacing={0}
+          direction="row"
+          flexWrap="wrap"
+        >
+          {filteredTags(item.tags).map((tag) => (
+            <>
+              <Chip
+                key={tag.name}
+                label={`${tag.name}`}
+                sx={{
+                  m: 0.5,
+                  fontSize: "small",
                 }}
-              ></div>
-            </Tooltip>
-          </Typography>
-
-          <Typography sx={subtitle}>Apparence</Typography>
-          {item.facesAttributes?.length > 0 &&
-            item.facesAttributes.map((facesAttribute, i) => (
-              <Fragment key={i}>
-                <Typography variant="body2">
-                  <Chip
-                    label={facesAttribute.gender}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-                  <Chip
-                    label={`Age : ${facesAttribute.age}`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-
-                  <Chip
-                    label={`Smile : ${(facesAttribute.smile * 100).toFixed(0)}%`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-                </Typography>
-
-                <Typography key={i} variant="body2">
-                  <Chip
-                    label={facesAttribute.glasses}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-
-                  <Chip
-                    label={`Beard : ${(facesAttribute.facialHair.beard * 100).toFixed(0)} %`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-                  <Chip
-                    label={`Moustache : ${facesAttribute.facialHair.moustache * 100} %`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-                  <Chip
-                    label={`Sideburns : ${facesAttribute.facialHair.sideburns * 100} %`}
-                    sx={{
-                      m: 0.5,
-                      fontSize: "small",
-                    }}
-                  />
-                </Typography>
-                <Divider sx={{ my: "0.5em" }} />
-              </Fragment>
-            ))}
-
-          <Typography sx={subtitle}>Objects</Typography>
+              />
+              {isShownTag && (
+                <Chip
+                  key={tag.confidence}
+                  label={`${tag.confidence.toFixed(2)}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                    backgroundColor: "#a5a5a5",
+                    color: "white",
+                  }}
+                />
+              )}
+            </>
+          ))}
+        </Stack>
+        <Typography variant="h4">Accent Color</Typography>
+        <Tooltip title={`#${item.accentColor}`}>
+          <div
+            style={{
+              height: "100px",
+              width: "200px",
+              backgroundColor: "#" + item.accentColor,
+            }}
+          ></div>
+        </Tooltip>
+        <Typography variant="h4">Apparence</Typography>
+        {item.facesAttributes?.length > 0 &&
+          item.facesAttributes.map((facesAttribute, i) => (
+            <Fragment key={i}>
+              <Stack direction="row" flexWrap="wrap">
+                <Chip
+                  label={facesAttribute.gender}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  label={`Age : ${facesAttribute.age}`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  label={`Smile : ${(facesAttribute.smile * 100).toFixed(0)}%`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  label={facesAttribute.glasses}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  label={`Beard : ${(facesAttribute.facialHair.beard * 100).toFixed(0)} %`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  label={`Moustache : ${facesAttribute.facialHair.moustache * 100} %`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+                <Chip
+                  label={`Sideburns : ${facesAttribute.facialHair.sideburns * 100} %`}
+                  sx={{
+                    m: 0.5,
+                    fontSize: "small",
+                  }}
+                />
+              </Stack>
+              <Divider sx={{ my: "0.5em" }} />
+            </Fragment>
+          ))}
+        <Typography variant="h4">Objects</Typography>
+        <Stack
+          direction="row"
+          spacing={0}
+          flexWrap="wrap"
+          onMouseEnter={() => setIsShownObject(true)}
+          onMouseLeave={() => setIsShownObject(false)}
+        >
           {item.objects?.length > 0 &&
             item.objects.map((object, i) => (
-              <Typography key={i} variant="body2">
+              <Fragment key={i}>
                 <Chip
-                  onMouseEnter={() => setIsShownObject(true)}
-                  onMouseLeave={() => setIsShownObject(false)}
                   label={object.name}
                   sx={{
                     m: 0.5,
@@ -257,48 +220,35 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                     }}
                   />
                 )}
-              </Typography>
+              </Fragment>
             ))}
-
-          <Typography sx={subtitle}>
-            Adult Content
-            <div
-              style={{
-                display: "flex",
-                marginTop: "2%",
-                fontSize: "large",
-                color: "black",
+        </Stack>
+        <Typography variant="h4">Adult Content</Typography>
+        <Typography>{item.isAdult.toString()}</Typography>
+        <Typography variant="h4">Ocr</Typography>
+        <OcrBlock ocr={item.ocr} />
+        <Typography variant="h4">Key phrase</Typography>
+        <div>
+          {item.ocr.keyPhrases.map((keyPhrase, i) => (
+            <Chip
+              key={i}
+              label={keyPhrase}
+              sx={{
+                m: 0.5,
+                fontSize: "small",
               }}
-            >
-              {item.isAdult.toString()}
-            </div>
-          </Typography>
-
-          <Typography sx={subtitle}>Ocr</Typography>
-          <OcrBlock ocr={item.ocr} />
-
-          <Typography sx={subtitle}>Key phrase</Typography>
-          <Typography variant="body2">
-            {item.ocr.keyPhrases.map((keyPhrase, i) => (
-              <Chip
-                key={i}
-                label={keyPhrase}
-                sx={{
-                  m: 0.5,
-                  fontSize: "small",
-                }}
-              />
-            ))}
-          </Typography>
-
-          <FilterCategory entities={item.ocr.entities} />
-
-          <Button variant="contained" color="error" onClick={onDelete} sx={buttonstyle}>
-            <DeleteForeverIcon />
-          </Button>
+            />
+          ))}
         </div>
-      </Box>
-    </Modal>
+        <FilterCategory entities={item.ocr.entities} />
+      </DialogContent>
+      <DialogActions>
+        <Button color="error" onClick={onDelete}>
+          <DeleteForeverIcon />
+        </Button>
+        <Button onClick={onClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 
@@ -353,7 +303,7 @@ function FilterCategory({ entities }: { entities: Entity[] }) {
 
   return (
     <>
-      <Typography sx={subtitle}>Categories</Typography>
+      <Typography variant="h4">Categories</Typography>
       {Object.entries(cats).map(([categorieName, valueName]) => (
         <div key={categorieName}>
           <TreeView

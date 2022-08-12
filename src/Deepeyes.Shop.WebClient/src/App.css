@@ -59,23 +59,6 @@ nav {
   text-align: center;
 }
 
-td {
-  background-color: #ffffff;
-  text-align: center;
-  margin: auto;
-}
-
-table {
-  align-items: center;
-  border: none;
-  font-size: small;
-  width: 100%;
-}
-.tableHome {
-  color: #4a4646;
-  width: auto;
-}
-
 #root {
   display: flex;
   flex-direction: column;
@@ -92,19 +75,10 @@ table {
   flex: 1 0 auto;
 }
 
-.search{
+.search {
   margin: 3%;
 }
 
-.modalTitle{
+.modalTitle {
   text-align: center;
 }
-
-.DescriptionModal{
-  font-family: "Bebas Neue", cursive;
-  margin-right: "40%";
-  font-size: x-large;
-}
-
-
-

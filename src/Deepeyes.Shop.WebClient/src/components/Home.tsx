@@ -1,6 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search"
 import Masonry from "@mui/lab/Masonry"
-import { Button, Grid, IconButton, InputAdornment, TextField } from "@mui/material"
+import { Button, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material"
 import { Container } from "@mui/system"
 import { useCallback, useState } from "react"
 import usePollingEffect from "../hooks/usePollingEffect"
@@ -80,7 +80,9 @@ function Home() {
 
   return (
     <div className="Home">
-      <h1>Deep Eyes Project</h1>
+      <Typography variant="h1" sx={{ color: "black" }}>
+        Deep Eyes Project
+      </Typography>
       <Container>
         <div className="search">
           <Grid container justifyContent="space-between">

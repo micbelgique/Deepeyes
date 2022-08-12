@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material"
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom"
 import "./App.css"
 
@@ -10,12 +11,12 @@ function Nav() {
       <main>
         <nav className="navMenu">
           <ul className="nav-link">
-            <li>
+            <Typography variant="h6" component="li">
               <Link to="/">Home</Link>
-            </li>
-            <li>
+            </Typography>
+            <Typography variant="h6" component="li">
               <Link to="/contact">Contact</Link>
-            </li>
+            </Typography>
           </ul>
         </nav>
 

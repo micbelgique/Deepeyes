@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   Chip,
+  Divider,
   Modal,
   Stack,
   Tooltip,
@@ -192,7 +193,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
 
                   <Chip
                     key={facesAttribute.smile}
-                    label={`Smile : ${facesAttribute.smile.toFixed(2)}/1`}
+                    label={`Smile : ${(facesAttribute.smile * 100).toFixed(0)}%`}
                     sx={{
                       m: 0.5,
                       fontSize: "small",
@@ -235,6 +236,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
                     }}
                   />
                 </Typography>
+                <Divider sx={{ my: "0.5em" }} />
               </>
             ))}
 

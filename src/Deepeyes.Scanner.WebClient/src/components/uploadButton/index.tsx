@@ -6,7 +6,6 @@ export default function UploadButton({ onSubmit }: { onSubmit: Function }) {
   const handleChange = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const files = event.target.files
-      console.log("gello")
       if (files) {
         onSubmit(files)
       }

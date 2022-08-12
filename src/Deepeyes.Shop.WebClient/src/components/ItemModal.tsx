@@ -323,7 +323,6 @@ function OcrBlock({ ocr }: { ocr: Ocr }) {
 }
 
 function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
-  console.log(state)
   if (state === "NONE")
     return <Typography sx={{ color: "text.secondary" }}>No Text found</Typography>
   if (state === "PENDING")
@@ -351,7 +350,6 @@ function FilterCategory({ entities }: { entities: Entity[] }) {
       cats[en.category].add(en.name)
     }
   }
-  console.log(cats)
 
   return (
     <>

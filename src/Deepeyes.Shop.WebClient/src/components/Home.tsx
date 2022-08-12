@@ -52,7 +52,6 @@ function Home() {
         if (!res.ok) {
           throw new Error(res.statusText)
         }
-        console.log("deleted")
         setItems((items) => items.filter((item) => item.id !== selectedItem.id))
         setSelectedItem(null)
         setOpenModal(false)
@@ -72,7 +71,6 @@ function Home() {
         if (!res.ok) {
           throw new Error(res.statusText)
         }
-        console.log("deleted")
       }
       setItems([])
     } catch (e) {

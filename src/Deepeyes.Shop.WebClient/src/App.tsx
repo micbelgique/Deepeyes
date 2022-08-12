@@ -1,14 +1,19 @@
 import { Container } from "@mui/material"
+import { Outlet } from "react-router-dom"
 import "./App.css"
-import Footer from "./Footer"
-import Nav from "./Nav"
+import Footer from "./components/Footer"
+import Nav from "./components/Nav"
 
 function App() {
   return (
     <>
-      <Nav />
       <div className="content">
-        <Container maxWidth="sm"></Container>
+        <Nav />
+        <main>
+          <Container maxWidth="xl">
+            <Outlet />
+          </Container>
+        </main>
       </div>
       <Footer />
     </>

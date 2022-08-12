@@ -1,6 +1,8 @@
-import { ConstructionOutlined } from "@mui/icons-material"
+import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import TreeItem from "@mui/lab/TreeItem"
+import TreeView from "@mui/lab/TreeView"
 import {
   Accordion,
   AccordionDetails,
@@ -17,11 +19,8 @@ import { useState } from "react"
 import Entity from "../models/Entities"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
+import { filteredTags } from "../utils/filter"
 import generatedImageUrl from "../utils/generatedImageUrl"
-import TreeView from '@mui/lab/TreeView';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem'
-
 
 interface ItemModalProps {
   item: ScanVisionResult | null
@@ -57,13 +56,12 @@ const buttonstyle = {
   marginRight: "40%",
   marginLeft: "40%",
 }
-  
+
 export default function ItemModal({ item, open, onClose, onDelete }: ItemModalProps): JSX.Element {
   //Show the confidence
   const [isShown, setIsShown] = useState(false)
   const [ShownDescribe, setIsShownDescribe] = useState(false)
   const [ShownObject, setIsShownObject] = useState(false)
-
 
   if (item === null) return <></>
   return (
@@ -128,7 +126,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
             direction="row"
             sx={{ flexWrap: "wrap" }}
           >
-            {item.tags.map((tag) => (
+            {filteredTags(item.tags).map((tag) => (
               <>
                 <Chip
                   key={tag.name}
@@ -170,78 +168,75 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
             </Tooltip>
           </Typography>
 
-
           <Typography sx={subtitle}>Apparence</Typography>
           {item.facesAttributes?.length > 0 &&
             item.facesAttributes.map((facesAttribute, i) => (
-              
               <>
-              <Typography key={i} variant="body2">
-                <Chip
-                  key={facesAttribute.gender}
-                  label={`${facesAttribute.gender.toString()}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-                <Chip
-                  key={facesAttribute.age}
-                  label={`${facesAttribute.age.toString()}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
+                <Typography key={i} variant="body2">
+                  <Chip
+                    key={facesAttribute.gender}
+                    label={`${facesAttribute.gender.toString()}`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
+                  <Chip
+                    key={facesAttribute.age}
+                    label={`${facesAttribute.age.toString()}`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
 
-                <Chip
-                  
-                  key={facesAttribute.smile}
-                  label={`Smile : ${(facesAttribute.smile.toFixed(2))}/1`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-              </Typography>
+                  <Chip
+                    key={facesAttribute.smile}
+                    label={`Smile : ${facesAttribute.smile.toFixed(2)}/1`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
+                </Typography>
 
-              <Typography key={i} variant="body2">
-                <Chip
-                  key={facesAttribute.glasses}
-                  label={`${facesAttribute.glasses.toString()}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
+                <Typography key={i} variant="body2">
+                  <Chip
+                    key={facesAttribute.glasses}
+                    label={`${facesAttribute.glasses.toString()}`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
 
-                <Chip
-                  key={facesAttribute.facialHair.beard}
-                  label={`Beard : ${facesAttribute.facialHair.beard} /1`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-                <Chip
-                  key={facesAttribute.facialHair.moustache}
-                  label={`Moustache : ${facesAttribute.facialHair.moustache}/1`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />               
-                <Chip
-                  key={facesAttribute.facialHair.sideburns}
-                  label={`Sideburns : ${facesAttribute.facialHair.sideburns}/1`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                /> 
-              </Typography>
+                  <Chip
+                    key={facesAttribute.facialHair.beard}
+                    label={`Beard : ${facesAttribute.facialHair.beard} /1`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
+                  <Chip
+                    key={facesAttribute.facialHair.moustache}
+                    label={`Moustache : ${facesAttribute.facialHair.moustache}/1`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
+                  <Chip
+                    key={facesAttribute.facialHair.sideburns}
+                    label={`Sideburns : ${facesAttribute.facialHair.sideburns}/1`}
+                    sx={{
+                      m: 0.5,
+                      fontSize: "small",
+                    }}
+                  />
+                </Typography>
               </>
-          ))}
+            ))}
 
           <Typography sx={subtitle}>Objects</Typography>
           {item.objects?.length > 0 &&
@@ -290,24 +285,21 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
           <Typography sx={subtitle}>Ocr</Typography>
           <OcrBlock ocr={item.ocr} />
 
-         
+          <Typography sx={subtitle}>Key phrase</Typography>
+          <Typography variant="body2">
+            {item.ocr.keyPhrases.map((keyPhrase) => (
+              <Chip
+                key={keyPhrase}
+                label={`${keyPhrase}`}
+                sx={{
+                  m: 0.5,
+                  fontSize: "small",
+                }}
+              />
+            ))}
+          </Typography>
 
-        <Typography sx={subtitle}>Key phrase</Typography>
-              <Typography variant="body2">
-              {item.ocr.keyPhrases.map((keyPhrase) => (
-               <Chip
-                  key={keyPhrase}
-                  label={`${keyPhrase}`}
-                  sx={{
-                    m: 0.5,
-                    fontSize: "small",
-                  }}
-                />
-                ))}
-              </Typography>
-
-
-              <FilterCategory entities={item.ocr.entities} />
+          <FilterCategory entities={item.ocr.entities} />
 
           <Button variant="contained" color="error" onClick={onDelete} sx={buttonstyle}>
             <DeleteForeverIcon />
@@ -346,8 +338,8 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
     return <Typography sx={{ color: "text.secondary" }}>Text will be processed</Typography>
   if (state === "RUNNING")
     return <Typography sx={{ color: "text.secondary" }}>Text is being processed</Typography>
- 
-    if (state === "DONE")
+
+  if (state === "DONE")
     return (
       <Typography sx={{ color: "text.secondary" }}>
         {summaries?.[0]?.text ?? "Text processed"}
@@ -356,41 +348,38 @@ function OcrState({ ocr: { state, summaries } }: { ocr: Ocr }) {
   return <Typography sx={{ color: "text.secondary" }}>Unknown state</Typography>
 }
 
+function FilterCategory({ entities }: { entities: Entity[] }) {
+  let cats: Record<string, Set<string>> = {}
 
-
-
-function FilterCategory ({ entities }: { entities: Entity[] }) {
-  let cats: Record<string, Set<string>> = {
-  };
- 
-  for(var en of entities){
-      if (!cats.hasOwnProperty(en.category)) {
-        cats[en.category] = new Set([en.name])
-        // cats = {[en.category]:[en.name], ...cats}
-      }
-      else{
-        cats[en.category].add(en.name)
-      }
+  for (var en of entities) {
+    if (!cats.hasOwnProperty(en.category)) {
+      cats[en.category] = new Set([en.name])
+      // cats = {[en.category]:[en.name], ...cats}
+    } else {
+      cats[en.category].add(en.name)
     }
-    console.log(cats)
-    
-    return(
-      <>
+  }
+  console.log(cats)
+
+  return (
+    <>
       <Typography sx={subtitle}>Categories</Typography>
-      {Object.entries(cats).map(([categorieName,valueName]) => (
+      {Object.entries(cats).map(([categorieName, valueName]) => (
         <div key={categorieName}>
-        <TreeView
-        aria-label="file system navigator"
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronRightIcon />}
-        sx={{flexGrow: 1, maxWidth: 400, overflowY: 'auto',backgroundColor:"white"}}
-        >
-          <TreeItem className="changecolor" nodeId="1" label={categorieName}>
-          {[...valueName].map((v, i) => <TreeItem key={i} nodeId="2" label={v} />)}
-          </TreeItem>
-        </TreeView>
+          <TreeView
+            aria-label="file system navigator"
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            sx={{ flexGrow: 1, maxWidth: 400, overflowY: "auto", backgroundColor: "white" }}
+          >
+            <TreeItem className="changecolor" nodeId="1" label={categorieName}>
+              {[...valueName].map((v, i) => (
+                <TreeItem key={i} nodeId="2" label={v} />
+              ))}
+            </TreeItem>
+          </TreeView>
         </div>
       ))}
     </>
-    )
+  )
 }

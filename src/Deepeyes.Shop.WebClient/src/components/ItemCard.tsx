@@ -9,6 +9,7 @@ import {
 } from "@mui/material"
 import adultImage from "../assets/adult.jpg"
 import ScanVisionResult from "../models/ScanVisionResult"
+import { filteredTags } from "../utils/filter"
 import generatedImageUrl from "../utils/generatedImageUrl"
 interface ItemCardProps {
   item: ScanVisionResult
@@ -37,9 +38,11 @@ export default function ItemCard({
             {description}
           </Typography>
           <Stack spacing={0} direction="row" sx={{ flexWrap: "wrap" }}>
-            {tags.slice(0, 3).map((tag) => (
-              <Chip key={tag.name} label={tag.name} sx={{ m: 0.2 }} />
-            ))}
+            {filteredTags(tags)
+              .slice(0, 3)
+              .map((tag) => (
+                <Chip key={tag.name} label={tag.name} sx={{ m: 0.2 }} />
+              ))}
           </Stack>
         </CardContent>
       </CardActionArea>

@@ -43,11 +43,20 @@ function App() {
   }, [])
 
   const handleSubmitFiles = useCallback(async (files: FileList) => {
-    for (let i = 0; i < Math.min(files.length, MAX_FILES); i++) {
-      const file = files.item(i)
-      if (file) {
-        await uploadImage(file)
+    try {
+      for (let i = 0; i < Math.min(files.length, MAX_FILES); i++) {
+        const file = files.item(i)
+        if (file) {
+          await uploadImage(file)
+        }
       }
+      setSnackbarText("Images uploaded")
+      setSnackbarSeverity("success")
+      setOpen(true)
+    } catch (error) {
+      setSnackbarText("Error uploading images")
+      setSnackbarSeverity("error")
+      setOpen(true)
     }
   }, [])
 

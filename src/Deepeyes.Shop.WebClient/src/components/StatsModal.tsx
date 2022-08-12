@@ -15,7 +15,7 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js"
 import { forwardRef } from "react"
 import { Doughnut } from "react-chartjs-2"
 import ScanVisionResult from "../models/ScanVisionResult"
-import { genderRatio, nbObjects } from "../utils/stats"
+import { genderRatio, meanAge, nbObjects } from "../utils/stats"
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -66,6 +66,7 @@ export default function StatsModal({ items, open, onClose }: ItemModalProps): JS
       <DialogContent>
         <Typography variant="h5">Number of Images: {items.length}</Typography>
         <Typography variant="h5">Number of Objects: {nbObjects(items)}</Typography>
+        <Typography variant="h5">Mean Age: {meanAge(items).toFixed(2)}</Typography>
         <Typography variant="h5">Gender Proportion:</Typography>
         <Box sx={{ height: "20em" }}>
           <Doughnut data={data} options={{ maintainAspectRatio: false }} />

@@ -1,15 +1,17 @@
 import Masonry from "@mui/lab/Masonry"
-import { Button, Grid, Typography } from "@mui/material"
+import { Button, Grid, Stack, Typography } from "@mui/material"
 import { useCallback, useState } from "react"
 import ItemCard from "../components/ItemCard"
 import ItemModal from "../components/ItemModal"
 import Search from "../components/Search"
+import StatsModal from "../components/StatsModal"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
 function Home() {
   const [items, setItems] = useState<ScanVisionResult[]>([])
   const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
-  const [openModal, setOpenModal] = useState(false)
+  const [openModalItem, setOpenModalitem] = useState(false)
+  const [openModalStats, setOpenModalStats] = useState(false)
   const { stopPolling, startPolling } = usePollingEffect(
     () => {
       fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/api/readtable")
@@ -52,7 +54,7 @@ function Home() {
         }
         setItems((items) => items.filter((item) => item.id !== selectedItem.id))
         setSelectedItem(null)
-        setOpenModal(false)
+        setOpenModalitem(false)
       } catch (e) {
         console.error(e)
       }
@@ -76,6 +78,10 @@ function Home() {
     }
   }, [items])
 
+  function showStats() {
+    setOpenModalStats(true)
+  }
+
   return (
     <>
       <Typography variant="h1" sx={{ color: "black", textAlign: "center" }}>
@@ -83,9 +89,14 @@ function Home() {
       </Typography>
       <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
         <Grid item>
-          <Button variant="contained" color="error" onClick={handleDeleteAll}>
-            DELETE
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button variant="contained" onClick={showStats}>
+              Stats
+            </Button>
+            <Button variant="contained" color="error" onClick={handleDeleteAll}>
+              DELETE ALL
+            </Button>
+          </Stack>
         </Grid>
         <Grid item>
           <Search onSubmit={handleSearch} />
@@ -105,17 +116,18 @@ function Home() {
             item={item}
             onClick={() => {
               setSelectedItem(item)
-              setOpenModal(true)
+              setOpenModalitem(true)
             }}
           />
         ))}
       </Masonry>
       <ItemModal
-        open={openModal}
+        open={openModalItem}
         item={selectedItem}
-        onClose={() => setOpenModal(false)}
+        onClose={() => setOpenModalitem(false)}
         onDelete={handleDelete}
       />
+      <StatsModal items={items} open={openModalStats} onClose={() => setOpenModalStats(false)} />
     </>
   )
 }

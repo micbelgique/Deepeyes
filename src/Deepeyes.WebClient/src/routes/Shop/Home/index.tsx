@@ -15,7 +15,7 @@ function Home() {
   const [openModalStats, setOpenModalStats] = useState(false)
   const { stopPolling, startPolling } = usePollingEffect(
     () => {
-      fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/api/readtable")
+      fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/readtable")
         .then((res) => res.json())
         .then((data: ScanVisionResult[]) => setItems(data))
     },
@@ -28,7 +28,7 @@ function Home() {
   const handleSearch = (search: string) => {
     if (search.length > 0) {
       stopPolling()
-      const url = new URL("/api/search", import.meta.env.VITE_FUNCTION_APP_URL)
+      const url = `${import.meta.env.VITE_FUNCTION_APP_URL}/search`
       const params = new URLSearchParams({ q: search }).toString()
       fetch(url + "?" + params, {
         method: "GET",
@@ -42,10 +42,10 @@ function Home() {
 
   const handleDelete = useCallback(async () => {
     if (selectedItem) {
-      const url = new URL(
-        `/api/deleteItem?id=${selectedItem.id}&imageId=${selectedItem.image}`,
-        import.meta.env.VITE_FUNCTION_APP_URL
-      )
+      const url = `${import.meta.env.VITE_FUNCTION_APP_URL}/deleteItem?id=${
+        selectedItem.id
+      }&imageId=${selectedItem.image}`
+
       try {
         const res = await fetch(url, {
           method: "DELETE",
@@ -63,7 +63,7 @@ function Home() {
   }, [selectedItem])
 
   const handleDeleteAll = useCallback(async () => {
-    const url = new URL(`/api/deleteItem`, import.meta.env.VITE_FUNCTION_APP_URL)
+    const url = `${import.meta.env.VITE_FUNCTION_APP_URL}/deleteItem`
     try {
       for (const { id, image } of items) {
         const res = await fetch(`${url}?id=${id}&imageId=${image}`, {

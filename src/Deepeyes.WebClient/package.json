@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "swa build && swa deploy --env production"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.11.0",
@@ -23,6 +24,7 @@
     "react-webcam": "^7.0.1"
   },
   "devDependencies": {
+    "@azure/static-web-apps-cli": "^1.0.2",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",

@@ -8,6 +8,8 @@ import UploadButton from "./components/uploadButton"
 
 import WebCamView from "./components/webcamView"
 import { uploadImage } from "./services/blobStorage"
+import QRCodeButton from "./components/qrCodeButton"
+import Nav from "../Shop/components/Nav"
 
 const MAX_FILES = 10
 
@@ -63,6 +65,7 @@ function Scanner() {
   return (
     <div className="App">
       <div className="content Container">
+        
         <div className="IndexInterface">
           <h1 style={{ margin: "0.2em 0" }}>Deep Eyes Project</h1>
         </div>
@@ -71,6 +74,7 @@ function Scanner() {
           <Stack direction="row" spacing={2}>
             <UploadButton onSubmit={handleSubmitFiles} />
             <CaptureButton onClick={handleCapture} />
+            <QRCodeButton/>
           </Stack>
         </div>
         <Footer />

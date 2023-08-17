@@ -1,5 +1,6 @@
 import CameraIcon from "@mui/icons-material/CameraAlt"
 import ShopIcon from "@mui/icons-material/ShoppingCart"
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { Card, CardActionArea, CardContent, Grid, Typography } from "@mui/material"
 
 export default function App() {
@@ -31,6 +32,18 @@ export default function App() {
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 Scanner
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+      <Grid item>
+        <Card sx={{ maxWidth: "18rem" }}>
+          <CardActionArea href="/generation">
+            <SmartToyIcon sx={{ height: "16rem", width: "16rem" }} />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Generation
               </Typography>
             </CardContent>
           </CardActionArea>

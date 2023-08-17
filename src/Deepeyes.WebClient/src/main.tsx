@@ -7,6 +7,7 @@ import "./index.css"
 import Contact from "./routes/Contact"
 
 import theme from "./routes/Shop/utils/theme"
+import Generation from "./routes/Generation"
 
 const Shop = lazy(() => import("./routes/Shop"))
 const Scanner = lazy(() => import("./routes/Scanner"))
@@ -28,13 +29,21 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
                 </Suspense>
               }
             />
-            <Route path="/contact" element={<Contact />} />
+            {/* <Route path="/contact" element={<Contact />} /> */}
           </Route>
           <Route
             path="/scanner"
             element={
               <Suspense fallback={<LinearProgress variant="indeterminate" />}>
                 <Scanner />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/generation"
+            element={
+              <Suspense fallback={<LinearProgress variant="indeterminate" />}>
+                <Generation />
               </Suspense>
             }
           />

@@ -4,5 +4,6 @@
   "azureFunctions.projectRuntime": "~4",
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.preDeployTask": "publish (functions)",
-  "azureFunctions.projectSubpath": "src\\Deepeyes.AzureFunctions.Scripts"
+  "azureFunctions.projectSubpath": "src\\Deepeyes.AzureFunctions.Scripts",
+  "azurite.location": ".azurite"
 }

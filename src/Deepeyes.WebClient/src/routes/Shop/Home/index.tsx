@@ -85,6 +85,7 @@ function Home() {
 
   return (
     <>
+    
       <Typography variant="h1" sx={{ color: "black", textAlign: "center" }}>
         Deep Eyes Project
       </Typography>

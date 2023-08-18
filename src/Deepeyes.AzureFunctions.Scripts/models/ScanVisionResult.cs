@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Azure.AI.Vision.ImageAnalysis;
 using Newtonsoft.Json;
 
 namespace Deepeyes.Functions.Models
@@ -24,6 +25,8 @@ namespace Deepeyes.Functions.Models
         public Ocr Ocr { get; set; } = new();
 
         public List<FaceAttributes> FacesAttributes { get; set; } = new();
+
+        public DenseCaptions denseCaptions { get; set; } = null;
 
     }
 }

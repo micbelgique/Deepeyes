@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure;
 using Azure.AI.TextAnalytics;
+using Azure.AI.Vision.Common;
+using Azure.AI.Vision.ImageAnalysis;
 using Azure.Storage.Blobs;
 using Deepeyes.Functions.Models;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
@@ -60,6 +62,7 @@ namespace Deepeyes.Functions
 
             // Replace "hello" with the name of your Durable Activity Function.
             var scanVisionResult = await context.CallActivityAsync<ScanVisionResult>("AnalyzeInput_DescribeImage", myBlobName);
+            scanVisionResult.denseCaptions = await context.CallActivityAsync<DenseCaptions>("AnalyzeInput_DenseCaption", myBlobName);
             // await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             if (scanVisionResult.Faces.Count > 0)
             {
@@ -94,7 +97,8 @@ namespace Deepeyes.Functions
                 VisualFeatureTypes.Brands,
                 VisualFeatureTypes.Faces,
                 VisualFeatureTypes.ImageType,
-                VisualFeatureTypes.Objects,
+                VisualFeatureTypes.Objects
+                
             };
             var result = await ComputerVisionClient.AnalyzeImageInStreamAsync(myBlob.OpenRead(), features);
             // var result = await ComputerVisionClient.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
@@ -139,6 +143,45 @@ namespace Deepeyes.Functions
                     State = hasText ? "PENDING" : "NONE"
                 }
             };
+        }
+
+        [FunctionName("AnalyzeInput_DenseCaption")]
+        public static async Task<DenseCaptions> AnalyzeInput_DenseCaption([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)
+        {
+            // send the blob to vision api and get the results
+            var serviceOptions = new VisionServiceOptions(
+                Environment.GetEnvironmentVariable("ComputerVisionApiKey"),
+                new AzureKeyCredential(Environment.GetEnvironmentVariable("ComputerVisionEndpoint"))
+            );
+
+            var analysisOptions = new ImageAnalysisOptions()
+            {
+                Features = ImageAnalysisFeature.DenseCaptions,
+
+                Language = "en",
+
+                GenderNeutralCaption = false
+            };
+            using var imageSource = VisionSource.FromUrl(myBlob.Uri);
+            using var analyzer = new ImageAnalyzer(serviceOptions, imageSource, analysisOptions);
+
+            var result = await analyzer.AnalyzeAsync();
+
+            if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
+            {
+                return result.DenseCaptions;
+            }
+            else
+            {
+                var errorDetails = ImageAnalysisErrorDetails.FromResult(result);
+                Console.WriteLine(" Analysis failed.");
+                Console.WriteLine($"   Error reason : {errorDetails.Reason}");
+                Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
+                Console.WriteLine($"   Error message: {errorDetails.Message}");
+                return null;
+            }
+
+         
         }
 
         [FunctionName("AnalyzeInput_StartExtractText")]

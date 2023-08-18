@@ -7,29 +7,50 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
+using Azure.AI.OpenAI;
+using Azure;
 
 namespace api
 {
     public static class GenerateImage
     {
+        
         [FunctionName("GenerateImage")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+        ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            string prompt = data?.prompt;
 
-            return new OkObjectResult(responseMessage);
+            if (string.IsNullOrEmpty(prompt))
+            {
+                return new BadRequestObjectResult("Please provide a valid prompt.");
+            }
+
+            OpenAIClient client = new OpenAIClient(Environment.GetEnvironmentVariable("OpenAiApiKey"));
+
+            Response<ImageGenerations> imageGenerations = await client.GetImageGenerationsAsync( new ImageGenerationOptions()
+            {
+                Prompt = prompt,
+                Size = ImageSize.Size512x512,
+            });
+
+            // Image Generations responses provide URLs you can use to retrieve requested images
+            Uri imageUri = imageGenerations.Value.Data[0].Url;
+            if (!string.IsNullOrEmpty(imageUri.ToString()))
+            {
+                return new OkObjectResult(imageUri);
+            }
+            return new BadRequestObjectResult("Failed to generate an image.");
+
+           
         }
     }
 }

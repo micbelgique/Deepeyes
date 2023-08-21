@@ -28,6 +28,8 @@ import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
 import { filteredTags } from "../utils/filter"
 import generatedImageUrl from "../utils/generatedImageUrl"
+import ObjectDetectionVisualizer from "object-detection-visualizer";
+import ImageWithRectangles from "./ImageWithRectangles"
 interface ItemModalProps {
   item: ScanVisionResult | null
   open: boolean
@@ -66,7 +68,9 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
     >
       <DialogTitle id="modal-modal-title">{item.captions?.[0]?.text ?? "Description"}</DialogTitle>
       <DialogContent>
-        <img src={generatedImageUrl(item.image, "full")} style={{ maxWidth: "100%" }} />
+        {/* <img src={generatedImageUrl(item.image, "full")} style={{ maxWidth: "100%" }} /> */}
+        {item.boxCaptions && <ImageWithRectangles imageUrl={generatedImageUrl(item.image, "full")} detections={item.boxCaptions} />}
+        
         {item.captions?.length > 0 && (
           <ul
             onMouseEnter={() => setIsShownDescribe(true)}

@@ -18,5 +18,5 @@ export default interface ScanVisionResult {
   objects: Object[]
   ocr: Ocr 
   facesAttributes: FaceAttributes[]
-  denseCaptions: BoxCaption[]
+  boxCaptions: BoxCaption[]
 }

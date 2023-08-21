@@ -172,7 +172,6 @@ namespace Deepeyes.Functions
                     if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
                     {
                         
-
                         return result.DenseCaptions.Select(cap => new BoxCaption(cap)).ToList();
                     }
                     else

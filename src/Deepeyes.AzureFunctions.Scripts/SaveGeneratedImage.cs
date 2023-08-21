@@ -30,15 +30,11 @@ namespace api
 
             string Connection = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
             string containerName = Environment.GetEnvironmentVariable("BlobContainerName");
-            log.LogInformation("step1");
             HttpClient client = new HttpClient();
             Stream stream = null;
-            log.LogInformation("step2");
             try
             {
-                log.LogInformation("step2.5");
                 stream = await client.GetStreamAsync(imageUrl);
-                log.LogInformation("step2.6");
             }
             catch (Exception ex)
             {
@@ -49,9 +45,8 @@ namespace api
             {
                 return new BadRequestObjectResult("Failed to fetch image");
             }
-            log.LogInformation("step3");
+           
             string blobName = $"{DateTimeOffset.Now.ToUnixTimeMilliseconds()}-{(new Random().NextDouble() * 100) % 100}.jpg";
-            
             var blobClient = new BlobContainerClient(Connection, containerName);
             var blob = blobClient.GetBlobClient(blobName);
             await blob.UploadAsync(stream);

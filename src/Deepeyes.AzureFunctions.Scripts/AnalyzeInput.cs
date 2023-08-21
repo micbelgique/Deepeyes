@@ -62,8 +62,8 @@ namespace Deepeyes.Functions
 
             // Replace "hello" with the name of your Durable Activity Function.
             var scanVisionResult = await context.CallActivityAsync<ScanVisionResult>("AnalyzeInput_DescribeImage", myBlobName);
-            scanVisionResult.denseCaptions = await context.CallActivityAsync<DenseCaptions>("AnalyzeInput_DenseCaption", myBlobName);
-            // await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
+            //scanVisionResult.denseCaptions = await context.CallActivityAsync<DenseCaptions>("AnalyzeInput_DenseCaption", myBlobName);
+             await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             if (scanVisionResult.Faces.Count > 0)
             {
                 scanVisionResult.FacesAttributes = await context.CallActivityAsync<List<Models.FaceAttributes>>("AnalyzeInput_AnalyseFaces", myBlobName);
@@ -100,6 +100,7 @@ namespace Deepeyes.Functions
                 VisualFeatureTypes.Objects
                 
             };
+
             var result = await ComputerVisionClient.AnalyzeImageInStreamAsync(myBlob.OpenRead(), features);
             // var result = await ComputerVisionClient.AnalyzeImageAsync(myBlob.Uri.ToString(), visualFeatures: features);
 
@@ -145,6 +146,7 @@ namespace Deepeyes.Functions
             };
         }
 
+
         [FunctionName("AnalyzeInput_DenseCaption")]
         public static async Task<DenseCaptions> AnalyzeInput_DenseCaption([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)
         {
@@ -162,27 +164,32 @@ namespace Deepeyes.Functions
 
                 GenderNeutralCaption = false
             };
-            using var imageSource = VisionSource.FromUrl(myBlob.Uri);
-            using var analyzer = new ImageAnalyzer(serviceOptions, imageSource, analysisOptions);
 
-            var result = await analyzer.AnalyzeAsync();
-
-            if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
+            using (VisionSource imageStream = VisionSource.FromUrl(myBlob.Uri))
             {
-                return result.DenseCaptions;
-            }
-            else
-            {
-                var errorDetails = ImageAnalysisErrorDetails.FromResult(result);
-                Console.WriteLine(" Analysis failed.");
-                Console.WriteLine($"   Error reason : {errorDetails.Reason}");
-                Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
-                Console.WriteLine($"   Error message: {errorDetails.Message}");
-                return null;
-            }
-
-         
+                using (var analyzer = new ImageAnalyzer(serviceOptions, imageStream, analysisOptions))
+                {
+                    Console.WriteLine(myBlob.Uri.ToString());
+                    var result = await analyzer.AnalyzeAsync();
+                    Console.WriteLine(result.ToString());
+                    if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
+                    {
+                        return result.DenseCaptions;
+                    }
+                    else
+                    {
+                        var errorDetails = ImageAnalysisErrorDetails.FromResult(result);
+                        Console.WriteLine(" Analysis failed.");
+                        Console.WriteLine($"   Error reason : {errorDetails.Reason}");
+                        Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
+                        Console.WriteLine($"   Error message: {errorDetails.Message}");
+                        Console.WriteLine(errorDetails.ToString());
+                        return null;
+                    }
+                }
+            }         
         }
+
 
         [FunctionName("AnalyzeInput_StartExtractText")]
         public static async Task<string> AnalyzeInput_StartExtractText([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)

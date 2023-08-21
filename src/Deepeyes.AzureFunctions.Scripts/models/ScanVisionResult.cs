@@ -26,7 +26,7 @@ namespace Deepeyes.Functions.Models
 
         public List<FaceAttributes> FacesAttributes { get; set; } = new();
 
-        public DenseCaptions denseCaptions { get; set; } = null;
+        public DenseCaptions DenseCaptions { get; set; } = null;
 
     }
 }

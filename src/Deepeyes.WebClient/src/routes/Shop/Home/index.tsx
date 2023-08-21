@@ -1,6 +1,6 @@
 import Masonry from "@mui/lab/Masonry"
-import { Button, Grid, Stack, Typography } from "@mui/material"
-import { useCallback, useState } from "react"
+import { Button, CircularProgress, Container, Grid, Stack, Typography } from "@mui/material"
+import { useCallback, useEffect, useState } from "react"
 import ItemCard from "../components/ItemCard"
 import ItemModal from "../components/ItemModal"
 import Search from "../components/Search"
@@ -9,6 +9,7 @@ import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
 
 function Home() {
+  const [title, setTitle] = useState<string>("")
   const [items, setItems] = useState<ScanVisionResult[]>([])
   const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
   const [openModalItem, setOpenModalitem] = useState(false)
@@ -24,6 +25,17 @@ function Home() {
       interval: 10_000,
     }
   )
+
+  useEffect(() => {
+    const fetchTitel = async () => {
+      fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/GenerateTitle")
+        .then((res) => res.text())
+        .then((data) => setTitle(data))
+
+    }
+
+    if (title === "") fetchTitel()
+  }, [])
 
   const handleSearch = (search: string) => {
     if (search.length > 0) {
@@ -42,9 +54,8 @@ function Home() {
 
   const handleDelete = useCallback(async () => {
     if (selectedItem) {
-      const url = `${import.meta.env.VITE_FUNCTION_APP_URL}/deleteItem?id=${
-        selectedItem.id
-      }&imageId=${selectedItem.image}`
+      const url = `${import.meta.env.VITE_FUNCTION_APP_URL}/deleteItem?id=${selectedItem.id
+        }&imageId=${selectedItem.image}`
 
       try {
         const res = await fetch(url, {
@@ -82,12 +93,16 @@ function Home() {
   function showStats() {
     setOpenModalStats(true)
   }
-
+  if (title === "") return (
+    <Container sx={{ textAlign: "center" }}>
+      <CircularProgress/>
+    </Container>
+  );
   return (
     <>
-    
+
       <Typography variant="h1" sx={{ color: "black", textAlign: "center" }}>
-        Deep Eyes Project
+        {title}
       </Typography>
       <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
         <Grid item>

@@ -22,7 +22,7 @@ import {
 } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions"
 import useMediaQuery from "@mui/material/useMediaQuery"
-import { forwardRef, Fragment, useState } from "react"
+import { forwardRef, Fragment, useEffect, useState } from "react"
 import Entity from "../models/Entities"
 import Ocr from "../models/Ocr"
 import ScanVisionResult from "../models/ScanVisionResult"
@@ -50,6 +50,9 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
   const [ShownObject, setIsShownObject] = useState(false)
   const theme = useTheme()
   const fullscreen = useMediaQuery(theme.breakpoints.down("md"))
+  useEffect(() => {
+    console.log(item);
+  }, [])
 
   if (item === null) return <></>
   return (

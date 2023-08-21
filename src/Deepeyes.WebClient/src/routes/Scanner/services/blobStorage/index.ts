@@ -10,7 +10,9 @@ const uploadImage = async (image: Blob) => {
   const blobClient = containerCLient.getBlockBlobClient(
     `${Date.now()}-${(Math.random() * 100) % 100}.jpg`
   )
+  
   await blobClient.upload(image, image.size)
+  console.log("uploaded")
 }
 
 export { uploadImage }

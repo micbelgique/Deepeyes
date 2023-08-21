@@ -133,6 +133,7 @@ function Home() {
             item={item}
             onClick={() => {
               setSelectedItem(item)
+              console.log(item)
               setOpenModalitem(true)
             }}
           />

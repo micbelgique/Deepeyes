@@ -50,9 +50,7 @@ export default function ItemModal({ item, open, onClose, onDelete }: ItemModalPr
   const [ShownObject, setIsShownObject] = useState(false)
   const theme = useTheme()
   const fullscreen = useMediaQuery(theme.breakpoints.down("md"))
-  useEffect(() => {
-    console.log(item);
-  }, [])
+
 
   if (item === null) return <></>
   return (

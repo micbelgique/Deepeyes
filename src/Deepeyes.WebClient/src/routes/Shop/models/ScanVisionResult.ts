@@ -1,3 +1,4 @@
+import BoxCaption from "./BoxCaption"
 import Caption from "./Caption"
 import Face from "./Face"
 import FaceAttributes from "./FaceAttributes"
@@ -17,5 +18,5 @@ export default interface ScanVisionResult {
   objects: Object[]
   ocr: Ocr 
   facesAttributes: FaceAttributes[]
-  denseCaptions: any
+  denseCaptions: BoxCaption[]
 }

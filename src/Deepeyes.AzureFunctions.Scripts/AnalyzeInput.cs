@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -62,8 +61,8 @@ namespace Deepeyes.Functions
 
             // Replace "hello" with the name of your Durable Activity Function.
             var scanVisionResult = await context.CallActivityAsync<ScanVisionResult>("AnalyzeInput_DescribeImage", myBlobName);
-            //scanVisionResult.denseCaptions = await context.CallActivityAsync<DenseCaptions>("AnalyzeInput_DenseCaption", myBlobName);
-             await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
+            scanVisionResult.BoxCaptions = await context.CallActivityAsync<List<BoxCaption>>("AnalyzeInput_DenseCaption", myBlobName);
+            //await context.CallActivityAsync("AnalyzeInput_SaveResult", scanVisionResult);
             if (scanVisionResult.Faces.Count > 0)
             {
                 scanVisionResult.FacesAttributes = await context.CallActivityAsync<List<Models.FaceAttributes>>("AnalyzeInput_AnalyseFaces", myBlobName);
@@ -148,12 +147,12 @@ namespace Deepeyes.Functions
 
 
         [FunctionName("AnalyzeInput_DenseCaption")]
-        public static async Task<DenseCaptions> AnalyzeInput_DenseCaption([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)
+        public static async Task<List<BoxCaption>> AnalyzeInput_DenseCaption([ActivityTrigger] string myBlobName, [Blob("raw-pics/{myBlobName}", FileAccess.Read)] BlobClient myBlob, ILogger log)
         {
             // send the blob to vision api and get the results
             var serviceOptions = new VisionServiceOptions(
-                Environment.GetEnvironmentVariable("ComputerVisionApiKey"),
-                new AzureKeyCredential(Environment.GetEnvironmentVariable("ComputerVisionEndpoint"))
+                Environment.GetEnvironmentVariable("ComputerVisionEndpoint"),
+                new AzureKeyCredential(Environment.GetEnvironmentVariable("ComputerVisionApiKey"))
             );
 
             var analysisOptions = new ImageAnalysisOptions()
@@ -169,12 +168,12 @@ namespace Deepeyes.Functions
             {
                 using (var analyzer = new ImageAnalyzer(serviceOptions, imageStream, analysisOptions))
                 {
-                    Console.WriteLine(myBlob.Uri.ToString());
                     var result = await analyzer.AnalyzeAsync();
-                    Console.WriteLine(result.ToString());
                     if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
                     {
-                        return result.DenseCaptions;
+                        
+
+                        return result.DenseCaptions.Select(cap => new BoxCaption(cap)).ToList();
                     }
                     else
                     {
@@ -183,7 +182,6 @@ namespace Deepeyes.Functions
                         Console.WriteLine($"   Error reason : {errorDetails.Reason}");
                         Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
                         Console.WriteLine($"   Error message: {errorDetails.Message}");
-                        Console.WriteLine(errorDetails.ToString());
                         return null;
                     }
                 }

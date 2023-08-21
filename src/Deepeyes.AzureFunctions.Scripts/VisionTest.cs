@@ -18,73 +18,49 @@ namespace api
     public static class VisionTest
     {
         [FunctionName("VisionTest")]
-        public static async Task<String> Run(
+        public static async Task<DenseCaptions> Run(
             [HttpTrigger(AuthorizationLevel.Function,"post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-           
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            String url= data?.url;
 
             // send the blob to vision api and get the results
             var serviceOptions = new VisionServiceOptions(
-                Environment.GetEnvironmentVariable("ComputerVisionApiKey"),
-                new AzureKeyCredential(Environment.GetEnvironmentVariable("ComputerVisionEndpoint"))
+                Environment.GetEnvironmentVariable("ComputerVisionEndpoint"),
+                new AzureKeyCredential(Environment.GetEnvironmentVariable("ComputerVisionApiKey"))
             );
-
-            using var imageSource = VisionSource.FromUrl(
-            new Uri("https://learn.microsoft.com/azure/cognitive-services/computer-vision/media/quickstarts/presentation.png"));
 
             var analysisOptions = new ImageAnalysisOptions()
             {
-                Features = ImageAnalysisFeature.Caption | ImageAnalysisFeature.Text,
+                Features = ImageAnalysisFeature.DenseCaptions,
 
                 Language = "en",
 
-                GenderNeutralCaption = true
+                GenderNeutralCaption = false
             };
-
-            using var analyzer = new ImageAnalyzer(serviceOptions, imageSource, analysisOptions);
-
-            var result = analyzer.Analyze();
-
-            if (result.Reason == ImageAnalysisResultReason.Analyzed)
+            string url = "https://deepeyes0822sa.blob.core.windows.net/raw-pics/1692615141955-34.41135540451255.jpg";
+            using (VisionSource imageStream = VisionSource.FromUrl(url))
             {
-                if (result.Caption != null)
+                using (var analyzer = new ImageAnalyzer(serviceOptions, imageStream, analysisOptions))
                 {
-                    Console.WriteLine(" Caption:");
-                    Console.WriteLine($"   \"{result.Caption.Content}\", Confidence {result.Caption.Confidence:0.0000}");
-                }
-
-                if (result.Text != null)
-                {
-                    Console.WriteLine($" Text:");
-                    foreach (var line in result.Text.Lines)
+                    
+                    var result = await analyzer.AnalyzeAsync();
+                    
+                    if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
                     {
-                        string pointsToString = "{" + string.Join(',', line.BoundingPolygon.Select(pointsToString => pointsToString.ToString())) + "}";
-                        Console.WriteLine($"   Line: '{line.Content}', Bounding polygon {pointsToString}");
-
-                        foreach (var word in line.Words)
-                        {
-                            pointsToString = "{" + string.Join(',', word.BoundingPolygon.Select(pointsToString => pointsToString.ToString())) + "}";
-                            Console.WriteLine($"     Word: '{word.Content}', Bounding polygon {pointsToString}, Confidence {word.Confidence:0.0000}");
-                        }
+                        return result.DenseCaptions;
+                    }
+                    else
+                    {
+                        var errorDetails = ImageAnalysisErrorDetails.FromResult(result);
+                        Console.WriteLine(" Analysis failed.");
+                        Console.WriteLine($"   Error reason : {errorDetails.Reason}");
+                        Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
+                        Console.WriteLine($"   Error message: {errorDetails.Message}");
+                        return null;
                     }
                 }
-                return "ça marche";
-            }
-            else
-            {
-                var errorDetails = ImageAnalysisErrorDetails.FromResult(result);
-                Console.WriteLine(" Analysis failed.");
-                Console.WriteLine($"   Error reason : {errorDetails.Reason}");
-                Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
-                Console.WriteLine($"   Error message: {errorDetails.Message}");
-                return null;
             }
         }
     }

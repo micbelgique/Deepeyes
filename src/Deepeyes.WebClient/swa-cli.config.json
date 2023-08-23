@@ -8,7 +8,8 @@
       "run": "npm run dev",
       "appDevserverUrl": "http://localhost:5173",
       "resourceGroupName": "Deepeyes-rg",
-      "appName": "deepeyes-0822-swa"
+      "appName": "deepeyes-0822-swa",
+      "resourceGroup": "Deepeyes-rg"
     }
   }
 }

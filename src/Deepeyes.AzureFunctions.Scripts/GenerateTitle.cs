@@ -19,7 +19,7 @@ namespace api
     {
         [FunctionName("GenerateTitle")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log,
             [CosmosDB(
                 databaseName: "DeepEyesDB",
@@ -30,7 +30,7 @@ namespace api
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            if (queryResults.Count() == 0) return new OkObjectResult("First, provide images");
+            if (queryResults.Count() == 0) return new OkObjectResult("{\"title\": \"First, provide images\", \"description\": \"\"}");
 
             string prompt = "We are a website that presents a collection of objects." +
                 " Those object can change during the year and we would like to generate the perfect title for our website " +

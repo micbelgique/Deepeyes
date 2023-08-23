@@ -19,7 +19,7 @@ namespace api
     {
         [FunctionName("VisionTest")]
         public static async Task<DenseCaptions> Run(
-            [HttpTrigger(AuthorizationLevel.Function,"post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous,"post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");

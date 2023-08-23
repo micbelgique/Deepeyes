@@ -1,5 +1,5 @@
 import Masonry from "@mui/lab/Masonry"
-import { Button, CircularProgress, Container, Grid, Stack, Typography } from "@mui/material"
+import { Button, CircularProgress, Container, Dialog, Grid, Stack, Typography } from "@mui/material"
 import { useCallback, useEffect, useState } from "react"
 import ItemCard from "../components/ItemCard"
 import ItemModal from "../components/ItemModal"
@@ -8,14 +8,17 @@ import StatsModal from "../components/StatsModal"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
 import ShopDisplay from "../models/ShopDisplay"
+import ImageGenerationModal from "../components/ImageGenerationModal"
 
 function Home() {
   const [title, setTitle] = useState<string>("")
   const [description, setDescription] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [items, setItems] = useState<ScanVisionResult[]>([])
   const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
   const [openModalItem, setOpenModalitem] = useState(false)
   const [openModalStats, setOpenModalStats] = useState(false)
+  const [openModalImageGeneration, setOpenModalImageGeneration] = useState(false)
   const { stopPolling, startPolling } = usePollingEffect(
     () => {
       fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/readtable")
@@ -29,18 +32,20 @@ function Home() {
   )
 
   useEffect(() => {
-    const fetchTitel = async () => {
-      fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/GenerateTitle")
-        .then((res) => res.json())
-        .then((data: ShopDisplay) => {
-          setTitle(data.title)
-          setDescription(data.description)
-        })
-
-    }
-
     if (title === "") fetchTitel()
   }, [])
+
+  const fetchTitel = async () => {
+    setIsLoading(true)
+    fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/GenerateTitle")
+      .then((res) => res.json())
+      .then((data: ShopDisplay) => {
+        setTitle(data.title)
+        setDescription(data.description)
+        setIsLoading(false);
+      })
+
+  }
 
   const handleSearch = (search: string) => {
     if (search.length > 0) {
@@ -98,23 +103,29 @@ function Home() {
   function showStats() {
     setOpenModalStats(true)
   }
-  if (title === "") return (
-    <Container sx={{ textAlign: "center" }}>
-      <CircularProgress />
-    </Container>
-  );
+
   return (
     <>
-
-      <Typography variant="h2" sx={{ color: "black", textAlign: "center" }}>
-        {title}
-      </Typography>
-      <Typography variant="subtitle1" sx={{ color: "black", textAlign: "center" }}>
-        {description}
-      </Typography>
+      <Container sx={{ textAlign: "center", pb: "1%" }} >
+        {isLoading ?
+          <CircularProgress />
+          :
+          <><Typography variant="h2" sx={{ color: "black", textAlign: "center" }}>
+            {title}
+          </Typography><Typography variant="subtitle1" sx={{ color: "black", textAlign: "center" }}>
+              {description}
+            </Typography></>
+        }
+      </Container>
       <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
         <Grid item>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1}>
+            <Button variant="contained" onClick={fetchTitel} disabled={isLoading}>
+              Generate Title
+            </Button>
+            <Button variant="contained" onClick={()=>setOpenModalImageGeneration(true)}>
+              Generate Image
+            </Button>
             <Button variant="contained" onClick={showStats}>
               Stats
             </Button>
@@ -141,7 +152,6 @@ function Home() {
             item={item}
             onClick={() => {
               setSelectedItem(item)
-              console.log(item)
               setOpenModalitem(true)
             }}
           />
@@ -154,6 +164,7 @@ function Home() {
         onDelete={handleDelete}
       />
       <StatsModal items={items} open={openModalStats} onClose={() => setOpenModalStats(false)} />
+      <ImageGenerationModal open={openModalImageGeneration} onClose={() => setOpenModalImageGeneration(false)}/>
     </>
   )
 }

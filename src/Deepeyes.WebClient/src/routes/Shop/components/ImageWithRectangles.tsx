@@ -25,8 +25,8 @@ const ImageWithRectangles: React.FC<ImageWithRectanglesProps> = ({
     const image = new Image();
     image.src = imageUrl;
     image.onload = () => {
-      canvas.width = image.width;
-      canvas.height = image.height;
+      canvas.width  = image.width + image.width/25;
+      canvas.height = image.height + image.height/25;
 
       context?.drawImage(image, 0, 0);
 

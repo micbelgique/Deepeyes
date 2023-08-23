@@ -32,10 +32,10 @@ function Home() {
   )
 
   useEffect(() => {
-    if (title === "") fetchTitel()
+    if (title === "") fetchTitle()
   }, [])
 
-  const fetchTitel = async () => {
+  const fetchTitle = async () => {
     setIsLoading(true)
     fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/GenerateTitle")
       .then((res) => res.json())
@@ -120,7 +120,7 @@ function Home() {
       <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
         <Grid item>
           <Stack direction="row" spacing={1}>
-            <Button variant="contained" onClick={fetchTitel} disabled={isLoading}>
+            <Button variant="contained" onClick={fetchTitle} disabled={isLoading}>
               Generate Title
             </Button>
             <Button variant="contained" onClick={()=>setOpenModalImageGeneration(true)}>

@@ -1,24 +1,14 @@
 .image-container {
-    position: relative;
-  }
-  
-  .image {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .rectangle {
-    position: absolute;
-    border: 2px solid #00ff00;
-  }
-  
-  .label {
-    background-color: #00ff00;
-    color: #ffffff;
-    padding: 4px;
-    font-size: 12px;
-    position: absolute;
-    bottom: -20px;
-    left: 0;
-    width: 100%;
-  }
+  max-width: 100%; /* Limitez la largeur de la div parent à 100% */
+  overflow: hidden; /* Masquez tout contenu dépassant la div parent */
+
+  /* Ajoutez d'autres styles de votre div parent ici */
+}
+
+canvas {
+  max-width: 100%; /* Assurez-vous que le canvas occupe toute la largeur de la div parent */
+  height: auto; /* Ajustez la hauteur automatiquement pour conserver le ratio */
+  display: block; /* Ajustez le comportement d'affichage du canvas */
+}
+
+/* Ajoutez d'autres styles CSS pour le canvas si nécessaire */

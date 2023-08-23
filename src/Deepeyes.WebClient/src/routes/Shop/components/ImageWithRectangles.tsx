@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import BoxCaption from '../models/BoxCaption';
+import "./ImageWithRectangle.css"
 
 
 interface ImageWithRectanglesProps {
@@ -34,34 +35,42 @@ const ImageWithRectangles: React.FC<ImageWithRectanglesProps> = ({
           .split(',')
           .map(Number);
 
+        // Appliquer une opacité plus basse si le rectangle n'est pas survolé
+        context.globalAlpha = highlightedIndex === index ? 1 : 0.1;
         context.strokeStyle = highlightedIndex === index ? '#ff0000' : '#000000'; // Changez la couleur ici
         context.lineWidth = 2;
         context.strokeRect(x, y, width, height);
 
-        context.font = '12px Arial';
-        context.fillStyle = '#000000'; // Changez la couleur ici
-        context?.fillText(detection.content, x, y + height + 12);
-         // Ajouter le gestionnaire d'événements de survol
-         canvas.addEventListener('mouseover', () => {
-            setHighlightedIndex(index);
-            canvas.style.cursor = 'pointer';
-          });
-  
-          canvas.addEventListener('mouseout', () => {
-            setHighlightedIndex(null);
-            canvas.style.cursor = 'default';
-          });
+        context.globalAlpha = highlightedIndex === index ? 1 : 0.1;
+        context.font = '28px Arial';
+        context.fillStyle = highlightedIndex === index ? '#ff0000' : '#000000';
+        context?.fillText(detection.content, x, y + height + 20);
+
+        canvas.addEventListener('mousemove', (event) => {
+          const rect = canvas.getBoundingClientRect();
+          const mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);
+          const mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
+
+          if (
+            mouseX >= x && mouseX <= x + width &&
+            mouseY >= y && mouseY <= y + height
+          ) {
+            if (highlightedIndex === null || width * height < detections[highlightedIndex].boundingBox.split(',').map(Number)[2] * detections[highlightedIndex].boundingBox.split(',').map(Number)[3]) {
+              setHighlightedIndex(index);
+            }
+           
+          } 
+        });
+
+        canvas.addEventListener('mouseout', () => {
+          setHighlightedIndex(null);
+          
+        });
       });
     };
   }, [imageUrl, detections, highlightedIndex]);
 
-  const handleMouseOver = (index: number) => {
-    setHighlightedIndex(index);
-  };
-
-  const handleMouseOut = () => {
-    setHighlightedIndex(null);
-  };
+ 
 
   return (
     <canvas ref={canvasRef}/>

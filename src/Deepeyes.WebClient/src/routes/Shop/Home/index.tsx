@@ -7,9 +7,11 @@ import Search from "../components/Search"
 import StatsModal from "../components/StatsModal"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
+import ShopDisplay from "../models/ShopDisplay"
 
 function Home() {
   const [title, setTitle] = useState<string>("")
+  const [description, setDescription] = useState<string>("")
   const [items, setItems] = useState<ScanVisionResult[]>([])
   const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
   const [openModalItem, setOpenModalitem] = useState(false)
@@ -29,8 +31,11 @@ function Home() {
   useEffect(() => {
     const fetchTitel = async () => {
       fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/GenerateTitle")
-        .then((res) => res.text())
-        .then((data) => setTitle(data))
+        .then((res) => res.json())
+        .then((data: ShopDisplay) => {
+          setTitle(data.title)
+          setDescription(data.description)
+        })
 
     }
 
@@ -95,14 +100,17 @@ function Home() {
   }
   if (title === "") return (
     <Container sx={{ textAlign: "center" }}>
-      <CircularProgress/>
+      <CircularProgress />
     </Container>
   );
   return (
     <>
 
-      <Typography variant="h1" sx={{ color: "black", textAlign: "center" }}>
+      <Typography variant="h2" sx={{ color: "black", textAlign: "center" }}>
         {title}
+      </Typography>
+      <Typography variant="subtitle1" sx={{ color: "black", textAlign: "center" }}>
+        {description}
       </Typography>
       <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
         <Grid item>

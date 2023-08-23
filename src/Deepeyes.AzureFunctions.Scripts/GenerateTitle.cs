@@ -32,13 +32,18 @@ namespace api
 
             if (queryResults.Count() == 0) return new OkObjectResult("First, provide images");
 
-            string prompt = "Based on the title below, generate a simple title for a page." +
-                " The title can contains maximum 10 words and don't surround it with quotes :";
+            string prompt = "We are a website that presents a collection of objects." +
+                " Those object can change during the year and we would like to generate the perfect title for our website " +
+                "based on the object in our collection. I will give you a list of the object we have for the moment." +
+                " And i would like you to generate a single title for the website page that describe the collection." +
+                " I also want you to create a small description for the page based on the objects." +
+                " Here are the objects : ";
+
             foreach (ScanVisionResult item in queryResults)
             {
                 prompt += "'" + item.Captions[0].Text + "', ";
             }
-
+            prompt += ". Send me those informations in a JSON format, with 2 attributes: \"title\" and \"description\".";
             OpenAIClient client = new OpenAIClient(Environment.GetEnvironmentVariable("OpenAiApiKey"));
 
             string deploymentName = "text-davinci-003";

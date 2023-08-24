@@ -1,5 +1,5 @@
 import Masonry from "@mui/lab/Masonry"
-import { Button, CircularProgress, Container, Dialog, Grid, Stack, Typography } from "@mui/material"
+import { Button, CircularProgress, Container, Dialog, Grid, Skeleton, Stack, Typography } from "@mui/material"
 import { useCallback, useEffect, useState } from "react"
 import ItemCard from "../components/ItemCard"
 import ItemModal from "../components/ItemModal"
@@ -108,7 +108,8 @@ function Home() {
     <>
       <Container sx={{ textAlign: "center", pb: "1%" }} >
         {isLoading ?
-          <CircularProgress />
+          <><Skeleton variant="rectangular" width={"100%"} height={"10vh"} /> <br />
+            <Skeleton variant="rectangular" width={"100%"} height={"5vh"} /></>
           :
           <><Typography variant="h2" sx={{ color: "black", textAlign: "center" }}>
             {title}
@@ -117,13 +118,13 @@ function Home() {
             </Typography></>
         }
       </Container>
-      <Grid container justifyContent="space-between" sx={{ p: "1em" }}>
+      <Grid container justifyContent="space-between" sx={{ pl: "12em", pr: "13em", pb: "1em" }}>
         <Grid item>
           <Stack direction="row" spacing={1}>
-            <Button variant="contained" onClick={() =>window.location.reload()} >
-              <CachedIcon/>
+            <Button variant="contained" onClick={() => window.location.reload()} >
+              <CachedIcon />
             </Button>
-            
+
             <Button variant="contained" onClick={showStats}>
               Stats
             </Button>
@@ -136,25 +137,28 @@ function Home() {
           <Search onSubmit={handleSearch} />
         </Grid>
       </Grid>
+      <Container  sx={{textAlign: "center"}}>
+        <Masonry
+          columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+          spacing={2}
+          defaultHeight={450}
+          defaultColumns={4}
+          defaultSpacing={1}
 
-      <Masonry
-        columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-        spacing={2}
-        defaultHeight={450}
-        defaultColumns={4}
-        defaultSpacing={1}
-      >
-        {items.map((item) => (
-          <ItemCard
-            key={item.id}
-            item={item}
-            onClick={() => {
-              setSelectedItem(item)
-              setOpenModalitem(true)
-            }}
-          />
-        ))}
-      </Masonry>
+        >
+          {items.map((item) => (
+            <ItemCard
+              key={item.id}
+              item={item}
+              onClick={() => {
+                setSelectedItem(item)
+                setOpenModalitem(true)
+              }}
+            />
+          ))}
+        </Masonry>
+        </Container>
+     
       <ItemModal
         open={openModalItem}
         item={selectedItem}
@@ -162,7 +166,7 @@ function Home() {
         onDelete={handleDelete}
       />
       <StatsModal items={items} open={openModalStats} onClose={() => setOpenModalStats(false)} />
-      
+
     </>
   )
 }

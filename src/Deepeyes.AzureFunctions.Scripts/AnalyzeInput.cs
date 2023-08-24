@@ -169,20 +169,7 @@ namespace Deepeyes.Functions
                 using (var analyzer = new ImageAnalyzer(serviceOptions, imageStream, analysisOptions))
                 {
                     var result = await analyzer.AnalyzeAsync();
-                    if (result.Reason == ImageAnalysisResultReason.Analyzed && result.DenseCaptions != null)
-                    {
-                        
-                        return result.DenseCaptions.Select(cap => new BoxCaption(cap)).ToList();
-                    }
-                    else
-                    {
-                        var errorDetails = ImageAnalysisErrorDetails.FromResult(result);
-                        Console.WriteLine(" Analysis failed.");
-                        Console.WriteLine($"   Error reason : {errorDetails.Reason}");
-                        Console.WriteLine($"   Error code : {errorDetails.ErrorCode}");
-                        Console.WriteLine($"   Error message: {errorDetails.Message}");
-                        return null;
-                    }
+                    
                 }
             }         
         }

@@ -1,4 +1,4 @@
-import { Alert, AlertColor, Snackbar, Stack } from "@mui/material"
+import { Alert, AlertColor, Snackbar, Stack, Typography } from "@mui/material"
 import { useCallback, useRef, useState } from "react"
 import Webcam from "react-webcam"
 import "./App.css"
@@ -9,7 +9,7 @@ import UploadButton from "./components/uploadButton"
 import WebCamView from "./components/webcamView"
 import { uploadImage } from "./services/blobStorage"
 import QRCodeButton from "./components/qrCodeButton"
-import Nav from "../Shop/components/Nav"
+
 
 const MAX_FILES = 10
 
@@ -65,19 +65,21 @@ function Scanner() {
   return (
     <div className="App">
       <div className="content Container">
-        
+
         <div className="IndexInterface">
-          <h1 style={{ margin: "0.2em 0" }}>Deep Eyes Project</h1>
+        <Typography variant="h2" sx={{ color: "black", textAlign: "center" }}>
+            Scanner
+          </Typography>
         </div>
         <WebCamView ref={webcamRef} />
         <div className="ButtonCam">
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} sx={{ mt: "10%" }}>
             <UploadButton onSubmit={handleSubmitFiles} />
             <CaptureButton onClick={handleCapture} />
-            <QRCodeButton/>
+            <QRCodeButton />
           </Stack>
         </div>
-        <Footer />
+
       </div>
       <Snackbar
         open={open}
@@ -89,7 +91,9 @@ function Scanner() {
           {snackbarText}
         </Alert>
       </Snackbar>
+    
     </div>
+
   )
 }
 

@@ -2,6 +2,8 @@ import { Alert, AlertColor, Button, CircularProgress, Container, Snackbar, TextF
 import { useCallback, useState } from "react"
 import { generateImage } from "../services/generateImage";
 import { saveGeneratedImage } from "../services/uploadGeneratedImage";
+import BackupIcon from '@mui/icons-material/Backup';
+import SendIcon from '@mui/icons-material/Send';
 
 
 export default function Generation() {
@@ -53,8 +55,8 @@ export default function Generation() {
     return (
         <Container sx={{ textAlign: "center", display: "flex", flexDirection: "column", minHeight: "80vh", justifyContent: "space-between" }}>
             <div>
-                <Typography variant="h4" sx={{ margin: "0.2em 0" }}>
-                    Deep Eyes Project
+                <Typography variant="h2" sx={{ color: "black", textAlign: "center" }}>
+                    Generation
                 </Typography>
                 <TextField
                     id="outlined-multiline-flexible"
@@ -65,7 +67,7 @@ export default function Generation() {
                     sx={{ mt: 2, width: "45%" }}
                 />
             </div>
-            <div>
+            <div style={{padding: "2%"}}>
                 {isLoading ? (
                     <CircularProgress />
                 ) : (
@@ -75,11 +77,11 @@ export default function Generation() {
 
 
             <Container sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 2 }}>
-                <Button onClick={handleClickGenerateBtn} sx={{ mr: 1 }}>
-                    Generate an image
+                <Button onClick={handleClickGenerateBtn} variant="contained" color="primary" sx={{ mr: 1 }}>
+                    <SendIcon/>
                 </Button>
-                <Button onClick={sendImage} disabled={imageUri === ""}>
-                    Upload image
+                <Button onClick={sendImage} variant="contained" color="primary" disabled={imageUri === ""}>
+                    <BackupIcon/>
                 </Button>
             </Container>
 

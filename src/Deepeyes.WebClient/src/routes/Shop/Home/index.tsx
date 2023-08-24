@@ -8,7 +8,8 @@ import StatsModal from "../components/StatsModal"
 import usePollingEffect from "../hooks/usePollingEffect"
 import ScanVisionResult from "../models/ScanVisionResult"
 import ShopDisplay from "../models/ShopDisplay"
-import ImageGenerationModal from "../components/ImageGenerationModal"
+import CachedIcon from '@mui/icons-material/Cached';
+
 
 function Home() {
   const [title, setTitle] = useState<string>("")
@@ -18,7 +19,6 @@ function Home() {
   const [selectedItem, setSelectedItem] = useState<ScanVisionResult | null>(null)
   const [openModalItem, setOpenModalitem] = useState(false)
   const [openModalStats, setOpenModalStats] = useState(false)
-  const [openModalImageGeneration, setOpenModalImageGeneration] = useState(false)
   const { stopPolling, startPolling } = usePollingEffect(
     () => {
       fetch(import.meta.env.VITE_FUNCTION_APP_URL + "/readtable")
@@ -117,15 +117,13 @@ function Home() {
             </Typography></>
         }
       </Container>
-      <Grid container justifyContent="space-between" sx={{ mb: "1em" }}>
+      <Grid container justifyContent="space-between" sx={{ p: "1em" }}>
         <Grid item>
           <Stack direction="row" spacing={1}>
-            <Button variant="contained" onClick={fetchTitle} disabled={isLoading}>
-              Generate Title
+            <Button variant="contained" onClick={() =>window.location.reload()} >
+              <CachedIcon/>
             </Button>
-            <Button variant="contained" onClick={()=>setOpenModalImageGeneration(true)}>
-              Generate Image
-            </Button>
+            
             <Button variant="contained" onClick={showStats}>
               Stats
             </Button>
@@ -164,7 +162,7 @@ function Home() {
         onDelete={handleDelete}
       />
       <StatsModal items={items} open={openModalStats} onClose={() => setOpenModalStats(false)} />
-      <ImageGenerationModal open={openModalImageGeneration} onClose={() => setOpenModalImageGeneration(false)}/>
+      
     </>
   )
 }

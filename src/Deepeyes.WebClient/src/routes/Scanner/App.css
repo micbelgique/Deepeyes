@@ -17,15 +17,6 @@ body {
   font-size: x-large;
 }
 
-.ButtonCam {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  color: white;
-}
-
 .content {
   flex: 1 0 auto;
 }

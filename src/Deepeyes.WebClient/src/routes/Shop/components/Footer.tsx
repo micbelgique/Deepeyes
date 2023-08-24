@@ -2,9 +2,10 @@ import { Box, Link } from "@mui/material"
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    <footer>
       <Box
         sx={{
+          textAlign: "center",
           mt: "2rem",
           mb: 0.4,
           color: (theme) => {

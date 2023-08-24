@@ -8,7 +8,7 @@
 }
 
 .navMenu a:hover {
-  color: #57ab5a;
+  color: #1976d2;
 }
 
 nav {
@@ -16,4 +16,16 @@ nav {
   justify-content: space-around;
   align-items: center;
   min-height: 10vh;
+}
+
+.active a {
+  color: #1976d2;
+  border-bottom: 2px solid #1976d2; 
+  padding-bottom: 4px; 
+  transition: color 0.3s, border-bottom 0.3s; 
+}
+
+.active a:hover {
+  color: #135a8f; 
+  border-bottom-color: #135a8f;
 }

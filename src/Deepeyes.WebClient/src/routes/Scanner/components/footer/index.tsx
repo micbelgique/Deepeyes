@@ -21,8 +21,7 @@ export default function Footer() {
             MIC Belgique
           </Link>
           .
-        </span>{" "}
-        | <RouterLink to="/shop">Shop</RouterLink>
+        </span>
       </Box>
     </footer>
   )

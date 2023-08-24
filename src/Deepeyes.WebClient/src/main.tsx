@@ -2,35 +2,32 @@ import { CssBaseline, LinearProgress, ThemeProvider } from "@mui/material"
 import React, { lazy, Suspense } from "react"
 import ReactDOM from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Start from "./components/Start"
+
 import "./index.css"
-import Contact from "./routes/Contact"
+
 
 import theme from "./routes/Shop/utils/theme"
 import Generation from "./routes/Generation"
+import Nav from "./routes/Shop/components/Nav"
+import Home from "./routes/Shop/Home"
+import Scanner from "./routes/Scanner"
+import Footer from "./routes/Shop/components/Footer"
 
-const Shop = lazy(() => import("./routes/Shop"))
-const Scanner = lazy(() => import("./routes/Scanner"))
-const Home = lazy(() => import("./routes/Shop/Home"))
+
+
+
+// const Scanner = lazy(() => import("./routes/Scanner"))
+// const Home = lazy(() => import("./routes/Shop/Home"))
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Nav/>
         <Routes>
-          <Route path="/" element={<Shop />}>
-            <Route index element={<Start />} />
-            <Route
-              path="/shop"
-              element={
-                <Suspense fallback={<LinearProgress variant="indeterminate" />}>
-                  <Home />
-                </Suspense>
-              }
-            />
-            {/* <Route path="/contact" element={<Contact />} /> */}
-          </Route>
+          <Route path="/" element={<Home />} />
+
           <Route
             path="/scanner"
             element={
@@ -48,6 +45,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             }
           />
         </Routes>
+        <Footer/>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
